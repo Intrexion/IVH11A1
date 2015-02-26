@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
+import edu.avans.hartigehap.web.form.Message;
 
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
@@ -50,17 +51,39 @@ public class KitchenController {
 		return "hartigehap/kitchen";
 	}
 
-	// this method serves kitchen subsystem and waiter subsystem requests,
-	// which is quite confusing!
-	// Reason is that the actual resource "orders/{orderId}" that is asked for,
-	// is the same for kitchen subsystem and waiter subsystem,
-	// meaning that the request URI is the same (according to REST).
-	// You cannot have two methods with the same request URI mapping.
-	// It is because the "event" request parameter (which is the distinguishing
-	// parameter) is part of the HTTP body and can therefore not be
-	// used for the request mapping.
-	@RequestMapping(value = "/orders/{orderId}", method = RequestMethod.PUT)
-	public String receiveEvent(@PathVariable("orderId") String orderId,
+
+	
+	@RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.GET)
+	public String showOrderInKitchen(@PathVariable("orderId") String orderId,
+			Model uiModel, Locale locale) {
+
+		// warmup stuff
+		Order order = orderService.findById(Long.valueOf(orderId));
+		Restaurant restaurant = warmupRestaurant(order, uiModel);
+		uiModel.addAttribute("restaurant", restaurant);
+
+		List<Order> allSubmittedOrders = orderService
+				.findSubmittedOrdersForRestaurant(restaurant);
+		uiModel.addAttribute("allSubmittedOrders", allSubmittedOrders);
+
+		List<Order> allPlannedOrders = orderService
+				.findPlannedOrdersForRestaurant(restaurant);
+		uiModel.addAttribute("allPlannedOrders", allPlannedOrders);
+
+		String orderContent = "";
+		for(OrderItem orderItem : order.getOrderItems()) {
+			orderContent += orderItem.getMenuItem().getId() + " (" + orderItem.getQuantity() + "x)" + "; ";
+		}
+		
+		uiModel.addAttribute("message", new Message("info",
+				messageSource.getMessage("label_order_content", new Object[]{}, locale) + ": " + orderContent));
+
+		return "hartigehap/kitchen";
+	}
+	
+	
+	@RequestMapping(value = "/kitchen/orders/{orderId}", method = RequestMethod.PUT)
+	public String receiveOrderEvent(@PathVariable("orderId") String orderId,
 			@RequestParam String event, Model uiModel, Locale locale) {
 
 		switch (event) {
@@ -70,10 +93,6 @@ public class KitchenController {
 
 		case "orderHasBeenPrepared":
 			return orderHasBeenPrepared(orderId, uiModel, locale);
-			// break unreachable
-
-		case "orderHasBeenServed":
-			return orderHasBeenServed(orderId, uiModel, locale);
 			// break unreachable
 
 		default:
@@ -125,26 +144,6 @@ public class KitchenController {
 		return "redirect:/restaurants/" + restaurant.getId() + "/kitchen";
 	}
 
-	private String orderHasBeenServed(String orderId, Model uiModel,
-			Locale locale) {
-		Order order = orderService.findById(Long.valueOf(orderId));
-		Restaurant restaurant = warmupRestaurant(order, uiModel);
-		try {
-			orderService.orderServed(order);
-		} catch (StateException e) {
-			logger.error(
-					"Internal error has occurred! Order "
-							+ Long.valueOf(orderId)
-							+ "has not been changed to served state!", e);
-
-			// StateException triggers a rollback; consequently all Entities are
-			// invalidated by Hibernate
-			// So new warmup needed
-			warmupRestaurant(order, uiModel);
-			return "hartigehap/waiter";
-		}
-		return "redirect:/restaurants/" + restaurant.getId() + "/waiter";
-	}
 
 	private Restaurant warmupRestaurant(Order order, Model uiModel) {
 		Collection<Restaurant> restaurants = restaurantService.findAll();

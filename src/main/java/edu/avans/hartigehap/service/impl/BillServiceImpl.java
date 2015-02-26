@@ -26,7 +26,7 @@ public class BillServiceImpl implements BillService {
 	private BillRepository billRepository;
 
 	@Transactional(readOnly=true)
-	public Bill findBillById(Long billId) {
+	public Bill findById(Long billId) {
 		return billRepository.findOne(billId);
 	}
 

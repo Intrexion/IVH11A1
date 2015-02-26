@@ -34,13 +34,13 @@
 		<tbody>
 			<c:forEach items="${allPreparedOrders}" var="preparedOrder">
 				<tr>
-					<spring:url var="showOrder" value="/orders/${preparedOrder.id}" />
+					<spring:url var="showOrder" value="/waiter/orders/${preparedOrder.id}" />
 					<td>
 						<a href="${showOrder}">${labelPreparedOrder} ${preparedOrder.bill.diningTable.tableNr}</a></td>
 					<td>
 						<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 							<spring:url var="servedOrderUrl"
-								value="/orders/${preparedOrder.id}" />
+								value="/waiter/orders/${preparedOrder.id}" />
 							<form:form name="servedOrderForm" action="${servedOrderUrl}" method="put">
 								<input type="hidden" name="event" value="orderHasBeenServed" />
 								<table>
@@ -65,13 +65,13 @@
 		<tbody>
 			<c:forEach items="${allSubmittedBills}" var="submittedBill">
 				<tr>
-					<spring:url var="showBill" value="/bills/${submittedBill.id}" />
+					<spring:url var="showBill" value="/waiter/bills/${submittedBill.id}" />
 					<td>
 						<a href="${showBill}">${labelSubmittedBill} ${submittedBill.diningTable.tableNr}</a></td>
 					<td>
 						<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 							<spring:url var="billPaidUrl"
-								value="/bills/${submittedBill.id}" />
+								value="/waiter/bills/${submittedBill.id}" />
 							<form:form name="paidBillForm" action="${billPaidUrl}" method="put">
 								<input type="hidden" name="event" value="billHasBeenPaid" />
 								<table>
