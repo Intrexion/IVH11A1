@@ -20,6 +20,8 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	final Logger logger = LoggerFactory.getLogger(RestaurantPopulatorServiceImpl.class);
 	
 	@Autowired
+	private ReservationRepository reservationRepository;
+	@Autowired
 	private RestaurantRepository restaurantRepository;
 	@Autowired
 	private FoodCategoryRepository foodCategoryRepository;
@@ -32,6 +34,8 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
 	private List<Drink> drinks = new ArrayList<Drink>();
 	private List<Customer> customers = new ArrayList<Customer>();
+	private List<Reservation> reservations = new ArrayList<Reservation>();
+	private List<DiningTable> diningTables = new ArrayList<DiningTable>();
 
 		
 	/**
@@ -68,10 +72,9 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(6)}));
 		
 		byte[] photo = new byte[]{127,-128,0};
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo);
-
+		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo, "a@a.nl", "123123");
+		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo, "a@a.nl", "123123");
+		createCustomer("piet", "bakker", new DateTime(), 1, "description", photo, "a@a.nl", "123123");		
 	}
 
 	private void createFoodCategory(String tag) {
@@ -98,8 +101,16 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	}
 	
 	private void createCustomer(String firstName, String lastName, DateTime birthDate,
-		int partySize, String description, byte[] photo) {
-		Customer customer = new Customer(firstName, lastName, birthDate, partySize, description, photo); 
+		int partySize, String description, byte[] photo, String email, String phone) {
+		//Customer customer2 = new Customer(firstName, lastName, birthDate, partySize, description, photo); 
+		Customer customer = new Customer.Builder(firstName, lastName)
+										.setBirthDate(birthDate)
+										.setDescription(description)
+										.setPartySize(partySize)
+										.setPhoto(photo)
+										.setEmail(email)
+										.setPhone(phone)
+										.build();
 		customers.add(customer);
 		customerRepository.save(customer);
 	}
@@ -109,10 +120,11 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 			DiningTable diningTable = new DiningTable(i+1);
 			diningTable.setRestaurant(restaurant);
 			restaurant.getDiningTables().add(diningTable);
+			diningTables.add(diningTable);
 		}
 	}
 	
-	private void populateRestaurant(Restaurant restaurant) {
+	private Restaurant populateRestaurant(Restaurant restaurant) {
 				
 		// will save everything that is reachable by cascading
 		// even if it is linked to the restaurant after the save
@@ -144,21 +156,40 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 			customer.getRestaurants().add(restaurant);
 			restaurant.getCustomers().add(customer);
 		}
-		
+		return restaurant;
 	}
 
+	private void createReservation(DateTime start, DateTime end, String description, Restaurant rest, DiningTable table, Customer cust){
+		Reservation reservation = new Reservation(start, end, description);
+		reservation = reservationRepository.save(reservation);
+		reservations.add(reservation);
+		cust.setReservation(reservation);
+		reservation.setCustomer(cust);
+		reservation.setRestaurant(rest);
+		rest.getReservations().add(reservation);
+		reservation.setDiningTable(table);
+		table.getReservations().add(reservation);
+	}
 	
 	public void createRestaurantsWithInventory() {
 		
 		createCommonEntities();
 
 		Restaurant restaurant = new Restaurant(HARTIGEHAP_RESTAURANT_NAME, "deHartigeHap.jpg");
-		populateRestaurant(restaurant);
+		restaurant = populateRestaurant(restaurant);
 		
-		restaurant = new Restaurant(PITTIGEPANNEKOEK_RESTAURANT_NAME, "dePittigePannekoek.jpg");
-		populateRestaurant(restaurant);
+		Restaurant restaurant1 = new Restaurant(PITTIGEPANNEKOEK_RESTAURANT_NAME, "dePittigePannekoek.jpg");
+		restaurant1 = populateRestaurant(restaurant1);
 		
-		restaurant = new Restaurant(HMMMBURGER_RESTAURANT_NAME, "deHmmmBurger.jpg");
-		populateRestaurant(restaurant);
+		Restaurant restaurant2 = new Restaurant(HMMMBURGER_RESTAURANT_NAME, "deHmmmBurger.jpg");
+		restaurant2 = populateRestaurant(restaurant2);
+		DiningTable diningTable = null;
+		for(DiningTable d : diningTables){
+			if(d.getRestaurant().getId().equals(restaurant.getId())){
+				diningTable = d;
+				break;
+			}
+		}
+		createReservation(new DateTime(), new DateTime(), "", restaurant, diningTable, customers.get(0));
 	}	
 }

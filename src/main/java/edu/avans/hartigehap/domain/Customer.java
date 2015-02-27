@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
@@ -61,11 +62,17 @@ public class Customer extends DomainObject {
 
 	private String description;
 
+	private String email;
+	private String phone;
+	
 	@Basic(fetch = FetchType.LAZY)
 	@Lob
 	@Column(name = "PHOTO")
 	private byte[] photo;
 
+	@OneToOne
+	private Reservation reservation;
+	
 	// no cascading
 	@ManyToMany
 	private Collection<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -77,14 +84,15 @@ public class Customer extends DomainObject {
 	
 
 	// TODO not complete (bills)
-	public Customer(String firstName, String lastName, DateTime birthDate,
-			int partySize, String description, byte[] photo) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-		this.partySize = partySize;
-		this.description = description;
-		this.photo = photo.clone();
+	private Customer(Builder build) {
+		this.firstName = build.firstName;
+		this.lastName = build.lastName;
+		this.birthDate = build.birthDate;
+		this.partySize = build.partySize;
+		this.description = build.description;
+		this.photo = build.photo;
+		this.email = build.email;
+		this.phone = build.phone;
 	}
 
 	// TODO	this method only updates user-editable fields
@@ -111,5 +119,53 @@ public class Customer extends DomainObject {
 	}
 
 	// business logic
+	public static class Builder{
+		public final String firstName;
+		public final String lastName;
+		public int partySize;
+		public DateTime birthDate;
+		public String description;
+		public byte[] photo;
+		public String email;
+		public String phone;
+		
+		public Builder(String firstName, String lastName){
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
+		
+		public Builder setPartySize(int partySize) {
+			this.partySize = partySize;
+			return this;
+		}
 
+		public Builder setBirthDate(DateTime birthDate) {
+			this.birthDate = birthDate;
+			return this;
+		}
+
+		public Builder setDescription(String description) {
+			this.description = description;
+			return this;
+		}
+
+		public Builder setPhoto(byte[] photo) {
+			this.photo = photo.clone();
+			return this;
+		}
+
+		public Builder setEmail(String email) {
+			this.email = email;
+			return this;
+		}
+
+		public Builder setPhone(String phone) {
+			this.phone = phone;
+			return this;
+		}
+		
+		public Customer build(){
+			return new Customer(this);
+		}
+	}
 }

@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.CascadeType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -34,12 +35,15 @@ public class DiningTable extends DomainObject {
 	
 	// example of an *unidirectional* one-to-one relationship, mapped on
 	// database by diningTable side
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Bill currentBill;
 
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "diningTable")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "diningTable")
 	private Collection<Bill> bills = new ArrayList<Bill>();
 
+	@OneToMany(mappedBy = "diningTable", cascade = CascadeType.ALL)
+	private Collection<Reservation> reservations = new ArrayList<Reservation>();
+	
 	@ManyToOne()
 	private Restaurant restaurant;
 

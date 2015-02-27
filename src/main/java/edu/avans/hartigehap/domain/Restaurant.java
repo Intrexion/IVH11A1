@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -21,7 +23,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "RESTAURANTS") 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@Getter @Setter
+@Getter 
+@Setter
 @ToString(callSuper=true, includeFieldNames=true, of= {"menu", "diningTables", "customers"})
 @NoArgsConstructor
 public class Restaurant extends DomainObjectNaturalId {
@@ -30,15 +33,18 @@ public class Restaurant extends DomainObjectNaturalId {
 	private String imageFileName;
 
 	// unidirectional one-to-one
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Menu menu = new Menu();
 	
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "restaurant")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
 	private Collection<DiningTable> diningTables = new ArrayList<DiningTable>();
 		
 	// no cascading
 	@ManyToMany(mappedBy = "restaurants")
 	private Collection<Customer> customers = new ArrayList<Customer>();
+	
+	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+	private Collection<Reservation> reservations = new ArrayList<Reservation>();
 	
 	public Restaurant(String name, String imageFileName) {
 		super(name);
