@@ -32,7 +32,7 @@ public class DiningTable extends DomainObject {
 	private static final long serialVersionUID = 1L;
 
 	private int tableNr;
-	
+	private int seats;
 	// example of an *unidirectional* one-to-one relationship, mapped on
 	// database by diningTable side
 	@OneToOne(cascade = CascadeType.ALL)
@@ -58,8 +58,9 @@ public class DiningTable extends DomainObject {
 		bills.add(currentBill);
 	}
 
-	public DiningTable(int tableNr) {
+	public DiningTable(int tableNr, int seats) {
 		this.tableNr = tableNr;
+		this.seats = seats;
 		// when the system resets, the c'tor is executed and a new Bill object
 		// is created (which in its turn creates a new order object. However, 
 		// when the dining table becomes managed, the currentBill as was 

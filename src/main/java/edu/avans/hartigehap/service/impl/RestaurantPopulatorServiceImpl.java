@@ -117,7 +117,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	
 	private void createDiningTables(int numberOfTables, Restaurant restaurant) {
 		for(int i=0; i<numberOfTables; i++) {
-			DiningTable diningTable = new DiningTable(i+1);
+			DiningTable diningTable = new DiningTable(i+1, i+2);
 			diningTable.setRestaurant(restaurant);
 			restaurant.getDiningTables().add(diningTable);
 			diningTables.add(diningTable);
