@@ -8,9 +8,9 @@ import java.util.Iterator;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -31,17 +31,12 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "BILLS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id") 
 @Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"billStatus", "currentOrder", "orders"})
+@ToString(callSuper=true, includeFieldNames=true, of= {"billState", "currentOrder", "orders"})
 public class Bill extends DomainObject {
 	private static final long serialVersionUID = 1L;
-	
-	public enum BillStatus {
-		CREATED, SUBMITTED, PAID
-	}
-	
-	// represented in database as integer
-	@Enumerated(EnumType.ORDINAL)
-	private BillStatus billStatus;
+
+	@OneToOne(orphanRemoval=true, cascade=CascadeType.ALL)
+	private BillState billState;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date submittedTime;
@@ -50,10 +45,10 @@ public class Bill extends DomainObject {
 	private Date paidTime;
 
 	// unidirectional one-to-one relationship
-	@OneToOne(cascade = javax.persistence.CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Order currentOrder;
 	
-	@OneToMany(cascade = javax.persistence.CascadeType.ALL, mappedBy = "bill")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "bill")
 	private Collection<Order> orders = new ArrayList<Order>();
 	
 	// bidirectional one-to-many relationship
@@ -61,11 +56,11 @@ public class Bill extends DomainObject {
 	private DiningTable diningTable;
 
 	// bidirectional one-to-many relationship
-	@ManyToOne(cascade = javax.persistence.CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Customer customer;
 	
 	public Bill() {
-		billStatus = BillStatus.CREATED;
+		billState = new BillStateCreated();
 		currentOrder = new Order();
 		currentOrder.setBill(this);
 		orders.add(currentOrder);
@@ -126,11 +121,12 @@ public class Bill extends DomainObject {
 		orders.add(currentOrder);
 	}
 
-	/*
-	 * as the table gets a new bill, there is no risk that a customer keeps
-	 * ordering on the submitted or paid bill
+	/**
+	 * Verify it's possible to submit the bill, if not an exception is thrown.
+	 * @throws StateException If the current order is not empty and in the created state
+	 * @throws EmptyBillException If the bill is empty
 	 */
-	public void submit() throws StateException, EmptyBillException {
+	public void checkSubmit() throws StateException, EmptyBillException {
 		boolean allEmpty = true;
 		Iterator<Order> orderIterator = orders.iterator();
 		while (orderIterator.hasNext()) {
@@ -140,6 +136,7 @@ public class Bill extends DomainObject {
 				break;
 			}
 		}
+
 		if (allEmpty) {
 			throw new EmptyBillException("not allowed to submit an empty bill");
 		}
@@ -148,36 +145,26 @@ public class Bill extends DomainObject {
 			// the currentOrder is not empty, but not yet submitted
 			throw new StateException("not allowed to submit an with currentOrder in created state");
 		}
+	}
 
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		// TODO better to use another exception, because now GUI show wrong
-		// error message
-		if (billStatus != BillStatus.CREATED) {
-			throw new StateException(
-			        "not allowed to submit an already submitted bill");
-		}
-
-		submittedTime = new Date();
-		billStatus = BillStatus.SUBMITTED;
+	/*
+	 * as the table gets a new bill, there is no risk that a customer keeps
+	 * ordering on the submitted or paid bill
+	 */
+	public void submit() throws StateException, EmptyBillException {
+		billState.submit(this);
 	}
 
 	@Transient
 	public boolean isSubmitted() {
-		return billStatus == BillStatus.SUBMITTED;
+		return billState.isSubmitted();
 	}
 
 	public void paid() throws StateException {
-
-		// this can only happen by directly invoking HTTP requests, so not via
-		// GUI
-		if (billStatus != BillStatus.SUBMITTED) {
-			throw new StateException(
-			        "not allowed to pay an bill that is not in the submitted state");
-		}
-
-		paidTime = new Date();
-		billStatus = BillStatus.PAID;
+		billState.paid(this);
 	}
 
+	public void setBillState(BillState billState) {
+		this.billState = billState;
+	}
 }
