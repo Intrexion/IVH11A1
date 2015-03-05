@@ -35,7 +35,7 @@
 			<props>
 				<!-- prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop -->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<!--  <prop key="hibernate.hbm2ddl.auto">create</prop>-->
 				<prop key="hibernate.max_fetch_depth">3</prop>
 				<prop key="hibernate.jdbc.fetch_size">50</prop>
 				<prop key="hibernate.jdbc.batch_size">10</prop>
@@ -55,10 +55,10 @@
 		id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://145.48.6.147:3306/hh_a1" />
-		<!-- property name="url" value="jdbc:mysql://localhost:3306/hh" /-->
-		<property name="username" value="hhuser" />
-		<property name="password" value="boem" />
+		<!--<property name="url" value="jdbc:mysql://145.48.6.147:3306/hh_a1" />-->
+		<property name="url" value="jdbc:mysql://localhost:3306/hh"/>
+		<property name="username" value="root" />
+		<property name="password" value="" />
 		<property name="maxActive" value="0" />
 		<property name="initialSize" value="50" />
 	</bean>
