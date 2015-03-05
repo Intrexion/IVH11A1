@@ -34,18 +34,16 @@ public class BillServiceImpl implements BillService {
 	public void billHasBeenPaid(Bill bill) throws StateException {
 		bill.paid();
 	}
-	
+
 
 	@Transactional(readOnly=true)
 	public List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant) {
-	// a query created using a repository method name
-	List<Bill> submittedBillsList = billRepository.
-			findByBillStatusAndDiningTableRestaurant(
-					Bill.BillStatus.SUBMITTED, 
-					restaurant,
-					new Sort(Sort.Direction.ASC, "submittedTime"));
+		// a query created using a repository method name
+		List<Bill> submittedBillsList = billRepository.findByBillStateAndDiningTableRestaurant(
+				new BillStateSubmitted(),
+				restaurant,
+				new Sort(Sort.Direction.ASC, "submittedTime"));
 
-	return submittedBillsList;
-
+		return submittedBillsList;
 	}	
 }
