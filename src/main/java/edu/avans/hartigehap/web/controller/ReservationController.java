@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.web.form.Message;
 import edu.avans.hartigehap.web.util.UrlUtil;
@@ -35,6 +36,8 @@ public class ReservationController {
 	final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 	@Autowired
 	private ReservationService reservationService;
+	@Autowired
+	private CustomerService customerService;
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String listReservations(Model uiModel) {
@@ -69,7 +72,10 @@ public class ReservationController {
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");
 		
-		//uiModel.addAttribute("reservation", new Reservation());
+		
+		
+		Customer customer = customerService.save(reservation.getCustomer());
+		reservation.setCustomer(customer);
 		System.out.println(reservation.getCustomer().getPartySize());
 		return "hartigehap/createreservationform";
 	}

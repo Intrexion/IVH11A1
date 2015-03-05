@@ -7,12 +7,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.DiningTableService;
+
 import com.google.common.collect.Lists;
 
 
@@ -87,5 +90,12 @@ public class DiningTableServiceImpl implements DiningTableService {
 	public void submitBill(DiningTable diningTable)
 		throws StateException, EmptyBillException {
 		diningTable.submitBill();
+	}
+
+	@Override
+	public List<DiningTable> findbySeatsGreaterThanEqual(Restaurant restaurant,
+			int seats, Sort sort) {
+		List<DiningTable> listDiningTables = diningTableRepository.findBySeatsGreaterThanEqualAndRestaurant(restaurant, seats, sort);
+		return listDiningTables;
 	}
 }
