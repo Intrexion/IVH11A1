@@ -1,5 +1,6 @@
 package edu.avans.hartigehap.domain;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
@@ -16,6 +17,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public abstract class BillState extends DomainObject {
 	private static final long serialVersionUID = 1L;
+
+	// Map the discriminator value as a read-only property
+	@Column(name="type", nullable=false, updatable=false, insertable=false)
+	private String statusType;
 
 	public abstract boolean isSubmitted();
 

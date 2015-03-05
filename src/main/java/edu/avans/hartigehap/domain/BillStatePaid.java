@@ -4,9 +4,11 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("paid")
+@DiscriminatorValue(BillStatePaid.DISCRIMINATOR)
 public class BillStatePaid extends BillState {
 	private static final long serialVersionUID = 1L;
+
+	public static final String DISCRIMINATOR = "paid";
 
 	@Override
 	public boolean isSubmitted() {

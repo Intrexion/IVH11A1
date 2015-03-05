@@ -13,8 +13,8 @@ public interface BillRepository extends PagingAndSortingRepository<Bill, Long> {
 	// bill.getBillStatus() == billStatus
 	// AND
 	// bill.getDiningTable().getRestaurant() == restaurant
-	List<Bill> findByBillStateAndDiningTableRestaurant(
-			BillState billState,
+	List<Bill> findByBillState_StatusTypeAndDiningTable_Restaurant(
+			String state,
 			Restaurant restaurant, 
 			Sort sort);
 }
