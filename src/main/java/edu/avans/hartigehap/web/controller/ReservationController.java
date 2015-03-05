@@ -57,9 +57,20 @@ public class ReservationController {
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
 		logger.info("Create reservation form");
+		Reservation reservation = new Reservation();
+		reservation.setCustomer(new Customer());
+		uiModel.addAttribute("reservation", reservation);
 		
-		uiModel.addAttribute("reservation", new Reservation());
+		return "hartigehap/createreservationform";
+	}
+	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
+	public String createReservation(Reservation reservation, BindingResult bindingResult,
+			Model uiModel, HttpServletRequest httpServletRequest,
+			RedirectAttributes redirectAttributes, Locale locale) {
+		logger.info("Create reservation form");
 		
+		//uiModel.addAttribute("reservation", new Reservation());
+		System.out.println(reservation.getCustomer().getPartySize());
 		return "hartigehap/createreservationform";
 	}
 }
