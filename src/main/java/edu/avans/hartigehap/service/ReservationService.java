@@ -1,9 +1,7 @@
 package edu.avans.hartigehap.service;
 
-import java.util.Collection;
 import java.util.List;
 
-import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
 

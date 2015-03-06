@@ -1,7 +1,6 @@
 package edu.avans.hartigehap.service.impl;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
