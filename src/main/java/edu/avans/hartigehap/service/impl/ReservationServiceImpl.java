@@ -65,20 +65,8 @@ public class ReservationServiceImpl implements ReservationService {
 	}
 	
 	@Override
-	public Reservation save(Reservation reservation, Collection<DiningTable> diningTables) {
-		
-		DiningTable dt = checkReservation(reservation, diningTables);
-		
-		if(dt != null){
-			reservation.setDiningTable(dt);
-			reservation.setRestaurant(dt.getRestaurant());
-			reservation = reservationRepository.save(reservation);
-		return reservation;
-		}
-		else{
-			return null;
-		}
-		
+	public Reservation save(Reservation reservation) {
+		return reservationRepository.save(reservation);
 	}
 
 	@Override

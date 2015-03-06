@@ -10,7 +10,7 @@ import edu.avans.hartigehap.domain.Restaurant;
 public interface ReservationService {
 	List<Reservation> findAll();
 	Reservation findById(Long id);
-	Reservation save(Reservation reservation, Collection<DiningTable> diningTables);
+	Reservation save(Reservation reservation);
 	void delete(Reservation owner);
 	List<Reservation> findByRestaurant(Restaurant restaurant);
 }
