@@ -16,7 +16,6 @@ public interface DiningTableService {
 	
 	void delete(Long id);
 	Page<DiningTable> findAllByPage(Pageable pageable);
-	List<DiningTable> findbySeatsGreaterThanEqualAndRestaurant(Restaurant restaurant, int seats, Sort sort);
 	DiningTable fetchWarmedUp(Long diningTableId);
 	void addOrderItem(DiningTable diningTable, String menuItemName);
 	void deleteOrderItem(DiningTable diningTable, String menuItemName);

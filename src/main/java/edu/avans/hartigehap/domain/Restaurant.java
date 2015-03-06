@@ -2,7 +2,10 @@ package edu.avans.hartigehap.domain;
 
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
@@ -51,6 +54,14 @@ public class Restaurant extends DomainObjectNaturalId {
 		this.imageFileName = imageFileName;
 	}
 
+	@Transient
+	public List<DiningTable> getDiningTablesBySeats(int seats){
+		List<DiningTable> newDiningTables = diningTables.stream().filter(r -> r.getSeats() >= seats).collect(Collectors.toList());
+		
+		Collections.sort(newDiningTables, (dt1, dt2) -> dt1.getSeats() - dt2.getSeats());
+		return newDiningTables;
+	}
+	
 
 	// business methods
 

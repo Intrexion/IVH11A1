@@ -91,11 +91,4 @@ public class DiningTableServiceImpl implements DiningTableService {
 		throws StateException, EmptyBillException {
 		diningTable.submitBill();
 	}
-
-	@Override
-	public List<DiningTable> findbySeatsGreaterThanEqualAndRestaurant(Restaurant restaurant,
-			int seats, Sort sort) {
-		List<DiningTable> listDiningTables = diningTableRepository.findBySeatsGreaterThanEqualAndRestaurant(restaurant, seats, sort);
-		return listDiningTables;
-	}
 }

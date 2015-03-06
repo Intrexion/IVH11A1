@@ -57,13 +57,8 @@ function checkTime() {
 	<fieldset>
 		<div class="pure-control-group">
 			<form:label path="restaurant">Restaurant</form:label>
-			<!-- uit te zoeken hoe dit moet ? -->
 			<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-forminput-2-3">
 			<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
-				<!-- <option value="a">Nader in te vullen</option>
-				<option value="b">Nader in te vullen</option>
-				<option value="c">Nader in te vullen</option>
-				<option value="d">Nader in te vullen</option>-->
 			</form:select>
 		</div>
 			<form:label path="startDate">

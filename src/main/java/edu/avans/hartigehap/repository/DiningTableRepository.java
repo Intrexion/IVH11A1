@@ -9,5 +9,5 @@ import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Restaurant;
 
 public interface DiningTableRepository extends PagingAndSortingRepository<DiningTable, Long> {
-	List<DiningTable> findBySeatsGreaterThanEqualAndRestaurant(Restaurant restaurant, int seats, Sort sort);
+	
 }

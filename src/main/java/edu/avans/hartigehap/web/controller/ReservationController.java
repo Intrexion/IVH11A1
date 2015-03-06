@@ -16,6 +16,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -88,17 +89,26 @@ public class ReservationController {
 		reservation.setStartDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getStartTime()));
 		reservation.setEndDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getEndTime()));
 		
-		Customer customer = new Customer.Builder("Henk", "Henkie").build();
-		customer = customerService.save(customer);
-		reservation.setCustomer(customer);
+		Customer formCust = reservation.getCustomer();
+		
+		Customer customer = new Customer.Builder(formCust.getFirstName(), formCust.getLastName())
+												.setPartySize(formCust.getPartySize())
+												.setEmail(formCust.getEmail())
+												.setPhone(formCust.getPhone())
+												.build();
 
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
-		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
-		DiningTable diningTable = tables.get(0);
+//		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
+		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(customer.getPartySize()));
+//				diningTableService.findbySeatsGreaterThanEqualAndRestaurant(restaurant, reservation.getCustomer().getPartySize(), new Sort(Sort.Direction.ASC, "seats")));
 	
-		reservation.setStartDate(new DateTime());
-		reservation.setEndDate(new DateTime());
+		if(diningTable == null){
+			// geen plaats voor de reservering
+		}else{
 		
+		customer = customerService.save(customer);
+		reservation.setCustomer(customer);
+			
 		reservation.setRestaurant(restaurant);
 		restaurant.getReservations().add(reservation);
 		reservation = reservationService.save(reservation);
@@ -109,7 +119,33 @@ public class ReservationController {
 		
 		customer = customerService.save(customer);
 		restaurant = restaurantService.save(restaurant);
-		
-		return "hartigehap/createreservationform";
+		}
+		return "hartigehap/listrestaurants";
+	}
+	
+	private DiningTable checkReservation(Reservation reservation, Collection<DiningTable> diningTables){
+		for(DiningTable dt : diningTables){
+			boolean freespot = true;
+			for(Reservation r : dt.getReservationsByDate(reservation.getStartDate())){
+				
+				if((reservation.getStartDate().isBefore(r.getStartDate()) && reservation.getStartDate().isBefore(r.getEndDate())) && (reservation.getEndDate().isBefore(r.getStartDate()) && reservation.getEndDate().isBefore(r.getEndDate()))){
+	                //afspraak voor de huidige
+	            }
+	            else if((reservation.getStartDate().isAfter(r.getStartDate()) && reservation.getStartDate().isAfter(r.getEndDate())) && (reservation.getEndDate().isAfter(r.getStartDate()) && reservation.getEndDate().isAfter(r.getEndDate()))){
+	                //afspraak na de hudige
+	            }
+	            else if((reservation.getStartDate().equals(r.getEndDate()) && reservation.getEndDate().isAfter(r.getEndDate())) || (reservation.getEndDate().equals(r.getStartDate()) && reservation.getStartDate().isBefore(r.getStartDate()))){
+	                //afspraak aansluitend aan huidige
+	            }
+	            else{
+	                freespot = false;
+	                break;
+	            }
+	        }
+	        if(freespot){    
+			return dt;
+	        }
+		}
+		return null;
 	}
 }
