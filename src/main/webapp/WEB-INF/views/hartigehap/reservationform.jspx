@@ -73,53 +73,53 @@ function checkTime() {
 		<div class="pure-control-group">
 			<form:label path="startTime" style="font-weight: bold;">Starttijd</form:label>
 			<!-- uit te zoeken hoe te werken met select -->
-			<select name="start-time" id="start-time" onchange="checkTime()">
-				<option value="1200">12:00</option>
-				<option value="1230">12:30</option>
-				<option value="1300">13:00</option>
-				<option value="1330">13:30</option>
-				<option value="1400">14:00</option>
-				<option value="1430">14:30</option>
-				<option value="1500">15:00</option>
-				<option value="1530">15:30</option>
-				<option value="1600">16:00</option>
-				<option value="1630">16:30</option>
-				<option value="1700">17:00</option>
-				<option value="1730">17:30</option>
-				<option value="1800">18:00</option>
-				<option value="1830">18:30</option>
-				<option value="1900">19:00</option>
-				<option value="1930">19:30</option>
-				<option value="2000">20:00</option>
-				<option value="2030">20:30</option>
-				<option value="2100">21:00</option>
+			<select name="startTime" id="startTime" onchange="checkTime()">
+				<option value="12:00">12:00</option>
+				<option value="12:30">12:30</option>
+				<option value="13:00">13:00</option>
+				<option value="13:30">13:30</option>
+				<option value="14:00">14:00</option>
+				<option value="14:30">14:30</option>
+				<option value="15:00">15:00</option>
+				<option value="15:30">15:30</option>
+				<option value="16:00">16:00</option>
+				<option value="16:30">16:30</option>
+				<option value="17:00">17:00</option>
+				<option value="17:30">17:30</option>
+				<option value="18:00">18:00</option>
+				<option value="18:30">18:30</option>
+				<option value="19:00">19:00</option>
+				<option value="19:30">19:30</option>
+				<option value="20:00">20:00</option>
+				<option value="20:30">20:30</option>
+				<option value="21:00">21:00</option>
 			</select> 
 		</div>
 		
 		<div class="pure-control-group">
-		<form:label path="startTime" style="font-weight: bold;">Eindtijd</form:label>
+		<form:label path="endTime" style="font-weight: bold;">Eindtijd</form:label>
 			<select name="endTime" id="endTime" onchange="checkTime()">
-				<option value="1300">13:00</option>
-				<option value="1330">13:30</option>
-				<option value="1400">14:00</option>
-				<option value="1430">14:30</option>
-				<option value="1500">15:00</option>
-				<option value="1530">15:30</option>
-				<option value="1600">16:00</option>
-				<option value="1630">16:30</option>
-				<option value="1700">17:00</option>
-				<option value="1730">17:30</option>
-				<option value="1800">18:00</option>
-				<option value="1830">18:30</option>
-				<option value="1900">19:00</option>
-				<option value="1930">19:30</option>
-				<option value="2000">20:00</option>
-				<option value="2030">20:30</option>
-				<option value="2100">21:00</option>
-				<option value="2130">21:30</option> 
-				<option value="2200">22:00</option> 
-				<option value="2230">22:30</option> 
-				<option value="2300">23:00</option> 
+				<option value="13:00">13:00</option>
+				<option value="13:30">13:30</option>
+				<option value="14:00">14:00</option>
+				<option value="14:30">14:30</option>
+				<option value="15:00">15:00</option>
+				<option value="15:30">15:30</option>
+				<option value="16:00">16:00</option>
+				<option value="16:30">16:30</option>
+				<option value="17:00">17:00</option>
+				<option value="17:30">17:30</option>
+				<option value="18:00">18:00</option>
+				<option value="18:30">18:30</option>
+				<option value="19:00">19:00</option>
+				<option value="19:30">19:30</option>
+				<option value="20:00">20:00</option>
+				<option value="20:30">20:30</option>
+				<option value="21:00">21:00</option>
+				<option value="21:30">21:30</option> 
+				<option value="22:00">22:00</option> 
+				<option value="22:30">22:30</option> 
+				<option value="23:00">23:00</option> 
 			</select>	
 		</div>
 		

@@ -82,8 +82,10 @@ public class ReservationController {
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");
 		
-		Customer customer = new Customer.Builder("Henk", "Henkie")
-										.build();
+		reservation.setStartDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getStartTime()));
+		reservation.setEndDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getEndTime()));
+		
+		Customer customer = new Customer.Builder("Henk", "Henkie").build();
 		customer = customerService.save(customer);
 		reservation.setCustomer(customer);
 		Restaurant restaurant = restaurantService.findAll().get(0);
@@ -104,7 +106,6 @@ public class ReservationController {
 		customer = customerService.save(customer);
 		restaurant = restaurantService.save(restaurant);
 		
-		System.out.println(reservation.getCustomer().getPartySize());
 		return "hartigehap/createreservationform";
 	}
 }
