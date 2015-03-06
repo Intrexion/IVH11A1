@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -33,6 +34,15 @@ public class Reservation extends DomainObject {
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE)
 	private DateTime endDate;
+	
+	@Transient
+	@DateTimeFormat(iso = ISO.DATE)
+	private DateTime day;
+	@Transient
+	private String startTime;
+	@Transient
+	private String endTime;
+	
 	private String description;
 	
 	@OneToOne(mappedBy="reservation")

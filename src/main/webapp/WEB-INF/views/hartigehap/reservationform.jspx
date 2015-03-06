@@ -68,11 +68,10 @@ function checkTime() {
 			<form:label path="startDate">
 				Reserveringsdatum
 			</form:label>
-			<!--  type="date" gebruiken? werkt schijnbaar niet in firefox -->
-			<form:input type="date" path="startDate" id="startDate" />
+			<form:input type="date" path="day" id="startDate" />
 		
 		<div class="pure-control-group">
-			<form:label path="startDate" style="font-weight: bold;">Starttijd</form:label>
+			<form:label path="startTime" style="font-weight: bold;">Starttijd</form:label>
 			<!-- uit te zoeken hoe te werken met select -->
 			<select name="start-time" id="start-time" onchange="checkTime()">
 				<option value="1200">12:00</option>
@@ -98,7 +97,7 @@ function checkTime() {
 		</div>
 		
 		<div class="pure-control-group">
-		<form:label path="endDate" style="font-weight: bold;">Eindtijd</form:label>
+		<form:label path="startTime" style="font-weight: bold;">Eindtijd</form:label>
 			<select name="endTime" id="endTime" onchange="checkTime()">
 				<option value="1300">13:00</option>
 				<option value="1330">13:30</option>
