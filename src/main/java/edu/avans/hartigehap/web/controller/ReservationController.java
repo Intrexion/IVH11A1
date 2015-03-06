@@ -74,6 +74,9 @@ public class ReservationController {
 		reservation.setCustomer(new Customer());
 		uiModel.addAttribute("reservation", reservation);
 		
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		
 		return "hartigehap/createreservationform";
 	}
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
@@ -88,24 +91,29 @@ public class ReservationController {
 		Customer customer = new Customer.Builder("Henk", "Henkie").build();
 		customer = customerService.save(customer);
 		reservation.setCustomer(customer);
-		Restaurant restaurant = restaurantService.findAll().get(0);
-		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
-		DiningTable diningTable = tables.get(0);
-	
-		reservation.setStartDate(new DateTime());
-		reservation.setEndDate(new DateTime());
 		
-		reservation = reservationService.save(reservation);
-		reservation.setRestaurant(restaurant);
-		restaurant.getReservations().add(reservation);
-		reservation.setDiningTable(diningTable);
-		diningTable.getReservations().add(reservation);
-		reservation.setCustomer(customer);
-		customer.setReservation(reservation);
-		
-		customer = customerService.save(customer);
-		restaurant = restaurantService.save(restaurant);
-		
+		if(reservation.getRestaurant() == null){
+			System.out.println("restaurant is null");
+		}
+//		System.out.println(reservation.getRestaurant().getId());
+//		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
+//		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
+//		DiningTable diningTable = tables.get(0);
+//	
+//		reservation.setStartDate(new DateTime());
+//		reservation.setEndDate(new DateTime());
+//		
+//		reservation = reservationService.save(reservation);
+//		reservation.setRestaurant(restaurant);
+//		restaurant.getReservations().add(reservation);
+//		reservation.setDiningTable(diningTable);
+//		diningTable.getReservations().add(reservation);
+//		reservation.setCustomer(customer);
+//		customer.setReservation(reservation);
+//		
+//		customer = customerService.save(customer);
+//		restaurant = restaurantService.save(restaurant);
+//		
 		return "hartigehap/createreservationform";
 	}
 }
