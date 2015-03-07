@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,16 +76,25 @@ public class ReservationController {
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");
 		
-		reservation.setStartDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getStartTime()));
-		reservation.setEndDate(DateTimeConverter.stringToDateTime(reservation.getDay().toString(), reservation.getEndTime()));
-		
+		DateTimeAdapter dateTimeAdapter = new DateTimeAdapter();
+
+		DateAndTime dateAndTimeStart = new DateAndTime(reservation.getDay(), reservation.getStartTime());
+		dateTimeAdapter.setDateAndTime(dateAndTimeStart);
+		DateTime startDate = dateTimeAdapter.getDateTime();
+		reservation.setStartDate(startDate);
+
+		DateAndTime dateAndTimeEnd = new DateAndTime(reservation.getDay(), reservation.getEndTime());
+		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
+		DateTime endDate = dateTimeAdapter.getDateTime();
+		reservation.setEndDate(endDate);
+
 		Customer formCust = reservation.getCustomer();
-		
+
 		Customer customer = new Customer.Builder(formCust.getFirstName(), formCust.getLastName())
-												.setPartySize(formCust.getPartySize())
-												.setEmail(formCust.getEmail())
-												.setPhone(formCust.getPhone())
-												.build();
+				.setPartySize(formCust.getPartySize())
+				.setEmail(formCust.getEmail())
+				.setPhone(formCust.getPhone())
+				.build();
 
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
 //		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
@@ -93,21 +103,20 @@ public class ReservationController {
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering
-		}else{
-		
-		customer = customerService.save(customer);
-		reservation.setCustomer(customer);
-			
-		reservation.setRestaurant(restaurant);
-		restaurant.getReservations().add(reservation);
-		reservation = reservationService.save(reservation);
-		reservation.setDiningTable(diningTable);
-		diningTable.getReservations().add(reservation);
-		reservation.setCustomer(customer);
-		customer.setReservation(reservation);
-		
-		customer = customerService.save(customer);
-		restaurant = restaurantService.save(restaurant);
+		} else {
+			customer = customerService.save(customer);
+			reservation.setCustomer(customer);
+
+			reservation.setRestaurant(restaurant);
+			restaurant.getReservations().add(reservation);
+			reservation = reservationService.save(reservation);
+			reservation.setDiningTable(diningTable);
+			diningTable.getReservations().add(reservation);
+			reservation.setCustomer(customer);
+			customer.setReservation(reservation);
+
+			customer = customerService.save(customer);
+			restaurant = restaurantService.save(restaurant);
 		}
 		return "hartigehap/listrestaurants";
 	}
