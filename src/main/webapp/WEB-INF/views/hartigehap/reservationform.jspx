@@ -53,18 +53,18 @@ function checkTime() {
 	<c:if test="${not empty message}">
 		<div id="message" class="${message.type}">${message.message}</div>
 	</c:if>
-	<form:form modelAttribute="reservation" id="form" method="post">
+	<form:form modelAttribute="reservationmodel" id="form" method="post">
 	<fieldset>
 		<div class="pure-control-group">
 			<form:label path="restaurant">Restaurant</form:label>
 			<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-forminput-2-3">
-			<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
+				<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
 			</form:select>
 		</div>
-			<form:label path="startDate">
+			<form:label path="date">
 				Reserveringsdatum
 			</form:label>
-			<form:input type="date" path="day" id="startDate" />
+			<form:input type="date" path="date" id="date" />
 		
 		<div class="pure-control-group">
 			<form:label path="startTime" style="font-weight: bold;">Starttijd</form:label>
@@ -120,27 +120,27 @@ function checkTime() {
 		</div>
 		
 		<div class="pure-control-group">
-			<form:label path="customer.partySize" style="font-weight: bold;">Aantal personen</form:label>
-			<form:input path="customer.partySize" type="number" min="1" max="12" class="pure-forminput-2-3" id="party-size" placeholder="Aantal personen" />
+			<form:label path="partySize" style="font-weight: bold;">Aantal personen</form:label>
+			<form:input path="partySize" type="number" min="1" max="12" class="pure-forminput-2-3" id="party-size" placeholder="Aantal personen" />
 		</div>
 
 		<div class="pure-control-group">
-			<form:label path="customer.firstName" style="font-weight: bold;">Voornaam</form:label>
-			<form:input path="customer.firstName" type="text" class="pure-forminput-2-3" id="first-name" placeholder="Voornaam"  />
+			<form:label path="firstName" style="font-weight: bold;">Voornaam</form:label>
+			<form:input path="firstName" type="text" class="pure-forminput-2-3" id="first-name" placeholder="Voornaam"  />
 		</div>
 		<div class="pure-control-group">
-			<form:label path="customer.lastName" style="font-weight: bold;">Achternaam</form:label>
-			<form:input path="customer.lastName" type="text" class="pure-forminput-2-3" id="first-name" placeholder="Achternaam"  />
+			<form:label path="lastName" style="font-weight: bold;">Achternaam</form:label>
+			<form:input path="lastName" type="text" class="pure-forminput-2-3" id="first-name" placeholder="Achternaam"  />
 		</div>
 		
 		<div class="pure-control-group">
-			<form:label path="customer.email" style="font-weight: bold;">E-mail</form:label>
-			<form:input path="customer.email" class="pure-forminput-2-3" id="email-address" placeholder="E-mailadres"  />
+			<form:label path="email" style="font-weight: bold;">E-mail</form:label>
+			<form:input path="email" class="pure-forminput-2-3" id="email-address" placeholder="E-mailadres"  />
 		</div>
 
 		<div class="pure-control-group">
-			<form:label path="customer.phone" style="font-weight: bold;">Telefoonnummer</form:label>
-			<form:input  path="customer.phone" minlength="10" maxlength="10" class="pure-forminput-2-3" id="phone-number" placeholder="Telefoonnummer"  />
+			<form:label path="phone" style="font-weight: bold;">Telefoonnummer</form:label>
+			<form:input path="phone" minlength="10" maxlength="10" class="pure-forminput-2-3" id="phone-number" placeholder="Telefoonnummer"  />
 		</div>
 		
 		<div class="pure-controls">

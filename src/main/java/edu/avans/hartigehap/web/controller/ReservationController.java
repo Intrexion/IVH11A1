@@ -22,6 +22,7 @@ import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
+import edu.avans.hartigehap.model.ReservationModel;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
@@ -61,9 +62,8 @@ public class ReservationController {
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
 		logger.info("Create reservation form");
-		Reservation reservation = new Reservation();
-		reservation.setCustomer(new Customer());
-		uiModel.addAttribute("reservation", reservation);
+		ReservationModel model = new ReservationModel();
+		uiModel.addAttribute("reservationmodel", model);
 		
 		Collection<Restaurant> restaurants = restaurantService.findAll();
 		uiModel.addAttribute("restaurants", restaurants);
@@ -71,35 +71,34 @@ public class ReservationController {
 		return "hartigehap/createreservationform";
 	}
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
-	public String createReservation(Reservation reservation, BindingResult bindingResult,
+	public String createReservation(ReservationModel model, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");
 		
+		Reservation reservation = new Reservation();
 		DateTimeAdapter dateTimeAdapter = new DateTimeAdapter();
 
-		DateAndTime dateAndTimeStart = new DateAndTime(reservation.getDay(), reservation.getStartTime());
+		DateAndTime dateAndTimeStart = new DateAndTime(model.getDate(), model.getStartTime());
 		dateTimeAdapter.setDateAndTime(dateAndTimeStart);
 		DateTime startDate = dateTimeAdapter.getDateTime();
 		reservation.setStartDate(startDate);
 
-		DateAndTime dateAndTimeEnd = new DateAndTime(reservation.getDay(), reservation.getEndTime());
+		DateAndTime dateAndTimeEnd = new DateAndTime(model.getDate(), model.getEndTime());
 		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
 		DateTime endDate = dateTimeAdapter.getDateTime();
 		reservation.setEndDate(endDate);
 
-		Customer formCust = reservation.getCustomer();
-
-		Customer customer = new Customer.Builder(formCust.getFirstName(), formCust.getLastName())
-				.setPartySize(formCust.getPartySize())
-				.setEmail(formCust.getEmail())
-				.setPhone(formCust.getPhone())
+		Customer customer = new Customer.Builder(model.getFirstName(), model.getLastName())
+				.setPartySize(model.getPartySize())
+				.setEmail(model.getEmail())
+				.setPhone(model.getPhone())
 				.build();
 
-		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
+		Restaurant restaurant = restaurantService.findById(model.getRestaurant().getId());
 //		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
 		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(customer.getPartySize()));
-//				diningTableService.findbySeatsGreaterThanEqualAndRestaurant(restaurant, reservation.getCustomer().getPartySize(), new Sort(Sort.Direction.ASC, "seats")));
+//		diningTableService.findbySeatsGreaterThanEqualAndRestaurant(restaurant, reservation.getCustomer().getPartySize(), new Sort(Sort.Direction.ASC, "seats")));
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering

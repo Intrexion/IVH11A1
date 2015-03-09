@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -26,28 +25,25 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @NoArgsConstructor
 public class Reservation extends DomainObject {
 	private static final long serialVersionUID = 1L;
+
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private DateTime startDate;
+
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private DateTime endDate;
-	
-	@Transient
-	private String day;
-	@Transient
-	private String startTime;
-	@Transient
-	private String endTime;
-	
+
 	private String description;
-	
+
 	@OneToOne(mappedBy="reservation")
 	private Customer customer;
+
 	@ManyToOne
 	private Restaurant restaurant;
+
 	@ManyToOne
 	private DiningTable diningTable;
 	
