@@ -56,8 +56,8 @@ function checkTime() {
 	<form:form modelAttribute="reservationmodel" id="form" method="post">
 	<fieldset>
 		<div class="pure-control-group">
-			<form:label path="restaurant">Restaurant</form:label>
-			<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-forminput-2-3">
+			<form:label path="restaurantId">Restaurant</form:label>
+			<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-forminput-2-3">
 				<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
 			</form:select>
 		</div>

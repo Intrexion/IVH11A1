@@ -95,10 +95,8 @@ public class ReservationController {
 				.setPhone(model.getPhone())
 				.build();
 
-		Restaurant restaurant = restaurantService.findById(model.getRestaurant().getId());
-//		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
+		Restaurant restaurant = restaurantService.findById(model.getRestaurantId());
 		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(customer.getPartySize()));
-//		diningTableService.findbySeatsGreaterThanEqualAndRestaurant(restaurant, reservation.getCustomer().getPartySize(), new Sort(Sort.Direction.ASC, "seats")));
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering
