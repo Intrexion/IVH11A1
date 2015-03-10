@@ -9,28 +9,22 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8" />  
     <jsp:directive.page pageEncoding="UTF-8" /> 
 		
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
-<!--[if lte IE 8]>
-  
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css" />
-  
-<![endif]-->
-<!--[if gt IE 8]><!-->
-  
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css" />
-  
-<!--<![endif]-->
-</head>	
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
+		<!--[if lte IE 8]>
+		    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css" />
+		<![endif]-->
+		<!--[if gt IE 8]><!-->
+		    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css" />
+		<!--<![endif]-->
+	</head>
 
-<body background="http://www.valueinvestasia.com/wp-content/uploads/2015/01/Singapore-Restaurant-Week-2012-Visual.jpg" onload="setCSS(); setCSS2;" style="	-webkit-background-size: cover;
-  	-moz-background-size: cover;
-  	-o-background-size: cover;
-  	background-size: cover;">
+	<spring:url value="/resources/images/background.jpg" var="background_url" />
+	<body background="${background_url}" onload="setCSS(); setCSS2;" style="-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
 
-<tiles:insertAttribute name="body"/> 
+		<tiles:insertAttribute name="body"/>
 
-</body>
+	</body>
 </html>
