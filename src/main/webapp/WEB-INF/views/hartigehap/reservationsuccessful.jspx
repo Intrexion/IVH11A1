@@ -8,6 +8,9 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
+	<spring:message code="label_reservation_successful_header" var="labelSuccessfulHeader" />
+	<spring:message code="label_reservation_successful_message" var="labelSuccessfulMessage" />
+
 	<div style=" 
 	background-color: #FFFFFF;
 	border:2px;
@@ -27,7 +30,7 @@
 	-moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
 	-webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);">
 	
-		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">Reservering succesvol!</h2>
+		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">${labelSuccessfulHeader}</h2>
 	
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>
@@ -35,7 +38,7 @@
 		
 		<div class="pure-g">
 		    <div class="pure-u-1-5"><p></p></div>
-		    <div class="pure-u-3-5"><p align="center">Uw reservering is succesvol geplaatst.</p></div>
+		    <div class="pure-u-3-5"><p align="center">${labelSuccessfulMessage}</p></div>
 		    <div class="pure-u-1-5"><p></p></div>
 		</div>
 		

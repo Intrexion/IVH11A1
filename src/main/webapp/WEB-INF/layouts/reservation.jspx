@@ -7,8 +7,14 @@
     <jsp:output doctype-root-element="HTML" doctype-system="about:legacy-compat" />
     
     <jsp:directive.page contentType="text/html;charset=UTF-8" />  
-    <jsp:directive.page pageEncoding="UTF-8" /> 
-		
+    <jsp:directive.page pageEncoding="UTF-8" />
+
+    <!-- Get the user locale from the page context (it was set by Spring MVC's locale resolver) -->
+    <c:set var="userLocale">
+        <c:set var="plocale">${pageContext.response.locale}</c:set>
+        <c:out value="${fn:replace(plocale, '_', '-')}" default="en" />
+    </c:set>
+
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
@@ -19,6 +25,9 @@
 		<!--[if gt IE 8]><!-->
 		    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css" />
 		<!--<![endif]-->
+
+		<spring:message code="label_reservation_reserve" var="label_title" />
+		<title>${label_title}</title>
 	</head>
 
 	<spring:url value="/resources/images/background.jpg" var="background_url" />

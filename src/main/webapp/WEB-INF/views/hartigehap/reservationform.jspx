@@ -8,6 +8,21 @@
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
+	<spring:message code="label_restaurant" var="labelRestaurant" />
+	<spring:message code="label_reservation_form" var="labelReservationForm" />
+	<spring:message code="label_reservation_date" var="labelDate" />
+	<spring:message code="label_reservation_starttime" var="labelStartTime" />
+	<spring:message code="label_reservation_endtime" var="labelEndTime" />
+	<spring:message code="label_reservation_persons" var="labelPersons" />
+	<spring:message code="label_reservation_firstname" var="labelFirstName" />
+	<spring:message code="label_reservation_lastname" var="labelLastName" />
+	<spring:message code="label_reservation_email" var="labelEmail" />
+	<spring:message code="label_reservation_phone" var="labelPhone" />
+	<spring:message code="label_reservation_comments" var="labelComments" />
+	<spring:message code="label_reservation_comments_placeholder" var="labelCommentsPlaceholder" />
+	<spring:message code="label_reservation_submit" var="labelSubmit" />
+	<spring:message code="label_reservation_time_error" var="labelTimeError" />
+
 	<script type="text/javascript">
 	function validateForm() {
 	    var a = document.getElementById('startTime').value;
@@ -20,7 +35,7 @@
 	    var y = bsplit[0] + bsplit[1];
 
 	    if (+x >= +y) {
-	        document.getElementById('startTime').setCustomValidity('De starttijd moet voor de eindtijd liggen.');
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
 	        return false;
 	    }
 	}
@@ -38,7 +53,7 @@
 	    if (+x >= +y) {
 	        document.getElementById('startTime').style.borderColor = "red";
 	        document.getElementById('endTime').style.borderColor = "red";
-	        document.getElementById('startTime').setCustomValidity('De starttijd moet voor de eindtijd liggen.');
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
 	    }
 
 	    if (+y > +x) {
@@ -68,7 +83,7 @@
 	-moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
 	-webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);">
 	
-		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">Reserveringsformulier</h2>
+		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">${labelReservationForm}</h2>
 	
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>
@@ -76,18 +91,18 @@
 		<form:form class="pure-form pure-form-aligned" style="color:#34495e; font-family:sans-serif;" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
 		<fieldset>
 			<div class="pure-control-group">
-				<form:label path="restaurantId" style="font-weight: bold;">Restaurant</form:label>
-					<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-input-2-3">
-				<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
+				<form:label path="restaurantId" style="font-weight: bold;">${labelRestaurant}</form:label>
+				<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-input-2-3">
+					<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
 				</form:select>
 			</div>
 			<div class="pure-control-group">
-				<form:label style="font-weight: bold;" path="date">Reserveringsdatum</form:label>
+				<form:label style="font-weight: bold;" path="date">${labelDate}</form:label>
 				<form:input class="pure-input-2-3" type="date" path="date" id="date" min="${currentDate}" value="${currentDate}" />
 			</div>	
 			
 			<div class="pure-control-group">
-				<form:label path="startTime" style="font-weight: bold;">Starttijd</form:label>
+				<form:label path="startTime" style="font-weight: bold;">${labelStartTime}</form:label>
 				<!-- uit te zoeken hoe te werken met select -->
 				<select name="startTime" id="startTime" onchange="checkTime()">
 					<option value="12:00">12:00</option>
@@ -113,7 +128,7 @@
 			</div>
 			
 			<div class="pure-control-group">
-			<form:label path="endTime" style="font-weight: bold;">Eindtijd</form:label>
+			<form:label path="endTime" style="font-weight: bold;">${labelEndTime}</form:label>
 				<select name="endTime" id="endTime" onchange="checkTime()">
 					<option value="13:00">13:00</option>
 					<option value="13:30">13:30</option>
@@ -140,32 +155,32 @@
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="partySize" style="font-weight: bold;">Aantal personen</form:label>
+				<form:label path="partySize" style="font-weight: bold;">${labelPersons}</form:label>
 				<form:input required="required" path="partySize" type="number" min="1" max="12" id="party-size" value="2" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="firstName" style="font-weight: bold;">Voornaam</form:label>
-				<form:input required="required" path="firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="Voornaam"  />
+				<form:label path="firstName" style="font-weight: bold;">${labelFirstName}</form:label>
+				<form:input required="required" path="firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 			<div class="pure-control-group">
-				<form:label path="lastName" style="font-weight: bold;">Achternaam</form:label>
-				<form:input required="required" path="lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="Achternaam"  />
+				<form:label path="lastName" style="font-weight: bold;">${labelLastName}</form:label>
+				<form:input required="required" path="lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="email" style="font-weight: bold;">E-mail</form:label>
-				<form:input type="email" required="required" path="email" class="pure-input-2-3" id="email-address" placeholder="E-mailadres" />
+				<form:label path="email" style="font-weight: bold;">${labelEmail}</form:label>
+				<form:input type="email" required="required" path="email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="phone" style="font-weight: bold;">Telefoonnummer</form:label>
-				<form:input type="tel" required="required" path="phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="Telefoonnummer"  />
+				<form:label path="phone" style="font-weight: bold;">${labelPhone}</form:label>
+				<form:input type="tel" required="required" path="phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="description" style="font-weight: bold;">Opmerkingen</form:label>
-				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3" style="resize: none;" placeholder="Vul hier eventuele opmerkingen in" />
+				<form:label path="description" style="font-weight: bold;">${labelComments}</form:label>
+				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3" style="resize: none;" placeholder="${labelCommentsPlaceholder}" />
 			</div>
 			
 			<div class="pure-controls">
@@ -176,7 +191,7 @@
 				<form:input id="terms" type="checkbox" path=/>
 				<br />-->
 			
-				<button type="submit" class="pure-button pure-button-primary" style="float: right; margin-right: 20px;">Verstuur</button>
+				<button type="submit" class="pure-button pure-button-primary" style="float: right; margin-right: 20px;">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>
