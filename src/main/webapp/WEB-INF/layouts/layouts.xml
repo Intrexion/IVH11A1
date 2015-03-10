@@ -10,5 +10,8 @@
     <put-attribute name="menu" value="/WEB-INF/views/menu.jspx" />
     <put-attribute name="footer" value="/WEB-INF/views/footer.jspx" />
   </definition>
+  
+  <definition name="reservation" template="/WEB-INF/layouts/reservation.jspx">
+  </definition>
 
 </tiles-definitions>

@@ -1,0 +1,89 @@
+<html xmlns:jsp="http://java.sun.com/JSP/Page" 
+      xmlns:c="http://java.sun.com/jsp/jstl/core" 
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+      xmlns:tiles="http://tiles.apache.org/tags-tiles" 
+      xmlns:spring="http://www.springframework.org/tags">  
+
+    <jsp:output doctype-root-element="HTML" doctype-system="about:legacy-compat" />
+    
+    <jsp:directive.page contentType="text/html;charset=UTF-8" />  
+    <jsp:directive.page pageEncoding="UTF-8" /> 
+		
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
+	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
+<!--[if lte IE 8]>
+  
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css" />
+  
+<![endif]-->
+<!--[if gt IE 8]><!-->
+  
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css" />
+  
+<!--<![endif]-->
+</head>	
+
+<script type="text/javascript">
+function fillDate() {
+	document.getElementById('date').valueAsDate = new Date();
+}
+
+function minDate() {
+	document.getElementById('date').min = new Date().toISOString().slice(0, 10);
+}
+
+
+function validateForm() {
+	var a = document.getElementById('startTime').value;
+    var b = document.getElementById('endTime').value;
+    
+    var asplit = a.split(':');
+    var bsplit = b.split(':');
+    
+    var x = asplit[0] + asplit[1];
+    var y = bsplit[0] + bsplit[1];
+
+    if (+x > +y) {
+		document.getElementById('startTime').setCustomValidity('De starttijd moet voor de eindtijd zijn.');
+        return false;
+    }
+
+
+}
+
+function checkTime() {
+	var a = document.getElementById('startTime').value;
+    var b = document.getElementById('endTime').value;
+    
+    var asplit = a.split(':');
+    var bsplit = b.split(':');
+    
+    var x = asplit[0] + asplit[1];
+    var y = bsplit[0] + bsplit[1];
+    
+
+    if (+x > +y) {
+        document.getElementById('startTime').style.borderColor = "red";
+        document.getElementById('endTime').style.borderColor = "red";
+		document.getElementById('startTime').setCustomValidity('De starttijd moet voor de eindtijd zijn.');
+    }
+
+    if (+y > +x) {
+    	document.getElementById('startTime').style.borderColor = "";
+        document.getElementById('endTime').style.borderColor = "";
+		document.getElementById('startTime').setCustomValidity('');
+    }
+}
+</script>
+
+<body background="http://www.valueinvestasia.com/wp-content/uploads/2015/01/Singapore-Restaurant-Week-2012-Visual.jpg" onload="fillDate(); minDate(); setCSS(); setCSS2;" style="	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;">
+
+<tiles:insertAttribute name="body"/> 
+
+</body>
+</html>

@@ -88,6 +88,8 @@ public class ReservationController {
 		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
 		DateTime endDate = dateTimeAdapter.getDateTime();
 		reservation.setEndDate(endDate);
+		
+		reservation.setDescription(model.getDescription());
 
 		Customer customer = new Customer.Builder(model.getFirstName(), model.getLastName())
 				.setPartySize(model.getPartySize())
@@ -100,6 +102,7 @@ public class ReservationController {
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering
+			return "hartigehap/reservationfailed";
 		} else {
 			customer = customerService.save(customer);
 			reservation.setCustomer(customer);
@@ -114,8 +117,9 @@ public class ReservationController {
 
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
+
+			return "hartigehap/reservationsuccessful";
 		}
-		return "hartigehap/listrestaurants";
 	}
 	
 	private DiningTable checkReservation(Reservation reservation, Collection<DiningTable> diningTables){

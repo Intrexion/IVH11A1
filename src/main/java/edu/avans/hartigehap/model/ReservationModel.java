@@ -16,4 +16,6 @@ public class ReservationModel {
 	private int partySize;
 	private String email;
 	private String phone;
+	
+	private String description;
 }

@@ -2,8 +2,14 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration
 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 <tiles-definitions>
-	<definition extends="default" name="hartigehap/createreservationform">
+	<definition extends="reservation" name="hartigehap/createreservationform">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/reservationform.jspx" />
+	</definition>
+	<definition extends="reservation" name="hartigehap/reservationsuccessful">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/reservationsuccessful.jspx" />
+	</definition>
+	<definition extends="reservation" name="hartigehap/reservationfailed">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/reservationfailed.jspx" />
 	</definition>
 	<definition extends="default" name="hartigehap/listreservations">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/listreservations.jspx" />
