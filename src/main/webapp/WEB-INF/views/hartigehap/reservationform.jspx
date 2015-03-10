@@ -42,7 +42,7 @@
 			</div>
 			<div class="pure-control-group">
 				<form:label style="font-weight: bold;" path="date">Reserveringsdatum</form:label>
-				<form:input class="pure-input-2-3" type="date" path="date" id="date"/>
+				<form:input class="pure-input-2-3" type="date" path="date" id="date" min="${currentDate}" value="${currentDate}" />
 			</div>	
 			
 			<div class="pure-control-group">

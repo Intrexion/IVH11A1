@@ -1,6 +1,9 @@
 package edu.avans.hartigehap.web.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,6 +71,9 @@ public class ReservationController {
 		Collection<Restaurant> restaurants = restaurantService.findAll();
 		uiModel.addAttribute("restaurants", restaurants);
 		
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		uiModel.addAttribute("currentDate", format.format(new Date()));
+
 		return "hartigehap/createreservationform";
 	}
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)

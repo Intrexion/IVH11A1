@@ -26,15 +26,6 @@
 </head>	
 
 <script type="text/javascript">
-function fillDate() {
-	document.getElementById('date').valueAsDate = new Date();
-}
-
-function minDate() {
-	document.getElementById('date').min = new Date().toISOString().slice(0, 10);
-}
-
-
 function validateForm() {
 	var a = document.getElementById('startTime').value;
     var b = document.getElementById('endTime').value;
@@ -78,7 +69,7 @@ function checkTime() {
 }
 </script>
 
-<body background="http://www.valueinvestasia.com/wp-content/uploads/2015/01/Singapore-Restaurant-Week-2012-Visual.jpg" onload="fillDate(); minDate(); setCSS(); setCSS2;" style="	-webkit-background-size: cover;
+<body background="http://www.valueinvestasia.com/wp-content/uploads/2015/01/Singapore-Restaurant-Week-2012-Visual.jpg" onload="setCSS(); setCSS2;" style="	-webkit-background-size: cover;
   	-moz-background-size: cover;
   	-o-background-size: cover;
   	background-size: cover;">
