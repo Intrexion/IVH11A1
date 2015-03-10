@@ -30,10 +30,46 @@
 		<title>${label_title}</title>
 	</head>
 
+	<script type="text/javascript">
+		<![CDATA[
+		    // Add a paramter to the url or replace if it already exists
+	        function insertParam(key, value) {
+		        key = escape(key); value = escape(value);
+
+		        var kvp = document.location.search.substr(1).split('&');
+		        if (kvp == '') {
+		            document.location.search = '?' + key + '=' + value;
+		        }
+		        else {
+
+		            var i = kvp.length; var x; while (i--) {
+		                x = kvp[i].split('=');
+
+		                if (x[0] == key) {
+		                    x[1] = value;
+		                    kvp[i] = x.join('=');
+		                    break;
+		                }
+		            }
+
+		            if (i < 0) { kvp[kvp.length] = [key, value].join('='); }
+
+		            document.location.search = kvp.join('&');
+		        }
+		    }
+	    ]]>
+	</script>
+
 	<spring:url value="/resources/images/background.jpg" var="background_url" />
 	<body background="${background_url}" onload="setCSS(); setCSS2;" style="-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
+		<div style="position: absolute; right: 10px; top: 10px;">
+			<spring:url value="/resources/images/flag_nl.png" var="flag_nl" />
+			<img src="${flag_nl}" onclick="insertParam('lang', 'nl_NL')" alt="Verander naar Nederlands" style="margin: 5px; width: 35px;" />
+
+			<spring:url value="/resources/images/flag_us.png" var="flag_us" />
+			<img src="${flag_us}" onclick="insertParam('lang', 'en_US')" alt="Switch to US English" style="margin: 5px; width: 35px;" />
+		</div>
 
 		<tiles:insertAttribute name="body"/>
-
 	</body>
 </html>
