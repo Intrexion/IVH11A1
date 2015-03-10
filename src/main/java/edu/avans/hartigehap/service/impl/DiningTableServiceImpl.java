@@ -10,9 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.DiningTableService;
+
 import com.google.common.collect.Lists;
 
 

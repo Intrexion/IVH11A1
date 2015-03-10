@@ -24,20 +24,25 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @NoArgsConstructor
 public class Reservation extends DomainObject {
 	private static final long serialVersionUID = 1L;
+
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private DateTime startDate;
+
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE)
+	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private DateTime endDate;
+
 	private String description;
-	
+
 	@OneToOne(mappedBy="reservation")
 	private Customer customer;
+
 	@ManyToOne
 	private Restaurant restaurant;
+
 	@ManyToOne
 	private DiningTable diningTable;
 	

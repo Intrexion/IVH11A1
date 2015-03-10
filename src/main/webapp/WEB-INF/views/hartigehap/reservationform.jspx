@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form" 
+	xmlns:sec="http://www.springframework.org/security/tags"
+	version="2.0">
+	<jsp:directive.page contentType="text/html;charset=UTF-8" />
+	<jsp:output omit-xml-declaration="yes" />
+
+	<div style=" 
+	background-color: #FFFFFF;
+	border:2px;
+	border-style: solid;
+	border-color: #0078e7;
+	width: 600px;
+	padding: 10px;
+	height: 620px;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-family:FreeSans,Arimo,Helvetica,Arial,sans-serif;
+	margin: auto;
+	box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+	-moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
+	-webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);">
+	
+		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">Reserveringsformulier</h2>
+	
+		<c:if test="${not empty message}">
+			<div id="message" class="${message.type}">${message.message}</div>
+		</c:if>
+		<form:form class="pure-form pure-form-aligned" style="color:#34495e; font-family:sans-serif;" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
+		<fieldset>
+			<div class="pure-control-group">
+				<form:label path="restaurantId" style="font-weight: bold;">Restaurant</form:label>
+					<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-input-2-3">
+				<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
+				</form:select>
+			</div>
+			<div class="pure-control-group">
+				<form:label style="font-weight: bold;" path="date">Reserveringsdatum</form:label>
+				<form:input class="pure-input-2-3" type="date" path="date" id="date"/>
+			</div>	
+			
+			<div class="pure-control-group">
+				<form:label path="startTime" style="font-weight: bold;">Starttijd</form:label>
+				<!-- uit te zoeken hoe te werken met select -->
+				<select name="startTime" id="startTime" onchange="checkTime()">
+					<option value="12:00">12:00</option>
+					<option value="12:30">12:30</option>
+					<option value="13:00">13:00</option>
+					<option value="13:30">13:30</option>
+					<option value="14:00">14:00</option>
+					<option value="14:30">14:30</option>
+					<option value="15:00">15:00</option>
+					<option value="15:30">15:30</option>
+					<option value="16:00">16:00</option>
+					<option value="16:30">16:30</option>
+					<option value="17:00">17:00</option>
+					<option value="17:30">17:30</option>
+					<option selected="selected" value="18:00">18:00</option>
+					<option value="18:30">18:30</option>
+					<option value="19:00">19:00</option>
+					<option value="19:30">19:30</option>
+					<option value="20:00">20:00</option>
+					<option value="20:30">20:30</option>
+					<option value="21:00">21:00</option>
+				</select> 
+			</div>
+			
+			<div class="pure-control-group">
+			<form:label path="endTime" style="font-weight: bold;">Eindtijd</form:label>
+				<select name="endTime" id="endTime" onchange="checkTime()">
+					<option value="13:00">13:00</option>
+					<option value="13:30">13:30</option>
+					<option value="14:00">14:00</option>
+					<option value="14:30">14:30</option>
+					<option value="15:00">15:00</option>
+					<option value="15:30">15:30</option>
+					<option value="16:00">16:00</option>
+					<option value="16:30">16:30</option>
+					<option value="17:00">17:00</option>
+					<option value="17:30">17:30</option>
+					<option value="18:00">18:00</option>
+					<option value="18:30">18:30</option>
+					<option value="19:00">19:00</option>
+					<option value="19:30">19:30</option>
+					<option value="20:00">20:00</option>
+					<option value="20:30">20:30</option>
+					<option selected="selected" value="21:00">21:00</option>
+					<option value="21:30">21:30</option> 
+					<option value="22:00">22:00</option> 
+					<option value="22:30">22:30</option> 
+					<option value="23:00">23:00</option> 
+				</select>	
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="partySize" style="font-weight: bold;">Aantal personen</form:label>
+				<form:input required="required" path="partySize" type="number" min="1" max="12" id="party-size" value="2" />
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="firstName" style="font-weight: bold;">Voornaam</form:label>
+				<form:input required="required" path="firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="Voornaam"  />
+			</div>
+			<div class="pure-control-group">
+				<form:label path="lastName" style="font-weight: bold;">Achternaam</form:label>
+				<form:input required="required" path="lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="Achternaam"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="email" style="font-weight: bold;">E-mail</form:label>
+				<form:input type="email" required="required" path="email" class="pure-input-2-3" id="email-address" placeholder="E-mailadres" />
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="phone" style="font-weight: bold;">Telefoonnummer</form:label>
+				<form:input type="tel" required="required" path="phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="Telefoonnummer"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="description" style="font-weight: bold;">Opmerkingen</form:label>
+				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3" style="resize: none;" placeholder="Vul hier eventuele opmerkingen in" />
+			</div>
+			
+			<div class="pure-controls">
+				<!-- <form:label path="terms" class="pure-checkbox">
+					 Ik ga akkoord met de voorwaarden
+				</form:label>
+				<br />
+				<form:input id="terms" type="checkbox" path=/>
+				<br />-->
+			
+				<button type="submit" class="pure-button pure-button-primary" style="float: right; margin-right: 20px;">Verstuur</button>
+			</div>
+		</fieldset>
+	</form:form>
+	</div>
+</div>

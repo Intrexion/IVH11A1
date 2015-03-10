@@ -3,6 +3,7 @@ package edu.avans.hartigehap.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.CascadeType;
+
+import org.joda.time.DateTime;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -57,6 +60,13 @@ public class DiningTable extends DomainObject {
 		currentBill.setDiningTable(this);
 		bills.add(currentBill);
 	}
+	
+	public Collection<Reservation> getReservationsByDate(DateTime date){
+		
+		Collection<Reservation> newReservations = reservations.stream().filter(r -> r.getStartDate().getDayOfYear() == date.getDayOfYear()).collect(Collectors.toList());
+		
+		return newReservations;
+		}
 
 	public DiningTable(int tableNr, int seats) {
 		this.tableNr = tableNr;

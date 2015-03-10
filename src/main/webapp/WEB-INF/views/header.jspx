@@ -16,7 +16,10 @@
 		<spring:url var="showRestMgtSystem" value="/restaurants" />													
    		<a href="${showRestMgtSystem}"><h3>${headerText}</h3></a>
 	</div>
-	
+	<div id="reservation">
+		<spring:url var="showReservationForm" value="/reservation?form" />													
+   		<a href="${showReservationForm}"><h3>Create reservation</h3></a>
+	</div>
     <div id="userinfo">
         <sec:authorize access="isAuthenticated()">${labelWelcome}
             <sec:authentication property="principal.username" />
