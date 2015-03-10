@@ -60,7 +60,7 @@ public class Bill extends DomainObject {
 	private Customer customer;
 	
 	public Bill() {
-		billState = new BillStateCreated();
+		billState = new BillStateCreated(this);
 		currentOrder = new Order();
 		currentOrder.setBill(this);
 		orders.add(currentOrder);
@@ -152,7 +152,7 @@ public class Bill extends DomainObject {
 	 * ordering on the submitted or paid bill
 	 */
 	public void submit() throws StateException, EmptyBillException {
-		billState.submit(this);
+		billState.submit();
 	}
 
 	@Transient
@@ -161,7 +161,7 @@ public class Bill extends DomainObject {
 	}
 
 	public void paid() throws StateException {
-		billState.paid(this);
+		billState.paid();
 	}
 
 	public void setBillState(BillState billState) {
