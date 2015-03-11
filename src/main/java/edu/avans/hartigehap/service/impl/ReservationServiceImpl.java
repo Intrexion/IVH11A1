@@ -75,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public List<Reservation> findByRestaurant(Restaurant restaurant) {
-		return reservationRepository.findByRestaurant(restaurant, new Sort(Sort.Direction.ASC, "name"));
+		return reservationRepository.findByRestaurant(restaurant, new Sort(Sort.Direction.ASC, "id"));
 	}
 
 }
