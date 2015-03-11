@@ -51,3 +51,7 @@
 	color:#34495e;
 	font-family:sans-serif;
 }
+
+.text-resize {
+	resize: none
+}

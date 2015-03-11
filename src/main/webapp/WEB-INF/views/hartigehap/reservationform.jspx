@@ -71,7 +71,7 @@
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>
 		</c:if>
-		<form:form class="pure-form pure-form-aligned form-style" style="" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
+		<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
 		<fieldset>
 			<div class="pure-control-group">
 				<form:label path="restaurantId" class="bold">${labelRestaurant}</form:label>
@@ -163,7 +163,7 @@
 			
 			<div class="pure-control-group">
 				<form:label path="description" class="bold">${labelComments}</form:label>
-				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3" style="resize: none;" placeholder="${labelCommentsPlaceholder}" />
+				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3 text-resize"  placeholder="${labelCommentsPlaceholder}" />
 			</div>
 			
 			<div class="pure-controls">
@@ -174,7 +174,7 @@
 				<form:input id="terms" type="checkbox" path=/>
 				<br />-->
 			
-				<button type="submit" class="pure-button pure-button-primary button-float" style="float: right; margin-right: 20px;">${labelSubmit}</button>
+				<button type="submit" class="pure-button pure-button-primary button-float" class="button-float">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>
