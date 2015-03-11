@@ -64,45 +64,28 @@
 	}
 	</script>
 
-	<div style=" 
-	background-color: #FFFFFF;
-	border:2px;
-	border-style: solid;
-	border-color: #0078e7;
-	width: 600px;
-	padding: 10px;
-	height: 620px;
-	position: absolute;
-	top:0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	font-family:FreeSans,Arimo,Helvetica,Arial,sans-serif;
-	margin: auto;
-	box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
-	-moz-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);
-	-webkit-box-shadow: 0px 0px 10px 4px rgba(119, 119, 119, 0.75);">
+	<div class="reservation-box">
 	
-		<h2 style="text-align: center; font-family:sans-serif; display:block; text-transuppercase;">${labelReservationForm}</h2>
+		<h2 class="reservation-header">${labelReservationForm}</h2>
 	
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>
 		</c:if>
-		<form:form class="pure-form pure-form-aligned" style="color:#34495e; font-family:sans-serif;" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
+		<form:form class="pure-form pure-form-aligned form-style" style="" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
 		<fieldset>
 			<div class="pure-control-group">
-				<form:label path="restaurantId" style="font-weight: bold;">${labelRestaurant}</form:label>
+				<form:label path="restaurantId" class="bold">${labelRestaurant}</form:label>
 				<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-input-2-3">
 					<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
 				</form:select>
 			</div>
 			<div class="pure-control-group">
-				<form:label style="font-weight: bold;" path="date">${labelDate}</form:label>
+				<form:label class="bold" path="date">${labelDate}</form:label>
 				<form:input class="pure-input-2-3" type="date" path="date" id="date" min="${currentDate}" value="${currentDate}" />
 			</div>	
 			
 			<div class="pure-control-group">
-				<form:label path="startTime" style="font-weight: bold;">${labelStartTime}</form:label>
+				<form:label path="startTime" class="bold">${labelStartTime}</form:label>
 				<!-- uit te zoeken hoe te werken met select -->
 				<select name="startTime" id="startTime" onchange="checkTime()">
 					<option value="12:00">12:00</option>
@@ -128,7 +111,7 @@
 			</div>
 			
 			<div class="pure-control-group">
-			<form:label path="endTime" style="font-weight: bold;">${labelEndTime}</form:label>
+			<form:label path="endTime" class="bold">${labelEndTime}</form:label>
 				<select name="endTime" id="endTime" onchange="checkTime()">
 					<option value="13:00">13:00</option>
 					<option value="13:30">13:30</option>
@@ -155,31 +138,31 @@
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="partySize" style="font-weight: bold;">${labelPersons}</form:label>
+				<form:label path="partySize" class="bold">${labelPersons}</form:label>
 				<form:input required="required" path="partySize" type="number" min="1" max="12" id="party-size" value="2" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="firstName" style="font-weight: bold;">${labelFirstName}</form:label>
+				<form:label path="firstName" class="bold">${labelFirstName}</form:label>
 				<form:input required="required" path="firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 			<div class="pure-control-group">
-				<form:label path="lastName" style="font-weight: bold;">${labelLastName}</form:label>
+				<form:label path="lastName" class="bold">${labelLastName}</form:label>
 				<form:input required="required" path="lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="email" style="font-weight: bold;">${labelEmail}</form:label>
+				<form:label path="email" class="bold">${labelEmail}</form:label>
 				<form:input type="email" required="required" path="email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="phone" style="font-weight: bold;">${labelPhone}</form:label>
+				<form:label path="phone" class="bold">${labelPhone}</form:label>
 				<form:input type="tel" required="required" path="phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="description" style="font-weight: bold;">${labelComments}</form:label>
+				<form:label path="description" class="bold">${labelComments}</form:label>
 				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3" style="resize: none;" placeholder="${labelCommentsPlaceholder}" />
 			</div>
 			
@@ -191,7 +174,7 @@
 				<form:input id="terms" type="checkbox" path=/>
 				<br />-->
 			
-				<button type="submit" class="pure-button pure-button-primary" style="float: right; margin-right: 20px;">${labelSubmit}</button>
+				<button type="submit" class="pure-button pure-button-primary button-float" style="float: right; margin-right: 20px;">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>

@@ -17,13 +17,20 @@
 
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" />
-		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css" />
+		<c:url value="/resources/styles/font-awesome.css" var="fontURL" />
+		<c:url value="/resources/styles/pure-min.css" var="cssURL" />
+		<c:url value="/resources/styles/custom.css" var="customcssURL" />
+		<c:url value="/resources/styles/0.6.0/grids-responsive-min.css" var="cssie8oldURL" />
+		<c:url value="/resources/styles/0.6.0/grids-responsive-min.css" var="cssie8URL" />
+		
+		<link rel="stylesheet" href="${customcssURL}" />
+		<link rel="stylesheet" href="${fontURL}" />
+		<link rel="stylesheet" href="${cssURL}" />
 		<!--[if lte IE 8]>
-		    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css" />
+		    <link rel="stylesheet" href="${cssie8oldURL}" />
 		<![endif]-->
 		<!--[if gt IE 8]><!-->
-		    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css" />
+		    <link rel="stylesheet" href="${cssie8URL}" />
 		<!--<![endif]-->
 
 		<spring:message code="label_reservation_reserve" var="label_title" />
@@ -61,8 +68,8 @@
 	</script>
 
 	<spring:url value="/resources/images/background.jpg" var="background_url" />
-	<body background="${background_url}" onload="setCSS(); setCSS2;" style="-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;">
-		<div style="position: absolute; right: 10px; top: 10px;">
+	<body background="${background_url}" onload="setCSS(); setCSS2;" class="perfect-background">
+		<div class="flags">
 			<spring:url value="/resources/images/flag_nl.png" var="flag_nl" />
 			<img src="${flag_nl}" onclick="insertParam('lang', 'nl_NL')" alt="Verander naar Nederlands" style="margin: 5px; width: 35px;" />
 
