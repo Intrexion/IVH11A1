@@ -11,7 +11,7 @@
 	<spring:message code="label_reservation_successful_header" var="labelSuccessfulHeader" />
 	<spring:message code="label_reservation_successful_message" var="labelSuccessfulMessage" />
 
-	<div class="reservation-box">
+	<div class="reservation-box success-box">
 	
 		<h2 class="reservation-header">${labelSuccessfulHeader}</h2>
 	

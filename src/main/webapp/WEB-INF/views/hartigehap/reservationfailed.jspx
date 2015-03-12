@@ -11,7 +11,7 @@
 	<spring:message code="label_reservation_failed_header" var="labelFailedHeader" />
 	<spring:message code="label_reservation_failed_message" var="labelFailedMessage" />
 
-	<div class="reservation-box">
+	<div class="reservation-box fail-box">
 	
 		<h2 class="reservation-header">${labelFailedHeader}</h2>
 	

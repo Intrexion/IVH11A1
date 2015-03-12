@@ -64,7 +64,7 @@
 	}
 	</script>
 
-	<div class="reservation-box">
+	<div class="reservation-box form-box">
 	
 		<h2 class="reservation-header">${labelReservationForm}</h2>
 	
