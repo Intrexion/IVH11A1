@@ -174,7 +174,7 @@
 				<form:input id="terms" type="checkbox" path=/>
 				<br />-->
 			
-				<button type="submit" class="pure-button pure-button-primary button-float" class="button-float">${labelSubmit}</button>
+				<button type="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>
