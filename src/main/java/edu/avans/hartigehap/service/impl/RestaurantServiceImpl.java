@@ -9,9 +9,12 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
+
 import com.google.common.collect.Lists;
 
 @Service("restaurantService")
@@ -53,6 +56,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	 *  to be able to follow associations outside the context of a transaction, prefetch the associated
 	 *  entities by traversing the associations
 	 */
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Restaurant fetchWarmedUp(String restaurantName) {
 		Restaurant restaurant = restaurantRepository.findOne(restaurantName);
