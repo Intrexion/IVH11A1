@@ -11,6 +11,9 @@
 	<definition extends="reservation" name="hartigehap/reservationfailed">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/reservationfailed.jspx" />
 	</definition>
+	<definition extends="default" name="hartigehap/reservation">
+		<put-attribute name="body" value="/WEB-INF/views/hartigehap/reservation.jspx" />
+	</definition>
 	<definition extends="default" name="hartigehap/listreservations">
 		<put-attribute name="body" value="/WEB-INF/views/hartigehap/listreservations.jspx" />
 	</definition>

@@ -8,15 +8,20 @@
 	<jsp:output omit-xml-declaration="yes" />
 
 
-	<spring:message code="label_restaurant_overview" var="labelRestaurantOverview" />
-	<spring:message code="label_restaurants" var="labelRestaurants" />
+	<spring:message code="label_reservation_overview" var="labelReservationOverview" />
+	<spring:message code="label_reservations" var="labelReservations" />
 	<spring:message code="label_admin_area" var="labelAdminArea" />
 	<spring:message code="label_create_harigehap" var="labelCreateHarigeHap" />
 	<spring:message code="label_create_plakkerigepannekoek" var="labelCreatePlakkerigePannekoek" />
 	<spring:message code="label_create_huilendehamburger" var="labelCreateHuilendeHamburger" />
 	<spring:message code="label_create_button" var="labelCreateButton" />
+	<spring:message code="label_customer_last_name" var="labelCustomerLastName" />
+	<spring:message code="label_customer_partysize" var="labelCustomerPartySize" />
+	<spring:message code="label_reservation_date" var="labelReservationDate" />
+	<spring:message code="label_restaurant" var="labelRestaurant" />
+	<spring:message code="label_dining_table_number" var="labelTableNumer" />
 
-	<h1>${labelRestaurantOverview}</h1>
+	<h1>${labelReservationOverview}</h1>
 
 	<c:if test="${not empty message}">
 		<div id="message" class="${message.type}">${message.message}</div>
@@ -25,14 +30,25 @@
 	<table>
 		<thead>
 			<tr>
-				<th>${labelRestaurants}</th>
+				<th colspan="3">${labelReservations}</th>
+			</tr>
+			<tr>
+				<th>${labelCustomerLastName}</th>
+				<th>${labelCustomerPartySize}</th>
+				<th>${labelReservationDate}</th>
+				<th>${labelRestaurant}</th>
+				<th>${labelTableNumer}</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${reservations}" var="reservation">
 				<spring:url var="showReservation" value="/reservations/${reservation.id}" />					
 				<tr>
-					<td><a href="${showReservation}">${reservation.id}</a></td>							
+					<td><a href="${showReservation}">${reservation.customer.lastName}</a></td>	
+					<td><a href="${showReservation}">${reservation.customer.partySize}</a></td>		
+					<td><a href="${showReservation}">${reservation.startDate}</a></td>	
+					<td><a href="${showReservation}">${reservation.restaurant.id}</a></td>	
+					<td><a href="${showReservation}">${reservation.diningTable.tableNr}</a></td>			
 				</tr>
 			</c:forEach>
 		</tbody>

@@ -30,6 +30,7 @@ import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.web.util.UrlUtil;
 
 @Controller
 public class ReservationController {
@@ -54,14 +55,28 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.GET)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Model uiModel) {
-		Collection<Reservation> reservations = reservationService.findAll();
-		uiModel.addAttribute("reservations", reservations);
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
 		
 		Reservation reservation = reservationService.findById(reservationID);
 		uiModel.addAttribute("reservation", reservation);
 		
 		return "hartigehap/reservation";
 	}
+	
+	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
+	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
+
+		Reservation existingReservation = reservationService.findById(reservation.getId());
+        assert existingReservation != null : "reservation should exist";
+        
+        // update user-editable fields
+        existingReservation.updateEditableFields(reservation);
+
+		reservationService.save(existingReservation);
+		return "hartigehap/reservations/";
+	}
+	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
 		logger.info("Create reservation form");
@@ -76,6 +91,7 @@ public class ReservationController {
 
 		return "hartigehap/createreservationform";
 	}
+	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
 	public String createReservation(ReservationModel model, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,

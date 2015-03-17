@@ -46,6 +46,11 @@ public class Reservation extends DomainObject {
 	@ManyToOne
 	private DiningTable diningTable;
 	
+	public void updateEditableFields(Reservation reservation) {
+        customer.updateEditableFields(reservation.getCustomer());
+        
+	}
+	
 	public Reservation(DateTime startDate, DateTime endDate, String description){
 		this.startDate = startDate;
 		this.endDate = endDate;

@@ -3,11 +3,26 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:joda="http://www.joda.org/joda/time/tags" version="2.0"
 	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
 	<spring:message code="label_restaurant" var="labelRestaurant" />
+	<spring:message code="label_reservation_form" var="labelReservationForm" />
+	<spring:message code="label_reservation_date" var="labelDate" />
+	<spring:message code="label_reservation_starttime" var="labelStartTime" />
+	<spring:message code="label_reservation_endtime" var="labelEndTime" />
+	<spring:message code="label_reservation_persons" var="labelPersons" />
+	<spring:message code="label_reservation_firstname" var="labelFirstName" />
+	<spring:message code="label_reservation_lastname" var="labelLastName" />
+	<spring:message code="label_reservation_email" var="labelEmail" />
+	<spring:message code="label_reservation_phone" var="labelPhone" />
+	<spring:message code="label_reservation_comments" var="labelComments" />
+	<spring:message code="label_reservation_comments_placeholder" var="labelCommentsPlaceholder" />
+	<spring:message code="label_reservation_submit" var="labelSubmit" />
+	<spring:message code="label_reservation_time_error" var="labelTimeError" />
+	<spring:message code="label_reservation_overview" var="labelReservationOverview" />
 	<spring:message code="label_ordering_subsystem" var="labelOrderingSubsystem" />
 	<spring:message code="label_kitchen_subsystem" var="labelKitchenSubsystem" />
 	<spring:message code="label_waiter_subsystem" var="labelWaiterSubsystem" />
@@ -15,28 +30,162 @@
 	<spring:message code="label_dining_tables" var="labelDiningTables" />
 	<spring:message code="label_dining_table" var="labelDiningTable" />
 
+	<script type="text/javascript">
+	function validateForm() {
+	    var a = document.getElementById('startTime').value;
+	    var b = document.getElementById('endTime').value;
 
-	<h1>${labelRestaurant} ${restaurant.id}</h1>
+	    var asplit = a.split(':');
+	    var bsplit = b.split(':');
 
-	<h3>${labelOrderingSubsystem}</h3>
+	    var x = asplit[0] + asplit[1];
+	    var y = bsplit[0] + bsplit[1];
+
+	    if (+x >= +y) {
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
+	        return false;
+	    }
+	}
+
+	function checkTime() {
+	    var a = document.getElementById('startTime').value;
+	    var b = document.getElementById('endTime').value;
+
+	    var asplit = a.split(':');
+	    var bsplit = b.split(':');
+
+	    var x = asplit[0] + asplit[1];
+	    var y = bsplit[0] + bsplit[1];
+
+	    if (+x >= +y) {
+	        document.getElementById('startTime').style.borderColor = "red";
+	        document.getElementById('endTime').style.borderColor = "red";
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
+	    }
+
+	    if (+y > +x) {
+	        document.getElementById('startTime').style.borderColor = "";
+	        document.getElementById('endTime').style.borderColor = "";
+	        document.getElementById('startTime').setCustomValidity('');
+	    }
+	}
+	</script>
+
+	<h3>${labelReservationOverview}</h3>
 
 	<c:if test="${not empty message}">
 		<div id="message" class="${message.type}">${message.message}</div>
 	</c:if>
 
 	<table>
-		<thead>
+	<!-- <thead>
 			<tr>
 				<th>${labelDiningTables}</th>
 			</tr>
 		</thead>
+		-->
 		<tbody>
-			<!-- <c:forEach items="${restaurant.diningTables}" var="diningTable">
-				<spring:url var="showTable" value="/diningTables/${diningTable.id}" />					
-				<tr>
-					<td><a href="${showTable}">${labelDiningTable} ${diningTable.tableNr}</a></td>							
-				</tr>
-			</c:forEach> -->
+				<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservation" id="form" method="put">
+		<fieldset>
+			<div class="pure-control-group">
+				<form:label path="restaurant.id" class="bold">${labelRestaurant}</form:label>
+				<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-input-2-3">
+					<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
+				</form:select>
+			</div>
+			<div class="pure-control-group">
+				<form:label class="bold" path="startDate">${labelDate}</form:label>
+				<form:input class="pure-input-2-3" type="date" path="startDate" id="date" min="${currentDate}" value="${currentDate}" />
+			</div>	
+			
+			<!-- <div class="pure-control-group">
+				<form:label path="startTime" class="bold">${labelStartTime}</form:label>
+				<select name="startTime" id="startTime" onchange="checkTime()">
+					<option value="12:00">12:00</option>
+					<option value="12:30">12:30</option>
+					<option value="13:00">13:00</option>
+					<option value="13:30">13:30</option>
+					<option value="14:00">14:00</option>
+					<option value="14:30">14:30</option>
+					<option value="15:00">15:00</option>
+					<option value="15:30">15:30</option>
+					<option value="16:00">16:00</option>
+					<option value="16:30">16:30</option>
+					<option value="17:00">17:00</option>
+					<option value="17:30">17:30</option>
+					<option value="18:00">18:00</option>
+					<option value="18:30">18:30</option>
+					<option value="19:00">19:00</option>
+					<option value="19:30">19:30</option>
+					<option value="20:00">20:00</option>
+					<option value="20:30">20:30</option>
+					<option value="21:00">21:00</option>
+				</select> 
+			</div>
+			
+			<div class="pure-control-group">
+			<form:label path="endTime" class="bold">${labelEndTime}</form:label>
+				<select name="endTime" id="endTime" onchange="checkTime()">
+					<option value="13:00">13:00</option>
+					<option value="13:30">13:30</option>
+					<option value="14:00">14:00</option>
+					<option value="14:30">14:30</option>
+					<option value="15:00">15:00</option>
+					<option value="15:30">15:30</option>
+					<option value="16:00">16:00</option>
+					<option value="16:30">16:30</option>
+					<option value="17:00">17:00</option>
+					<option value="17:30">17:30</option>
+					<option value="18:00">18:00</option>
+					<option value="18:30">18:30</option>
+					<option value="19:00">19:00</option>
+					<option value="19:30">19:30</option>
+					<option value="20:00">20:00</option>
+					<option value="20:30">20:30</option>
+					<option value="21:00">21:00</option>
+					<option value="21:30">21:30</option> 
+					<option value="22:00">22:00</option> 
+					<option value="22:30">22:30</option> 
+					<option value="23:00">23:00</option> 
+				</select>	
+			</div>
+			-->
+			
+			<div class="pure-control-group">
+				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
+				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size" value="2" />
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="customer.firstName" class="bold">${labelFirstName}</form:label>
+				<form:input required="required" path="customer.firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
+			</div>
+			<div class="pure-control-group">
+				<form:label path="customer.lastName" class="bold">${labelLastName}</form:label>
+				<form:input required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="customer.email" class="bold">${labelEmail}</form:label>
+				<form:input type="email" required="required" path="customer.email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="customer.phone" class="bold">${labelPhone}</form:label>
+				<form:input type="tel" required="required" path="customer.phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="description" class="bold">${labelComments}</form:label>
+				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3 text-resize"  placeholder="${labelCommentsPlaceholder}" />
+			</div>
+			
+			<div class="pure-controls">
+			
+				<button type="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
+			</div>
+		</fieldset>
+	</form:form>
 		</tbody>
 	</table>
 </div>
