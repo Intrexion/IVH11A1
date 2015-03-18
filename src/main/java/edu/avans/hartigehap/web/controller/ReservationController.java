@@ -60,6 +60,7 @@ public class ReservationController {
 		
 		Reservation reservation = reservationService.findById(reservationID);
 		uiModel.addAttribute("reservation", reservation);
+		uiModel.addAttribute("startTijd", reservation.getStartTime());
 		
 		return "hartigehap/reservation";
 	}
@@ -67,20 +68,21 @@ public class ReservationController {
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
 
-		
-		System.out.println(reservation.getStartTime());
-//		Reservation existingReservation = reservationService.findById(reservation.getId());
-//        assert existingReservation != null : "reservation should exist";
-//        
-//        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize()){
-//    		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
-//        }
-//        
-//        // update user-editable fields
-//        existingReservation.updateEditableFields(reservation);
 
-//		reservationService.save(existingReservation);
-		return "hartigehap/reservations/";
+		Reservation existingReservation = reservationService.findById(reservation.getId());
+        assert existingReservation != null : "reservation should exist";
+        
+        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize()){
+    		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+        }
+        
+        
+        // update user-editable fields
+        existingReservation.updateEditableFields(reservation);
+
+		reservationService.save(existingReservation);
+		
+		return "redirect:../reservations";
 	}
 	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)

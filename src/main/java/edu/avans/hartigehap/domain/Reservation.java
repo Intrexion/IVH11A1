@@ -55,6 +55,7 @@ public class Reservation extends DomainObject {
         customer = reservation.getCustomer();
         restaurant = reservation.getRestaurant();
         diningTable = reservation.getDiningTable();
+        description = reservation.getDescription();
         
 	}
 	
