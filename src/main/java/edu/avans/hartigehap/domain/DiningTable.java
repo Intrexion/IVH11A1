@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -39,15 +40,19 @@ public class DiningTable extends DomainObject {
 	// example of an *unidirectional* one-to-one relationship, mapped on
 	// database by diningTable side
 	@OneToOne(cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Bill currentBill;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "diningTable")
+	@JsonBackReference
 	private Collection<Bill> bills = new ArrayList<Bill>();
 
 	@OneToMany(mappedBy = "diningTable", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Collection<Reservation> reservations = new ArrayList<Reservation>();
 	
 	@ManyToOne()
+	@JsonBackReference
 	private Restaurant restaurant;
 
 	public DiningTable() {

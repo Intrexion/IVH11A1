@@ -16,6 +16,7 @@ import lombok.ToString;
 
 import javax.persistence.CascadeType;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -37,16 +38,20 @@ public class Restaurant extends DomainObjectNaturalId {
 
 	// unidirectional one-to-one
 	@OneToOne(cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Menu menu = new Menu();
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "restaurant")
+	@JsonBackReference
 	private Collection<DiningTable> diningTables = new ArrayList<DiningTable>();
 		
 	// no cascading
 	@ManyToMany(mappedBy = "restaurants")
+	@JsonBackReference
 	private Collection<Customer> customers = new ArrayList<Customer>();
 	
 	@OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Collection<Reservation> reservations = new ArrayList<Reservation>();
 	
 	public Restaurant(String name, String imageFileName) {

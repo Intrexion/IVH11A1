@@ -14,8 +14,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
 
 @Entity
 @Table(name = "RESERVATIONS")
@@ -28,11 +32,13 @@ public class Reservation extends DomainObject {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime startDate;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime endDate;
 
 	private String description;
