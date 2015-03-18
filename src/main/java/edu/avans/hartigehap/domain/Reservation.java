@@ -17,6 +17,9 @@ import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.avans.hartigehap.web.controller.DateTimeAdapter;
+import edu.avans.hartigehap.web.controller.DateTimeProvider;
+
 @Entity
 @Table(name = "RESERVATIONS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -35,6 +38,8 @@ public class Reservation extends DomainObject {
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	private DateTime endDate;
 
+	private String startTime, endTime,day;
+	
 	private String description;
 
 	@OneToOne(mappedBy="reservation")
@@ -47,7 +52,9 @@ public class Reservation extends DomainObject {
 	private DiningTable diningTable;
 	
 	public void updateEditableFields(Reservation reservation) {
-        customer.updateEditableFields(reservation.getCustomer());
+        customer = reservation.getCustomer();
+        restaurant = reservation.getRestaurant();
+        diningTable = reservation.getDiningTable();
         
 	}
 	
@@ -55,6 +62,11 @@ public class Reservation extends DomainObject {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.description = description;
+		DateTimeProvider provider = new DateTimeAdapter(startDate);
+		startTime = provider.getTime();
+		day = provider.getDate();
+		provider = new DateTimeAdapter(endDate);
+		endTime = provider.getTime();
 	}
 
 }

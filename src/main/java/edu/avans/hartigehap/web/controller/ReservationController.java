@@ -67,13 +67,19 @@ public class ReservationController {
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
 
-		Reservation existingReservation = reservationService.findById(reservation.getId());
-        assert existingReservation != null : "reservation should exist";
-        
-        // update user-editable fields
-        existingReservation.updateEditableFields(reservation);
+		
+		System.out.println(reservation.getStartTime());
+//		Reservation existingReservation = reservationService.findById(reservation.getId());
+//        assert existingReservation != null : "reservation should exist";
+//        
+//        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize()){
+//    		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+//        }
+//        
+//        // update user-editable fields
+//        existingReservation.updateEditableFields(reservation);
 
-		reservationService.save(existingReservation);
+//		reservationService.save(existingReservation);
 		return "hartigehap/reservations/";
 	}
 	
@@ -110,6 +116,9 @@ public class ReservationController {
 		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
 		DateTime endDate = dateTimeAdapter.getDateTime();
 		reservation.setEndDate(endDate);
+		reservation.setStartTime(model.getStartTime());
+		reservation.setEndTime(model.getEndTime());
+		reservation.setDay(model.getDate());
 		
 		reservation.setDescription(model.getDescription());
 

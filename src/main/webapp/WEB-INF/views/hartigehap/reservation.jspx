@@ -87,20 +87,18 @@
 		<tbody>
 				<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservation" id="form" method="put">
 		<fieldset>
-			<div class="pure-control-group">
+		<div class="pure-control-group">
 				<form:label path="restaurant.id" class="bold">${labelRestaurant}</form:label>
-				<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-input-2-3">
-					<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
-				</form:select>
+				<form:input readonly="true" required="required" path="restaurant.id" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 			<div class="pure-control-group">
-				<form:label class="bold" path="startDate">${labelDate}</form:label>
-				<form:input class="pure-input-2-3" type="date" path="startDate" id="date" min="${currentDate}" value="${currentDate}" />
+				<form:label class="bold" path="day">${labelDate}</form:label>
+				<form:input class="pure-input-2-3" type="date" path="day" id="date" min="${currentDate}" value="${currentDate}" />
 			</div>	
 			
-			<!-- <div class="pure-control-group">
+			<div class="pure-control-group">
 				<form:label path="startTime" class="bold">${labelStartTime}</form:label>
-				<select name="startTime" id="startTime" onchange="checkTime()">
+				<form:select path="startTime" name="startTime" id="startTime" onchange="checkTime()">
 					<option value="12:00">12:00</option>
 					<option value="12:30">12:30</option>
 					<option value="13:00">13:00</option>
@@ -120,12 +118,12 @@
 					<option value="20:00">20:00</option>
 					<option value="20:30">20:30</option>
 					<option value="21:00">21:00</option>
-				</select> 
+				</form:select> 
 			</div>
 			
 			<div class="pure-control-group">
 			<form:label path="endTime" class="bold">${labelEndTime}</form:label>
-				<select name="endTime" id="endTime" onchange="checkTime()">
+				<form:select path="endTime" name="endTime" id="endTime" onchange="checkTime()">
 					<option value="13:00">13:00</option>
 					<option value="13:30">13:30</option>
 					<option value="14:00">14:00</option>
@@ -147,9 +145,8 @@
 					<option value="22:00">22:00</option> 
 					<option value="22:30">22:30</option> 
 					<option value="23:00">23:00</option> 
-				</select>	
+				</form:select>	
 			</div>
-			-->
 			
 			<div class="pure-control-group">
 				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
@@ -158,16 +155,16 @@
 	
 			<div class="pure-control-group">
 				<form:label path="customer.firstName" class="bold">${labelFirstName}</form:label>
-				<form:input required="required" path="customer.firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
+				<form:input readonly="true" required="required" path="customer.firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 			<div class="pure-control-group">
 				<form:label path="customer.lastName" class="bold">${labelLastName}</form:label>
-				<form:input required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
+				<form:input readonly="true" required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
 			</div>
 			
 			<div class="pure-control-group">
 				<form:label path="customer.email" class="bold">${labelEmail}</form:label>
-				<form:input type="email" required="required" path="customer.email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
+				<form:input readonly="true" type="email" required="required" path="customer.email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
 			</div>
 	
 			<div class="pure-control-group">
