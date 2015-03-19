@@ -60,7 +60,6 @@ public class ReservationController {
 		
 		Reservation reservation = reservationService.findById(reservationID);
 		uiModel.addAttribute("reservation", reservation);
-		uiModel.addAttribute("startTijd", reservation.getStartTime());
 		
 		return "hartigehap/reservation";
 	}
@@ -68,14 +67,37 @@ public class ReservationController {
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
 
-
-		Reservation existingReservation = reservationService.findById(reservation.getId());
+		
+		Reservation existingReservation = reservationService.findById(reservationID);
         assert existingReservation != null : "reservation should exist";
         
-        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize()){
-    		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
+		reservation.setStartDate(provider.getDateTime());
+    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
+    	reservation.setEndDate(provider.getDateTime());
+    	
+    	
+    	System.out.println(reservation.getCustomer().getPartySize());
+    	System.out.println(existingReservation.getCustomer().getPartySize());    	
+    	System.out.println(reservation.getStartDate());
+    	System.out.println(existingReservation.getStartDate());
+    	System.out.println(reservation.getEndDate());
+    	System.out.println(existingReservation.getEndDate());
+    	
+    	reservation.setRestaurant(restaurantService.findById(reservation.getRestaurant().getId()));
+    	
+        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize() || !reservation.getStartDate().equals(existingReservation.getStartDate()) || !reservation.getEndDate().equals(existingReservation.getEndDate())){
+    		System.out.println(reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()).size());
+        	DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+    		if(diningTable ==null){
+    			//geen andere tafel beschikbaar
+    			//TODO hier alles afbreken
+    			System.out.println("geen dt gevonden");
+    			return "redirect:../reservations";
+    		}else{
+    			reservation.setDiningTable(diningTable);
+    		}
         }
-        
         
         // update user-editable fields
         existingReservation.updateEditableFields(reservation);

@@ -108,7 +108,7 @@
 			
 			<div class="pure-control-group">
 				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
-				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size" value="2" />
+				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size"/>
 			</div>
 	
 			<div class="pure-control-group">

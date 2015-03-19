@@ -17,6 +17,7 @@ import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.avans.hartigehap.web.controller.DateAndTime;
 import edu.avans.hartigehap.web.controller.DateTimeAdapter;
 import edu.avans.hartigehap.web.controller.DateTimeProvider;
 
@@ -52,10 +53,18 @@ public class Reservation extends DomainObject {
 	private DiningTable diningTable;
 	
 	public void updateEditableFields(Reservation reservation) {
-        customer = reservation.getCustomer();
-        restaurant = reservation.getRestaurant();
+		
+		
+		customer.setPartySize(reservation.getCustomer().getPartySize());
         diningTable = reservation.getDiningTable();
         description = reservation.getDescription();
+    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
+		startDate = provider.getDateTime();
+    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
+		endDate = provider.getDateTime();
+        startTime = reservation.getStartTime();
+        endTime = reservation.getEndTime();
+        day= reservation.getDay();
         
 	}
 	
