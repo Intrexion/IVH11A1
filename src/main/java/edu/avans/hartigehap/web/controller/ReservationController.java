@@ -48,6 +48,10 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String listReservations(Model uiModel) {
+		
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		
 		Collection<Reservation> reservations = reservationService.findAll();
 		uiModel.addAttribute("reservations", reservations);
 		
