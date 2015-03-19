@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -62,6 +63,15 @@ public class ReservationController {
 		uiModel.addAttribute("reservation", reservation);
 		
 		return "hartigehap/reservation";
+	}
+	
+	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.DELETE)
+	public String deleteReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel){	
+		Reservation existingReservation = reservationService.findById(reservationID);
+        assert existingReservation != null : "reservation should exist";
+		reservationService.delete(existingReservation);
+        
+        return "redirect:../reservations";
 	}
 	
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
@@ -123,7 +133,7 @@ public class ReservationController {
 	}
 	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
-	public String createReservation(ReservationModel model, BindingResult bindingResult,
+	public String createReservation(@Valid ReservationModel model, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");

@@ -4,11 +4,13 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:joda="http://www.joda.org/joda/time/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
 	xmlns:spring="http://www.springframework.org/tags" version="2.0"
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
-
+	
+	<spring:message code="label_reservation_delete" var="labeldelete" />
 	<spring:message code="label_reservation_overview" var="labelReservationOverview" />
 	<spring:message code="label_reservations" var="labelReservations" />
 	<spring:message code="label_admin_area" var="labelAdminArea" />
@@ -42,6 +44,7 @@
 				<th>${labelReservationStartTime}</th>
 				<th>${labelRestaurant}</th>
 				<th>${labelTableNumer}</th>
+				<th>${labeldelete}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -53,7 +56,12 @@
 					<td><a href="${showReservation}" >${fn:substring(reservation.day, 8, 10)}${fn:substring(reservation.day, 4, 8)}${fn:substring(reservation.day, 0, 4)}</a></td>
 					<td><a href="${showReservation}">${reservation.startTime}</a></td>
 					<td><a href="${showReservation}">${reservation.restaurant.id}</a></td>	
-					<td><a href="${showReservation}">${reservation.diningTable.tableNr}</a></td>			
+					<td><a href="${showReservation}">${reservation.diningTable.tableNr}</a></td>
+					<td>
+						<form:form modelAttribute="reservation" id="form" action="${showReservation}" method="delete">
+							<button type="submit">${labeldelete}</button>
+						</form:form>
+					</td>			
 				</tr>
 			</c:forEach>
 		</tbody>
