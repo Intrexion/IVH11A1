@@ -9,6 +9,7 @@
 	<spring:message code="header_text" var="headerText"/>
     <spring:message code="label_logout" var="labelLogout"/>
     <spring:message code="label_welcome" var="labelWelcome"/>
+    <spring:message code="label_create_reservation" var="labelReservation"/>
     <spring:url var="logoutUrl" value="/j_spring_security_logout" />    	
 
 
@@ -18,7 +19,7 @@
 	</div>
 	<div id="reservation">
 		<spring:url var="showReservationForm" value="/reservation?form" />													
-   		<a href="${showReservationForm}"><h3>Create reservation</h3></a>
+   		<a href="${showReservationForm}"><h3>${labelReservation}</h3></a>
 	</div>
     <div id="userinfo">
         <sec:authorize access="isAuthenticated()">${labelWelcome}

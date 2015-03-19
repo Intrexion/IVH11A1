@@ -10,6 +10,7 @@
 
 	<spring:message code="label_reservation_failed_header" var="labelFailedHeader" />
 	<spring:message code="label_reservation_failed_message" var="labelFailedMessage" />
+	<spring:message code="label_reservation_back" var="labelBack" />
 
 	<div class="reservation-box fail-box">
 	
@@ -24,6 +25,7 @@
 		    <div class="pure-u-3-5"><p align="center">${labelFailedMessage}</p></div>
 		    <div class="pure-u-1-5"><p></p></div>
 		</div>
-		
+		<spring:url var="showReservationForm" value="/reservation?form" />
+		<a href="${showReservationForm}"><button class="pure-button pure-button-primary button-float-left">${labelBack}</button></a>		
 	</div>
 </div>

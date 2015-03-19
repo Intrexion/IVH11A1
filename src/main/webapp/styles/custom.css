@@ -41,11 +41,11 @@
 }
 
 .fail-box {
-	height: 150px;
+	height: 210px;
 }
 
 .success-box {
-	height: 120px;
+	height: 160px;
 }
 
 .reservation-header {
@@ -62,6 +62,11 @@
 .button-float {
 	float: right;
 	margin-right: 20px;
+}
+
+.button-float-left {
+	float: left;
+	margin-left: 20px;
 }
 
 .form-style {
