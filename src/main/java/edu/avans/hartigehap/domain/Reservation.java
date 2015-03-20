@@ -1,5 +1,6 @@
 package edu.avans.hartigehap.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -43,7 +44,7 @@ public class Reservation extends DomainObject {
 
 	private String description;
 
-	@OneToOne(mappedBy="reservation")
+	@OneToOne(mappedBy="reservation", cascade = CascadeType.ALL)
 	private Customer customer;
 
 	@ManyToOne

@@ -71,9 +71,12 @@ public class ReservationsRS {
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void delete(@PathVariable Reservation reservation, HttpServletResponse httpResponse, WebRequest httpRequest) {
-		logger.debug("reservationId: {}", reservation);
-		reservationService.delete(reservation);
+	public void delete(@PathVariable Long reservationId, HttpServletResponse httpResponse, WebRequest httpRequest) {
+		
+		Reservation toBeDeleted = reservationService.findById(reservationId);
+		
+		logger.debug("reservationId: {}", toBeDeleted);
+		reservationService.delete(toBeDeleted);
 	}
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
