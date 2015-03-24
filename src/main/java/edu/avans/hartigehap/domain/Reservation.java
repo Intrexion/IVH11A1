@@ -1,13 +1,17 @@
 package edu.avans.hartigehap.domain;
 
+import java.text.SimpleDateFormat;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -15,13 +19,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
-
 @Entity
 @Table(name = "RESERVATIONS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -32,13 +35,13 @@ public class Reservation extends DomainObject {
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
 	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime startDate;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
 	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime endDate;
 
@@ -58,5 +61,4 @@ public class Reservation extends DomainObject {
 		this.endDate = endDate;
 		this.description = description;
 	}
-
 }

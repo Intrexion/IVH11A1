@@ -1,6 +1,7 @@
 package edu.avans.hartigehap.web.controller.rs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +23,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
+import edu.avans.hartigehap.domain.Customer;
+import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.web.controller.ReservationController;
 
 @Controller
 public class ReservationsRS {
@@ -32,6 +38,9 @@ public class ReservationsRS {
 
 	@Autowired
 	private ReservationService reservationService;
+	
+	@Autowired
+	private RestaurantService restaurantService;
 	
 	private View jsonView = null;
 
@@ -50,23 +59,27 @@ public class ReservationsRS {
 		return reservationService.findAll();
 	}
 	
-	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ModelAndView createReservationJson(@RequestBody Reservation reservation, HttpServletResponse httpResponse,
-	        WebRequest httpRequest) {
-		logger.debug("body: {}", reservation);
-
-		try {
-			Reservation savedReservation = reservationService.save(reservation);
-			httpResponse.setStatus(HttpStatus.CREATED.value());
-			httpResponse
-			        .setHeader("Location", httpRequest.getContextPath() + "/reservations/" + savedReservation.getId());
-			return new ModelAndView(jsonView, DATA_FIELD, savedReservation);
-		} catch (Exception e) {
-			logger.error("Error creating new restaurant", e);
-			String message = "Error creating new restaurant. [%1$s]";
-			return createErrorResponse(String.format(message, e.toString()));
+	public HashMap<String, Object> createReservationJson(Reservation reservation, BindingResult bindingResult) {
+		HashMap<String, Object> response = new HashMap<String, Object>();
+		
+		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
+		DiningTable diningTable = ReservationController.checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+		if(diningTable == null){
+			response.put("result", "FAIL");
+		}else{
+			reservation.setRestaurant(restaurant);
+			restaurant.getReservations().add(reservation);
+			reservation.setDiningTable(diningTable);
+			diningTable.getReservations().add(reservation);
+			reservation.getCustomer().setReservation(reservation);
+			
+			reservation = reservationService.save(reservation);
+			response.put("result", "OK");
 		}
+		response.put("reservation", reservation);
+		return response;
 	}
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
