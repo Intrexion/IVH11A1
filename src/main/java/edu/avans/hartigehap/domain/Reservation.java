@@ -77,10 +77,8 @@ public class Reservation extends DomainObject {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.description = description;
-		DateTimeProvider provider = new DateTimeAdapter(startDate);
-		startTime = provider.getTime();
-		day = provider.getDate();
-		provider = new DateTimeAdapter(endDate);
-		endTime = provider.getTime();
+		day = startDate.toString("yyyy-MM-dd");
+		startTime = startDate.toString("HH:mm");
+		endTime = endDate.toString("HH:mm");
 	}
 }
