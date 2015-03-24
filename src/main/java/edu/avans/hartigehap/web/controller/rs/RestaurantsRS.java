@@ -1,6 +1,5 @@
 package edu.avans.hartigehap.web.controller.rs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;

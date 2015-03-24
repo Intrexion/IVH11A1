@@ -1,17 +1,13 @@
 package edu.avans.hartigehap.domain;
 
-import java.text.SimpleDateFormat;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -21,7 +17,6 @@ import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
