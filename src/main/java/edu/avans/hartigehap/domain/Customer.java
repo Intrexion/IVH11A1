@@ -12,7 +12,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,12 @@ import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
 
 /**
  * 
@@ -53,6 +56,8 @@ public class Customer extends DomainObject {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE)
+	//Converter for restful
+	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime birthDate;
 
 	private int partySize;
@@ -72,11 +77,13 @@ public class Customer extends DomainObject {
 	
 	// no cascading
 	@ManyToMany
+	@JsonBackReference
 	private Collection<Restaurant> restaurants = new ArrayList<Restaurant>();
 
 	// no cascading
 	// bidirectional one-to-many; mapping on the database happens at the many side
 	@OneToMany(mappedBy = "customer")
+	@JsonBackReference
 	private Collection<Bill> bills = new ArrayList<Bill>();
 	
 
@@ -105,15 +112,15 @@ public class Customer extends DomainObject {
 
 	// example of a "derived property". This property can be be easily derived
 	// from the property "birthDate", so no need to persist it.
-	@Transient
-	public String getBirthDateString() {
-		String birthDateString = "";
-		if (birthDate != null) {
-			birthDateString = org.joda.time.format.DateTimeFormat.forPattern(
-					"yyyy-MM-dd").print(birthDate);
-		}
-		return birthDateString;
-	}
+	//	@Transient
+	//	public String getBirthDateString() {
+	//		String birthDateString = "";
+	//		if (birthDate != null) {
+	//			birthDateString = org.joda.time.format.DateTimeFormat.forPattern(
+	//					"yyyy-MM-dd").print(birthDate);
+	//		}
+	//		return birthDateString;
+	//	}
 
 	// business logic
 	public static class Builder{

@@ -1,5 +1,6 @@
 package edu.avans.hartigehap.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -16,7 +17,9 @@ import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
 @Entity
 @Table(name = "RESERVATIONS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -27,17 +30,19 @@ public class Reservation extends DomainObject {
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
+	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime startDate;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
-	@DateTimeFormat(iso = ISO.DATE_TIME)
+	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
+	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime endDate;
 
 	private String description;
 
-	@OneToOne(mappedBy="reservation")
+	@OneToOne(mappedBy="reservation", cascade = CascadeType.ALL)
 	private Customer customer;
 
 	@ManyToOne
@@ -51,5 +56,4 @@ public class Reservation extends DomainObject {
 		this.endDate = endDate;
 		this.description = description;
 	}
-
 }

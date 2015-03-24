@@ -47,7 +47,7 @@ public class RestaurantsRS {
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/restaurants", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Restaurant> restaurants() {
-		logger.debug("");
+		logger.debug("");		
 		return restaurantService.findAll();
 	}
 

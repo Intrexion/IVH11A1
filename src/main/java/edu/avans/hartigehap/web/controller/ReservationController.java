@@ -128,7 +128,7 @@ public class ReservationController {
 		}
 	}
 	
-	private DiningTable checkReservation(Reservation reservation, Collection<DiningTable> diningTables){
+	public static DiningTable checkReservation(Reservation reservation, Collection<DiningTable> diningTables){
 		for(DiningTable dt : diningTables){
 			boolean freespot = true;
 			for(Reservation r : dt.getReservationsByDate(reservation.getStartDate())){
