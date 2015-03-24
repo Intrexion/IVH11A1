@@ -2,6 +2,7 @@ package edu.avans.hartigehap.web.controller;
 
 import lombok.Setter;
 
+import org.h2.util.New;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,7 +14,15 @@ public class DateTimeAdapter implements DateTimeProvider {
 	@Setter
 	private DateAndTime dateAndTime;
 
+	@Setter
+	private DateTime dateTime;
+	
+
 	public DateTimeAdapter() {
+	}
+	
+	public DateTimeAdapter(DateTime dateTime) {
+		this.dateTime = dateTime; 
 	}
 
     public DateTimeAdapter(DateAndTime dateAndTime) {
@@ -35,4 +44,28 @@ public class DateTimeAdapter implements DateTimeProvider {
         DateTime dateTime = formatter.parseDateTime(text);
         return dateTime;
     }
+
+    /**
+     * @return yyyy-MM-dd format
+     */
+	@Override
+	public String getDate() {
+		String date= "";
+		if(dateTime != null){
+			date = dateTime.toString().substring(0,10);
+		}
+		return date;
+	}
+
+	/**
+     * @return HH:mm format
+     */
+	@Override
+	public String getTime() {
+		String time= "";
+		if(dateTime != null){
+			time = dateTime.toString().substring(11,16);
+		}
+		return time;
+	}
 }

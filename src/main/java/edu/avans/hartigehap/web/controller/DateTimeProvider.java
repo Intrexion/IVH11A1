@@ -7,4 +7,6 @@ import org.joda.time.DateTime;
  */
 public interface DateTimeProvider {
     public DateTime getDateTime();
+    public String getDate();
+    public String getTime();
 }

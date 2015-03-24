@@ -3,11 +3,26 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:joda="http://www.joda.org/joda/time/tags" version="2.0"
 	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
 
 	<spring:message code="label_restaurant" var="labelRestaurant" />
+	<spring:message code="label_reservation_form" var="labelReservationForm" />
+	<spring:message code="label_reservation_date" var="labelDate" />
+	<spring:message code="label_reservation_starttime" var="labelStartTime" />
+	<spring:message code="label_reservation_endtime" var="labelEndTime" />
+	<spring:message code="label_reservation_persons" var="labelPersons" />
+	<spring:message code="label_reservation_firstname" var="labelFirstName" />
+	<spring:message code="label_reservation_lastname" var="labelLastName" />
+	<spring:message code="label_reservation_email" var="labelEmail" />
+	<spring:message code="label_reservation_phone" var="labelPhone" />
+	<spring:message code="label_reservation_comments" var="labelComments" />
+	<spring:message code="label_reservation_comments_placeholder" var="labelCommentsPlaceholder" />
+	<spring:message code="label_reservation_submit" var="labelSubmit" />
+	<spring:message code="label_reservation_time_error" var="labelTimeError" />
+	<spring:message code="label_reservation_overview" var="labelReservationOverview" />
 	<spring:message code="label_ordering_subsystem" var="labelOrderingSubsystem" />
 	<spring:message code="label_kitchen_subsystem" var="labelKitchenSubsystem" />
 	<spring:message code="label_waiter_subsystem" var="labelWaiterSubsystem" />
@@ -15,28 +30,117 @@
 	<spring:message code="label_dining_tables" var="labelDiningTables" />
 	<spring:message code="label_dining_table" var="labelDiningTable" />
 
+	<script type="text/javascript">
+	function validateForm() {
+	    var a = document.getElementById('startTime').value;
+	    var b = document.getElementById('endTime').value;
 
-	<h1>${labelRestaurant} ${restaurant.id}</h1>
+	    var asplit = a.split(':');
+	    var bsplit = b.split(':');
 
-	<h3>${labelOrderingSubsystem}</h3>
+	    var x = asplit[0] + asplit[1];
+	    var y = bsplit[0] + bsplit[1];
+
+	    if (+x >= +y) {
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
+	        return false;
+	    }
+	}
+
+	function checkTime() {
+	    var a = document.getElementById('startTime').value;
+	    var b = document.getElementById('endTime').value;
+
+	    var asplit = a.split(':');
+	    var bsplit = b.split(':');
+
+	    var x = asplit[0] + asplit[1];
+	    var y = bsplit[0] + bsplit[1];
+
+	    if (+x >= +y) {
+	        document.getElementById('startTime').style.borderColor = "red";
+	        document.getElementById('endTime').style.borderColor = "red";
+	        document.getElementById('startTime').setCustomValidity('${labelTimeError}');
+	    }
+
+	    if (+y > +x) {
+	        document.getElementById('startTime').style.borderColor = "";
+	        document.getElementById('endTime').style.borderColor = "";
+	        document.getElementById('startTime').setCustomValidity('');
+	    }
+	}
+	</script>
+
+	<h3>${labelReservationOverview}</h3>
 
 	<c:if test="${not empty message}">
 		<div id="message" class="${message.type}">${message.message}</div>
 	</c:if>
 
 	<table>
-		<thead>
+	<!-- <thead>
 			<tr>
 				<th>${labelDiningTables}</th>
 			</tr>
 		</thead>
+		-->
 		<tbody>
-			<!-- <c:forEach items="${restaurant.diningTables}" var="diningTable">
-				<spring:url var="showTable" value="/diningTables/${diningTable.id}" />					
-				<tr>
-					<td><a href="${showTable}">${labelDiningTable} ${diningTable.tableNr}</a></td>							
-				</tr>
-			</c:forEach> -->
+				<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservation" id="form" method="put">
+		<fieldset>
+		<div class="pure-control-group">
+				<form:label path="restaurant.id" class="bold">${labelRestaurant}</form:label>
+				<form:input readonly="true" required="required" path="restaurant.id" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
+			</div>
+			<div class="pure-control-group">
+				<form:label class="bold" path="day">${labelDate}</form:label>
+				<form:input class="pure-input-2-3" type="date" path="day" id="date" min="${currentDate}" value="${currentDate}" />
+			</div>	
+			
+			<div class="pure-control-group">
+				<form:label class="bold" path="startTime">${labelStartTime}</form:label>
+				<form:input step="1800" class="pure-input-2-3" type="time" path="startTime" id="startTime" min="12:00:00" max="21:00:00"/>
+			</div>	
+			
+			<div class="pure-control-group">
+				<form:label class="bold" path="endTime">${labelEndTime}</form:label>
+				<form:input step="1800" class="pure-input-2-3" type="time" path="endTime" id="endTime" min="13:00:00" max="23:00:00"/>
+			</div>	
+			
+			<div class="pure-control-group">
+				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
+				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size"/>
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="customer.firstName" class="bold">${labelFirstName}</form:label>
+				<form:input readonly="true" required="required" path="customer.firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
+			</div>
+			<div class="pure-control-group">
+				<form:label path="customer.lastName" class="bold">${labelLastName}</form:label>
+				<form:input readonly="true" required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="customer.email" class="bold">${labelEmail}</form:label>
+				<form:input readonly="true" type="email" required="required" path="customer.email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
+			</div>
+	
+			<div class="pure-control-group">
+				<form:label path="customer.phone" class="bold">${labelPhone}</form:label>
+				<form:input type="tel" required="required" path="customer.phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
+			</div>
+			
+			<div class="pure-control-group">
+				<form:label path="description" class="bold">${labelComments}</form:label>
+				<form:textarea rows="3" path="description" name="description" id="description" class="pure-input-2-3 text-resize"  placeholder="${labelCommentsPlaceholder}" />
+			</div>
+			
+			<div class="pure-controls">
+			
+				<button type="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
+			</div>
+		</fieldset>
+	</form:form>
 		</tbody>
 	</table>
 </div>

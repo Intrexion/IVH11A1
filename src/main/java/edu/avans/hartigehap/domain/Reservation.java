@@ -20,6 +20,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
+import edu.avans.hartigehap.web.controller.DateAndTime;
+import edu.avans.hartigehap.web.controller.DateTimeAdapter;
+import edu.avans.hartigehap.web.controller.DateTimeProvider;
+
 @Entity
 @Table(name = "RESERVATIONS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -40,6 +44,8 @@ public class Reservation extends DomainObject {
 	@JsonSerialize(using = DateTimeToRSConverter.class)
 	private DateTime endDate;
 
+	private String startTime, endTime,day;
+	
 	private String description;
 
 	@OneToOne(mappedBy="reservation", cascade = CascadeType.ALL)
@@ -51,9 +57,30 @@ public class Reservation extends DomainObject {
 	@ManyToOne
 	private DiningTable diningTable;
 	
+	public void updateEditableFields(Reservation reservation) {
+		
+		
+		customer.setPartySize(reservation.getCustomer().getPartySize());
+        diningTable = reservation.getDiningTable();
+        description = reservation.getDescription();
+    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
+		startDate = provider.getDateTime();
+    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
+		endDate = provider.getDateTime();
+        startTime = reservation.getStartTime();
+        endTime = reservation.getEndTime();
+        day= reservation.getDay();
+        
+	}
+	
 	public Reservation(DateTime startDate, DateTime endDate, String description){
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.description = description;
+		DateTimeProvider provider = new DateTimeAdapter(startDate);
+		startTime = provider.getTime();
+		day = provider.getDate();
+		provider = new DateTimeAdapter(endDate);
+		endTime = provider.getTime();
 	}
 }

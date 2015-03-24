@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.web.util.UrlUtil;
 
 @Controller
 public class ReservationController {
@@ -46,6 +48,10 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String listReservations(Model uiModel) {
+		
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
+		
 		Collection<Reservation> reservations = reservationService.findAll();
 		uiModel.addAttribute("reservations", reservations);
 		
@@ -54,14 +60,67 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.GET)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Model uiModel) {
-		Collection<Reservation> reservations = reservationService.findAll();
-		uiModel.addAttribute("reservations", reservations);
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		uiModel.addAttribute("restaurants", restaurants);
 		
 		Reservation reservation = reservationService.findById(reservationID);
 		uiModel.addAttribute("reservation", reservation);
 		
 		return "hartigehap/reservation";
 	}
+	
+	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.DELETE)
+	public String deleteReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel){	
+		Reservation existingReservation = reservationService.findById(reservationID);
+        assert existingReservation != null : "reservation should exist";
+		reservationService.delete(existingReservation);
+        
+        return "redirect:../reservations";
+	}
+	
+	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
+	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
+
+		
+		Reservation existingReservation = reservationService.findById(reservationID);
+        assert existingReservation != null : "reservation should exist";
+        
+    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
+		reservation.setStartDate(provider.getDateTime());
+    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
+    	reservation.setEndDate(provider.getDateTime());
+    	
+    	
+    	System.out.println(reservation.getCustomer().getPartySize());
+    	System.out.println(existingReservation.getCustomer().getPartySize());    	
+    	System.out.println(reservation.getStartDate());
+    	System.out.println(existingReservation.getStartDate());
+    	System.out.println(reservation.getEndDate());
+    	System.out.println(existingReservation.getEndDate());
+    	
+    	reservation.setRestaurant(restaurantService.findById(reservation.getRestaurant().getId()));
+    	
+        if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize() || !reservation.getStartDate().equals(existingReservation.getStartDate()) || !reservation.getEndDate().equals(existingReservation.getEndDate())){
+    		System.out.println(reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()).size());
+        	DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+    		if(diningTable ==null){
+    			//geen andere tafel beschikbaar
+    			//TODO hier alles afbreken
+    			System.out.println("geen dt gevonden");
+    			return "redirect:../reservations";
+    		}else{
+    			reservation.setDiningTable(diningTable);
+    		}
+        }
+        
+        // update user-editable fields
+        existingReservation.updateEditableFields(reservation);
+
+		reservationService.save(existingReservation);
+		
+		return "redirect:../reservations";
+	}
+	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
 		logger.info("Create reservation form");
@@ -76,8 +135,9 @@ public class ReservationController {
 
 		return "hartigehap/createreservationform";
 	}
+	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
-	public String createReservation(ReservationModel model, BindingResult bindingResult,
+	public String createReservation(@Valid ReservationModel model, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			RedirectAttributes redirectAttributes, Locale locale) {
 		logger.info("Create reservation form");
@@ -94,6 +154,9 @@ public class ReservationController {
 		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
 		DateTime endDate = dateTimeAdapter.getDateTime();
 		reservation.setEndDate(endDate);
+		reservation.setStartTime(model.getStartTime());
+		reservation.setEndTime(model.getEndTime());
+		reservation.setDay(model.getDate());
 		
 		reservation.setDescription(model.getDescription());
 
