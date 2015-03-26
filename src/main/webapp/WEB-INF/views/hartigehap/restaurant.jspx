@@ -14,6 +14,12 @@
 	<spring:message code="label_customer_subsystem" var="labelCustomerSubsystem" />
 	<spring:message code="label_dining_tables" var="labelDiningTables" />
 	<spring:message code="label_dining_table" var="labelDiningTable" />
+	<spring:message code="label_reservations" var="labelReservations" />
+	<spring:message code="label_customer_last_name" var="labelCustomerLastName" />
+	<spring:message code="label_customer_partysize" var="labelCustomerPartySize" />
+	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
+	<spring:message code="label_dining_table_number" var="labelTableNumber" />
+	<spring:message code="label_no_reservations" var="labelNoReservations" />
 
 
 	<h1>${labelRestaurant} ${restaurant.id}</h1>
@@ -32,9 +38,40 @@
 		</thead>
 		<tbody>
 			<c:forEach items="${restaurant.diningTables}" var="diningTable">
+			<c:forEach items="${occupiedTables}" var="table"></c:forEach>
 				<spring:url var="showTable" value="/diningTables/${diningTable.id}" />					
 				<tr>
 					<td><a href="${showTable}">${labelDiningTable} ${diningTable.tableNr}</a></td>							
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+	<br/>
+	<br/>
+	<br/>
+<table>
+		<thead>
+			<tr>
+				<th colspan="4">${labelReservations}</th>
+			</tr>
+			<c:if test="${reservations.size() > 0}">
+				<tr>		
+					<th>${labelCustomerLastName}</th>
+					<th>${labelCustomerPartySize}</th>
+					<th>${labelReservationStartTime}</th>
+					<th>${labelTableNumber}</th>	
+				</tr>
+			</c:if>
+		</thead>
+		<tbody>
+		<c:if test="${reservations.size() == '0'}"><td colspan="4" >${labelNoReservations}</td></c:if>		
+			<c:forEach items="${reservations}" var="reservation">
+				<spring:url var="showTable" value="/diningTables/${reservation.diningTable.id}" />								
+				<tr>
+					<td><a href="${showTable}">${reservation.customer.lastName}</a></td>	
+					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
+					<td><a href="${showTable}">${reservation.startTime}</a></td>
+					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
 				</tr>
 			</c:forEach>
 		</tbody>

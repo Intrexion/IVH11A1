@@ -190,6 +190,6 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 				break;
 			}
 		}
-		createReservation(new DateTime(), new DateTime(), "", restaurant, diningTable, customers.get(0));
+		createReservation(new DateTime(), new DateTime().plusHours(2), "", restaurant, diningTable, customers.get(0));
 	}	
 }

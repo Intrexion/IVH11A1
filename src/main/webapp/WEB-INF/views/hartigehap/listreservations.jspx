@@ -23,7 +23,7 @@
 	<spring:message code="label_reservation_date" var="labelReservationDate" />
 	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
 	<spring:message code="label_restaurant" var="labelRestaurant" />
-	<spring:message code="label_dining_table_number" var="labelTableNumer" />
+	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 
 
 	<h1>${labelReservationOverview}</h1>
@@ -43,7 +43,7 @@
 				<th>${labelReservationDate}</th>
 				<th>${labelReservationStartTime}</th>
 				<th>${labelRestaurant}</th>
-				<th>${labelTableNumer}</th>
+				<th>${labelTableNumber}</th>
 				<th>${labeldelete}</th>
 			</tr>
 		</thead>
