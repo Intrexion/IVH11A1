@@ -2,7 +2,6 @@ package edu.avans.hartigehap.web.controller;
 
 import lombok.Setter;
 
-import org.h2.util.New;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

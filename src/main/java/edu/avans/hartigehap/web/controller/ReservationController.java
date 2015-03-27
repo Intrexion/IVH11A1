@@ -17,8 +17,6 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
@@ -38,7 +36,6 @@ import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
-import edu.avans.hartigehap.web.util.UrlUtil;
 
 @Controller
 public class ReservationController {
