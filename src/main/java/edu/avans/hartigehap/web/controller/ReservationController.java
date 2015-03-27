@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -185,7 +186,7 @@ public class ReservationController {
 			diningTable.getReservations().add(reservation);
 			reservation.setCustomer(customer);
 			customer.setReservation(reservation);
-			reservation.setCode("AAA111");
+			reservation.setCode(randomGenerator());
 
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
@@ -222,5 +223,15 @@ public class ReservationController {
 	        }
 		}
 		return null;
+	}
+	
+	public static String randomGenerator() {
+		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		Random rnd = new Random();
+		
+		StringBuilder sb = new StringBuilder(6);
+		   for( int i = 0; i < 6; i++ ) 
+		      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+		   return sb.toString();
 	}
 }
