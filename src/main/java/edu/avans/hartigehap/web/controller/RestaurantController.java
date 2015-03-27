@@ -84,7 +84,7 @@ public class RestaurantController {
 		for(DiningTable dt : restaurant.getDiningTables()){
 			for(Reservation r : dt.getReservationsByDate(now)){
 				
-				if(now.plusMinutes(30).isBefore(r.getStartDate())){
+				if(now.plusHours(1).isBefore(r.getStartDate())){
 	                //afspraak voor de huidige
 	            }
 	            else if(now.isAfter(r.getEndDate())){

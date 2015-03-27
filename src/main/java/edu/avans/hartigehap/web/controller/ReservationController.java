@@ -14,6 +14,8 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -186,6 +188,10 @@ public class ReservationController {
 
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
+			
+			ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
+			SMTPController mailSender = (SMTPController) context.getBean("SMTPController");
+			mailSender.sendMail(reservation);
 
 			return "hartigehap/reservationsuccessful";
 		}

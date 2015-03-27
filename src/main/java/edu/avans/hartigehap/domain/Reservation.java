@@ -47,6 +47,8 @@ public class Reservation extends DomainObject {
 	private String startTime, endTime,day;
 	
 	private String description;
+	
+	private String code;
 
 	@OneToOne(mappedBy="reservation", cascade = CascadeType.ALL)
 	private Customer customer;
@@ -70,6 +72,7 @@ public class Reservation extends DomainObject {
         startTime = reservation.getStartTime();
         endTime = reservation.getEndTime();
         day= reservation.getDay();
+        code= "AAAA11";
         
 	}
 	
