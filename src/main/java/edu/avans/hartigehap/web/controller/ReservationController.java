@@ -185,11 +185,12 @@ public class ReservationController {
 			diningTable.getReservations().add(reservation);
 			reservation.setCustomer(customer);
 			customer.setReservation(reservation);
+			reservation.setCode("AAA111");
 
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
 			
-			ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Mail.xml");
+			ApplicationContext context = new ClassPathXmlApplicationContext("datasource-tx-jpa.xml");
 			SMTPController mailSender = (SMTPController) context.getBean("SMTPController");
 			mailSender.sendMail(reservation);
 

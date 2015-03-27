@@ -72,7 +72,7 @@ public class Reservation extends DomainObject {
         startTime = reservation.getStartTime();
         endTime = reservation.getEndTime();
         day= reservation.getDay();
-        code= "AAAA11";
+
         
 	}
 	
