@@ -12,11 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,6 +45,8 @@ public class ReservationController {
 	final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 	
 	@Autowired
+	private MailSender mailSender;
+	@Autowired
 	private ReservationService reservationService;
 	@Autowired
 	private CustomerService customerService;
@@ -48,6 +54,7 @@ public class ReservationController {
 	private RestaurantService restaurantService;
 	@Autowired
 	private DiningTableService diningTableService;
+
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String listReservations(Model uiModel) {
@@ -191,9 +198,7 @@ public class ReservationController {
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
 			
-			ApplicationContext context = new ClassPathXmlApplicationContext("datasource-tx-jpa.xml");
-			SMTPController mailSender = (SMTPController) context.getBean("SMTPController");
-			mailSender.sendMail(reservation);
+			sendMail(reservation);
 
 			return "hartigehap/reservationsuccessful";
 		}
@@ -223,6 +228,31 @@ public class ReservationController {
 	        }
 		}
 		return null;
+	}
+	
+	
+	public void setMailSender(MailSender mailSender){
+		this.mailSender = mailSender;
+	}
+	
+	public void sendMail(Reservation reservation){		
+		DateTime date = reservation.getStartDate();
+		DateTimeFormatter dtfd = DateTimeFormat.forPattern("dd/MM/yyyy");
+		DateTimeFormatter dtft = DateTimeFormat.forPattern("HH:mm");
+		String reservationDate = dtfd.print(date);
+		String reservationTime = dtft.print(date);
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("hhreserveringen@gmail.com");
+		message.setTo(reservation.getCustomer().getEmail());
+		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
+		message.setText("Geachte heer/mevrouw " + reservation.getCustomer().getLastName() + ",\n\n" +
+						"Hierbij bevestigen wij uw reservering bij " + reservation.getRestaurant().getId() + " op " + reservationDate + " om " + reservationTime + ". \n\n" +
+						"Uw reserveringscode is: " + reservation.getCode() + ". \n\n" +
+						"Bewaar deze code goed, deze is nodig om uw reservering te bevestigen in het restaurant. \n\n" +
+						"Met vriendelijke groet, \n" +
+						"Het Hartige Hap management");
+		mailSender.send(message);
 	}
 	
 	public static String randomGenerator() {
