@@ -249,17 +249,25 @@ public class ReservationController {
 						"Uw reserveringscode is: " + reservation.getCode() + ". \n\n" +
 						"Bewaar deze code goed, deze is nodig om uw reservering te bevestigen in het restaurant. \n\n" +
 						"Met vriendelijke groet, \n" +
-						"Het Hartige Hap management");
+						"Het Hartige Hap management \n\n" +
+						"-----------------------------------------------------------\n\n" +
+						"Dear Sir/Madam " + reservation.getCustomer().getLastName() + ",\n\n" +
+						"We hereby confirm your reservation at " + reservation.getRestaurant().getId() + " on " + reservationDate + " at " + reservationTime + ". \n\n" +
+						"Your reservationcode is: " + reservation.getCode() + ". \n\n" +
+						"Make sure to keep this code safe, it is needed upon your arrival in the restaurant to confirm your reservation. \n\n" +
+						"Best regards, \n" +
+						"The Hartige Hap team");
 		mailSender.send(message);
 	}
 	
-	public static String randomGenerator() {
+	public static String randomGenerator(){
 		String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		Random rnd = new Random();
 		
 		StringBuilder sb = new StringBuilder(6);
-		   for( int i = 0; i < 6; i++ ) 
-		      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
-		   return sb.toString();
+		for(int i = 0; i<6; i++){
+			sb.append(AB.charAt(rnd.nextInt(AB.length())));
+		}
+		return sb.toString();
 	}
 }
