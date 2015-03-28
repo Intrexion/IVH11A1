@@ -31,6 +31,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -253,12 +254,9 @@ public class ReservationController {
 		DateTimeFormatter dtft = DateTimeFormat.forPattern("HH:mm");
 		String reservationDate = dtfd.print(date);
 		String reservationTime = dtft.print(date);
-		
-		//create QRCode from reservationcode
+		String locale = LocaleContextHolder.getLocale().toString();
 		File qrcode = QRCode.from(reservation.getCode()).to(ImageType.JPG).withSize(250, 250).file();
-		//encode in base64
-		//String encodeQR = encodeFileToBase64Binary(qrcode);
-				
+		
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, "utf-8");
 		Multipart multipart = new MimeMultipart("related");
@@ -266,22 +264,25 @@ public class ReservationController {
 		message.setTo(reservation.getCustomer().getEmail());
 		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
 		BodyPart htmlPart = new MimeBodyPart();
-		htmlPart.setContent("<html><body><p>Geachte heer/mevrouw " + reservation.getCustomer().getLastName() + ",</p>" +
-						"<p>Hierbij bevestigen wij uw reservering bij " + reservation.getRestaurant().getId() + " op " + reservationDate + " om " + reservationTime + ".</p>" +
-						"<p>Uw reserveringscode is: <b>" + reservation.getCode() + "</b>.</p>" +
-						"<p>Bewaar deze code goed, deze is nodig om uw reservering te bevestigen in het restaurant. <br> Hieronder vindt u de code ook in QR vorm, deze kunt u inscannen in het restaurant om uw reservering te bevestigen</p>" +
-						"<img src=\"cid:qr-code\"/><br>" +
-						"<p>Met vriendelijke groet,<br>" +
-						"Het Hartige Hap management</p>" +
-						"----------------------------------------------------------- <br>" +
-						"<p>Dear Sir/Madam " + reservation.getCustomer().getLastName() + ",</p>" +
+		if (locale.equals("nl_NL")) {
+			htmlPart.setContent("<html><body><p>Geachte heer/mevrouw " + reservation.getCustomer().getLastName() + ",</p>" +
+							"<p>Hierbij bevestigen wij uw reservering bij " + reservation.getRestaurant().getId() + " op " + reservationDate + " om " + reservationTime + ".</p>" +
+							"<p>Uw reserveringscode is: <b>" + reservation.getCode() + "</b>.</p>" +
+							"<p>Bewaar deze code goed, deze is nodig om uw reservering te bevestigen in het restaurant. <br> Hieronder vindt u de code ook in QR vorm, deze kunt u inscannen in het restaurant om uw reservering te bevestigen</p>" +
+							"<img src=\"cid:qr-code\"/><br>" +
+							"<p>Met vriendelijke groet,<br>" +
+							"Het Hartige Hap management</p></body></html>", "text/html");
+			multipart.addBodyPart(htmlPart);
+		} else if (locale.equals("en_US")) {
+			htmlPart.setContent("<html><body><p>Dear Sir/Madam " + reservation.getCustomer().getLastName() + ",</p>" +
 						"<p>We hereby confirm your reservation at " + reservation.getRestaurant().getId() + " on " + reservationDate + " at " + reservationTime + ".</p>" +
 						"<p>Your reservationcode is: <b>" + reservation.getCode() + "</b>.<p>" +
 						"<p>Make sure to keep this code safe, it is needed upon your arrival in the restaurant to confirm your reservation. <br> Below you will also find the code as QR code,  which you can also use to confirm your reservation by scanning it at the restaurant.</p>" +
 						"<img src=\"cid:qr-code\"/><br>" +
 						"<p>Best regards,<br>" +
-						"The Hartige Hap team</p></html></body>", "text/html");
-		multipart.addBodyPart(htmlPart);
+						"The Hartige Hap team</p></body></html>", "text/html");
+			multipart.addBodyPart(htmlPart);
+		}
 		BodyPart imgPart = new MimeBodyPart();
 		DataSource ds = new FileDataSource(qrcode);
 		imgPart.setDataHandler(new DataHandler(ds));
