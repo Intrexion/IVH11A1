@@ -9,7 +9,9 @@
 	<jsp:output omit-xml-declaration="yes" />
 
 	<spring:message code="label_reservation_successful_header" var="labelSuccessfulHeader" />
-	<spring:message code="label_reservation_successful_message" var="labelSuccessfulMessage" />
+	<spring:message code="label_reservation_successful_message1" var="labelSuccessfulMessage1" />
+	<spring:message code="label_reservation_successful_message2" var="labelSuccessfulMessage2" />
+	<spring:message code="label_reservation_successful_message3" var="labelSuccessfulMessage3" />
 	<spring:message code="label_reservation_back" var="labelBack" />
 
 	<div class="reservation-box success-box">
@@ -22,7 +24,11 @@
 		
 		<div class="pure-g">
 		    <div class="pure-u-1-5"><p></p></div>
-		    <div class="pure-u-3-5"><p align="center">${labelSuccessfulMessage}</p></div>
+		    <div class="pure-u-3-5">
+		    	<p align="center">${labelSuccessfulMessage1} ${reservation.customer.lastName},</p>
+		    	<p align="center">${labelSuccessfulMessage2} <b>${reservation.code}</b>.</p>
+		    	<p align="center">${labelSuccessfulMessage3} ${reservation.restaurant.id}.</p>
+		    </div>	
 		    <div class="pure-u-1-5"><p></p></div>
 		</div>
 		<spring:url var="showReservationForm" value="/reservation?form" />

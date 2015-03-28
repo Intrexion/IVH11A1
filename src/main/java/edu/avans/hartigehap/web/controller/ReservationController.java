@@ -196,7 +196,8 @@ public class ReservationController {
 			restaurant = restaurantService.save(restaurant);
 			
 			sendMail(reservation);
-
+			
+			uiModel.addAttribute("reservation", reservation);
 			return "hartigehap/reservationsuccessful";
 		}
 	}
