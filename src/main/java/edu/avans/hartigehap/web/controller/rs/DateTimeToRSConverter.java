@@ -12,13 +12,14 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class DateTimeToRSConverter extends JsonSerializer<DateTime> {
-    private static DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
+	private static DateTimeFormatter formatter = DateTimeFormat
+			.forPattern("yyyy-MM-dd HH:mm");
 
-        @Override
-        public void serialize(DateTime arg0, JsonGenerator gen, 
-                              SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
+	@Override
+	public void serialize(DateTime arg0, JsonGenerator gen,
+			SerializerProvider arg2) throws IOException,
+			JsonProcessingException {
 
-            gen.writeString(formatter.print(arg0));
-        }
+		gen.writeString(formatter.print(arg0));
+	}
 }

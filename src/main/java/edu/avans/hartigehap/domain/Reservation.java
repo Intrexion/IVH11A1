@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -16,10 +17,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import edu.avans.hartigehap.web.controller.rs.DateTimeToRSConverter;
+import edu.avans.hartigehap.web.controller.rs.DateTimeToJsonAdapter;
+
+
 @Entity
 @Table(name = "RESERVATIONS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -31,13 +34,21 @@ public class Reservation extends DomainObject {
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
-	@JsonSerialize(using = DateTimeToRSConverter.class)
+	//Alleen zodat json dit veld negeert en de getter naar String pakt
+	@JsonIgnore
+	/* Dit is de mooie manier om het op te lossen, klasse heb ik hiervoor expres er in gelaten. Deze manier staat in de customer als voorbeeld
+	 * @JsonSerialize(using = DateTimeToRSConverter.class)
+	 */
 	private DateTime startDate;
 
 	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
 	// needed to allow changing a date in the GUI
 	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
-	@JsonSerialize(using = DateTimeToRSConverter.class)
+	//Alleen zodat json dit veld negeert en de getter naar String pakt
+	@JsonIgnore
+	/* Dit is de mooie manier om het op te lossen, klasse heb ik hiervoor expres er in gelaten. Deze manier staat in de customer als voorbeeld
+	 * @JsonSerialize(using = DateTimeToRSConverter.class)
+	 */
 	private DateTime endDate;
 
 	private String description;
@@ -55,5 +66,17 @@ public class Reservation extends DomainObject {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.description = description;
+	}
+	
+	@Transient
+	public String getEndDateString(){
+		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(endDate);
+		return adapter.getJson();
+	}
+	
+	@Transient
+	public String getStartDateString(){
+		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(startDate);
+		return adapter.getJson();
 	}
 }
