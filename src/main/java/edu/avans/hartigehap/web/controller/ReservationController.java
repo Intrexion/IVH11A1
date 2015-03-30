@@ -57,7 +57,7 @@ public class ReservationController {
 	final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 	
 	@Autowired
-	private JavaMailSender mailSender;
+	private static JavaMailSender mailSender;
 	@Autowired
 	private ReservationService reservationService;
 	@Autowired
@@ -248,7 +248,7 @@ public class ReservationController {
 		this.mailSender = mailSender;
 	}
 	
-	public void sendMail(Reservation reservation) throws MessagingException, IOException{		
+	public static void sendMail(Reservation reservation) throws MessagingException, IOException{		
 		DateTime date = reservation.getStartDate();
 		DateTimeFormatter dtfd = DateTimeFormat.forPattern("dd/MM/yyyy");
 		DateTimeFormatter dtft = DateTimeFormat.forPattern("HH:mm");

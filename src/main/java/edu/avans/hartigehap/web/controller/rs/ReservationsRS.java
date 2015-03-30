@@ -1,8 +1,10 @@
 package edu.avans.hartigehap.web.controller.rs;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -49,7 +51,7 @@ public class ReservationsRS {
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public HashMap<String, Object> createReservationJson(Reservation reservation, BindingResult bindingResult) {
+	public HashMap<String, Object> createReservationJson(Reservation reservation, BindingResult bindingResult) throws MessagingException, IOException {
 		HashMap<String, Object> response = new HashMap<String, Object>();
 		
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
@@ -66,6 +68,7 @@ public class ReservationsRS {
 			reservation.setCode(ReservationController.randomGenerator());
 			
 			reservation = reservationService.save(reservation);
+			ReservationController.sendMail(reservation);
 			response.put("result", "OK");
 		}
 
