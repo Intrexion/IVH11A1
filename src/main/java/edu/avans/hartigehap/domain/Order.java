@@ -95,8 +95,21 @@ public class Order extends DomainObject {
 			oItem = new OrderItemDecoration(oItem, i, additions.get(i));
 			}
 		}	
+		
+		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+		boolean found = false;
+		while (orderItemIterator.hasNext()) {
+			OrderItem orderItem = orderItemIterator.next();
+			if (orderItem.getDescription().equals(oItem.getDescription())) {
+				orderItem.incrementQuantity();
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
 			OrderItem orderItem = oItem;
 			orderItems.add(orderItem);
+		}
 	}
 
 	public void deleteOrderItem(String orderItemId) {
@@ -108,7 +121,7 @@ public class Order extends DomainObject {
 			OrderItem orderItem = orderItemIterator.next();
 			if (orderItem.getId() == Long.valueOf(orderItemId)){
 				found = true;
-				if (orderItem.getQuantity() > 1) {
+				if (orderItem.getBaseQuantity() > 1) {
 					orderItem.decrementQuantity();
 				} else {
 					// orderItem.getQuantity() == 1

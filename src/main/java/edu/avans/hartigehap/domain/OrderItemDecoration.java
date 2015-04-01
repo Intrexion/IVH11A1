@@ -37,7 +37,7 @@ public class OrderItemDecoration extends OrderItem{
 	@Override
 	@Transient
 	public int getPrice() {		
-		return orderItem.getPrice() + (ingredient.getPrice() * quantity);
+		return orderItem.getPrice() + (ingredient.getPrice() * quantity * getBaseQuantity());
 	}
 	
 	@Transient
@@ -58,6 +58,11 @@ public class OrderItemDecoration extends OrderItem{
 	@Override
 	public String getDescription() {
 		return orderItem.getDescription() + " + " + quantity + "x " + ingredient.getId();
+	}
+
+	@Override
+	public int getBaseQuantity() {
+		return orderItem.getBaseQuantity();
 	}
 
 }

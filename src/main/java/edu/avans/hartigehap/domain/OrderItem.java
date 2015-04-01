@@ -1,8 +1,6 @@
 package edu.avans.hartigehap.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -37,6 +35,9 @@ public abstract class OrderItem extends DomainObject {
 
 	/* business logic */
 
+	@Transient
+	public abstract int getBaseQuantity();
+	
 	public abstract void incrementQuantity() ;
 
 	public abstract void decrementQuantity();

@@ -156,16 +156,6 @@
 								</tr>
 							</table>
 						</form:form>
-						<spring:url var="deleteOrderItemUrl"
-							value="/diningTables/${diningTable.id}/menuItems/${menuItem.id}" />
-						<form:form name="deleteOrderItemForm"
-							action="${deleteOrderItemUrl}" method="delete">
-							<table>
-								<tr>
-									<td><input type="submit" value="${labelRemoveButton}" /></td>
-								</tr>
-							</table>
-						</form:form>
 					</div>
 				</c:forEach>
 
