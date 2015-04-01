@@ -14,39 +14,48 @@ import lombok.ToString;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-/**
- * 
- * @author Erco
- */
 @Entity
 @Table(name = "ORDERITEMS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter @Setter
 @ToString(callSuper=true, includeFieldNames=true, of= {"menuItem", "quantity"})
 @NoArgsConstructor
-public abstract class OrderItem extends DomainObject {
+public class BasicOrderItem extends OrderItem{
 	private static final long serialVersionUID = 1L;
-
+	// unidirectional one-to-one
+	// deliberate: no cascade!!
+	@OneToOne()
+	protected MenuItem menuItem;
 	
-	protected int quantity = 0;
 
-	public OrderItem(int quantity) {
-		this.quantity = quantity;
+	public BasicOrderItem(MenuItem menuItem) {
+		this.menuItem = menuItem;
+		quantity = 1;
 	}
 
-
-	/* business logic */
-
-	public abstract void incrementQuantity() ;
-
-	public abstract void decrementQuantity();
 	
+	@Override
 	@Transient
-	public abstract int getPrice();
+	public int getPrice() {
+		return menuItem.getPrice() * quantity;
+	}
+
+	@Override
+	public void incrementQuantity() {
+		quantity ++;
+		
+	}
+
+	@Override
+	public void decrementQuantity() {
+		assert quantity > 0 : "quantity cannot be below 0";
+		this.quantity--;
+	}
 	
+	@Override
 	@Transient
-	public abstract MenuItem getMenuItem();
+	public String getDescription(){
+		return quantity + "x " + menuItem.getId();
+	}
 	
-	@Transient
-	public abstract String getDescription();
 }

@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
+
 import org.joda.time.DateTime;
 
 @Service("restaurantPopulatorService")
@@ -26,11 +28,14 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	@Autowired
 	private FoodCategoryRepository foodCategoryRepository;
 	@Autowired
+	private IngredientRepository ingredientRepository;
+	@Autowired
 	private MenuItemRepository menuItemRepository;
 	@Autowired
 	private CustomerRepository customerRepository;
 	
 	private List<Meal> meals = new ArrayList<Meal>();
+	private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 	private List<FoodCategory> foodCats = new ArrayList<FoodCategory>();
 	private List<Drink> drinks = new ArrayList<Drink>();
 	private List<Customer> customers = new ArrayList<Customer>();
@@ -53,18 +58,30 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		createFoodCategory("alcoholic drinks");
 		createFoodCategory("energizing drinks");
 		
+		
+		createIngredient("extra bell pepper", 1);
+		createIngredient("extra salami", 2);
+		createIngredient("extra mushrooms", 2);
+		createIngredient("extra cheese", 1);
+		
 		createMeal("spaghetti", "spaghetti.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(0), ingredients.get(2), ingredients.get(3)}));
 		createMeal("macaroni", "macaroni.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));		
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(0), ingredients.get(2), ingredients.get(3)}));	
 		createMeal("canneloni", "canneloni.jpg", 9, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(0), ingredients.get(2), ingredients.get(3)}));
 		createMeal("pizza", "pizza.jpg", 9, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}));
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(0),ingredients.get(1), ingredients.get(2), ingredients.get(3)}));
 		createMeal("carpaccio", "carpaccio.jpg", 7, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(0)}));
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(0)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(3)}));
 		createMeal("ravioli", "ravioli.jpg", 8, "easy",
-			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1), foodCats.get(2)}));
+			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(3), foodCats.get(1), foodCats.get(2)}),
+			Arrays.<Ingredient>asList(new Ingredient[]{ingredients.get(2), ingredients.get(3)}));
 
 		createDrink("beer", "beer.jpg", 1, Drink.Size.LARGE,
 			Arrays.<FoodCategory>asList(new FoodCategory[]{foodCats.get(5)}));
@@ -83,12 +100,19 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		foodCats.add(foodCategory);
 	}
 	
-	private void createMeal(String name, String image, int price, String recipe, List<FoodCategory> foodCats) {
+	private void createIngredient(String name, int price) {
+		Ingredient ingredient = new Ingredient(name, price);
+		ingredient = ingredientRepository.save(ingredient);
+		ingredients.add(ingredient);
+	}
+	
+	private void createMeal(String name, String image, int price, String recipe, List<FoodCategory> foodCats, List<Ingredient> possibleAdditions) {
 		Meal meal = new Meal(name, image, price, recipe);
 		// as there is no cascading between FoodCategory and MenuItem (both ways), it is important to first 
 		// save foodCategory and menuItem before relating them to each other, otherwise you get errors
 		// like "object references an unsaved transient instance - save the transient instance before flushing:"
 		meal.addFoodCategories(foodCats);
+		meal.addPossibleAdditions(possibleAdditions);
 		meal = menuItemRepository.save(meal);
 		meals.add(meal);
 	}
@@ -97,6 +121,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		Drink drink = new Drink(name, image, price, size);
 		drink = menuItemRepository.save(drink);
 		drink.addFoodCategories(foodCats);
+		drink.addPossibleAdditions(new ArrayList<Ingredient>());
 		drinks.add(drink);
 	}
 	

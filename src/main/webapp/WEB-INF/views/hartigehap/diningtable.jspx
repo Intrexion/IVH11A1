@@ -27,6 +27,19 @@
 	<spring:message code="label_remove_button" var="labelRemoveButton" />
 	<spring:message code="label_currency" var="labelCurrency" />
 	<spring:url var="showRestaurant" value="/restaurants/${restaurant.id}" />
+<script type="text/javascript">
+	function increaseOption(fieldId) {
+	    var inputField = document.getElementById(fieldId);
+	    inputField.value = parseInt(inputField.value) + 1;
+	}
+	function decreaseOption(fieldId) {
+	    var inputField = document.getElementById(fieldId);
+	    if(inputField.value > 0){
+	    inputField.value = parseInt(inputField.value) - 1;
+	    }
+	}
+	</script>
+
 
 	<h1>
 		${labelDiningMenu} ${diningTable.tableNr} (${labelRestaurant} <a
@@ -42,7 +55,7 @@
 	<table>
 		<thead>
 			<tr>
-				<th>${labelCurrentOrder}</th>
+				<th colspan="2" >${labelCurrentOrder}</th>
 				<th><spring:url var="submitOrderUrl"
 						value="/diningTables/${diningTable.id}" /> <form:form
 						name="submitOrderForm" action="${submitOrderUrl}" method="put">
@@ -59,7 +72,15 @@
 			<c:forEach items="${diningTable.currentBill.currentOrder.orderItems}"
 				var="orderItem">
 				<tr>
-					<td>${orderItem.menuItem.id} (${orderItem.quantity}x)</td>
+					<td>${orderItem.description}</td>
+					<td>
+					<spring:url var="deleteOrderItemUrl"
+							value="/diningTables/${diningTable.id}/menuItems/${orderItem.id}" />
+						<form:form name="deleteOrderItemForm"
+							action="${deleteOrderItemUrl}" method="delete">
+							<button type="submit">${labelRemoveButton}</button>
+						</form:form>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -115,12 +136,23 @@
 						${labelPrice} ${menuItem.price} ${labelCurrency}
 						<spring:url var="addOrderItemUrl"
 							value="/diningTables/${diningTable.id}/menuItems" />
-						<form:form name="addOrderItemForm" action="${addOrderItemUrl}"
+							
+						
+						<form:form name="addOrderItemForm" modelAttribute="orderItemModel" action="${addOrderItemUrl}"
 							method="post">
-							<input type="hidden" name="menuItemName" value="${menuItem.id}" />
+							<form:input type="hidden" path="menuItemName" value="${menuItem.id}" />
 							<table>
+							
+								<c:forEach items="${menuItem.possibleAdditions}" var="option">
+									<tr>
+										<td>${option.id}</td>
+										<td onclick="decreaseOption('extraOption${foodCategory.id}_${menuItem.id}_${option.id}')"><p>-</p></td>
+										<td> <form:input path="additions['${option.id}']" id="extraOption${foodCategory.id}_${menuItem.id}_${option.id}" type="text" size="2" value="0" /> </td>
+										<td onclick="increaseOption('extraOption${foodCategory.id}_${menuItem.id}_${option.id}')"><p>+</p></td>
+									</tr>
+								</c:forEach>
 								<tr>
-									<td><input type="submit" value="${labelAddButton}" /></td>
+									<td colspan="4"><input type="submit" value="${labelAddButton}" /></td>
 								</tr>
 							</table>
 						</form:form>

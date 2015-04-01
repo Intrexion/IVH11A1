@@ -3,6 +3,7 @@ package edu.avans.hartigehap.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.persistence.Entity;
@@ -85,29 +86,27 @@ public class Order extends DomainObject {
 		return orderItems.isEmpty();
 	}
 
-	public void addOrderItem(MenuItem menuItem) {
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
-		boolean found = false;
-		while (orderItemIterator.hasNext()) {
-			OrderItem orderItem = orderItemIterator.next();
-			if (orderItem.getMenuItem().equals(menuItem)) {
-				orderItem.incrementQuantity();
-				found = true;
-				break;
+	public void addOrderItem(MenuItem menuItem, HashMap<Ingredient, Integer>additions) {
+		
+		
+		OrderItem oItem = new BasicOrderItem(menuItem);
+		for(Ingredient i : additions.keySet()){
+			if(additions.get(i) != 0){
+			oItem = new OrderItemDecoration(oItem, i, additions.get(i));
 			}
-		}
-		if (!found) {
-			OrderItem orderItem = new OrderItem(menuItem, 1);
+		}	
+			OrderItem orderItem = oItem;
 			orderItems.add(orderItem);
-		}
 	}
 
-	public void deleteOrderItem(MenuItem menuItem) {
+	public void deleteOrderItem(String orderItemId) {
+
+		
 		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
 		boolean found = false;
 		while (orderItemIterator.hasNext()) {
 			OrderItem orderItem = orderItemIterator.next();
-			if (orderItem.getMenuItem().equals(menuItem)) {
+			if (orderItem.getId() == Long.valueOf(orderItemId)){
 				found = true;
 				if (orderItem.getQuantity() > 1) {
 					orderItem.decrementQuantity();

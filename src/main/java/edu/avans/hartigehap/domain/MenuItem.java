@@ -36,6 +36,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 public abstract class MenuItem extends DomainObjectNaturalId {
 	private static final long serialVersionUID = 1L;
 
+
+	
 	// image stored in the database
 	@Column(name = "IMAGE", table = "MENUITEM_IMAGES")
 	@Lob
@@ -49,7 +51,10 @@ public abstract class MenuItem extends DomainObjectNaturalId {
 	// JPA is case sensitive: the corresponding column name will be in small
 	// caps "price"
 	private int price;
-
+	
+	@ManyToMany
+	private Collection<Ingredient> possibleAdditions = new ArrayList<Ingredient>();
+	
 	// no cascade
 	@ManyToMany
 	private Collection<FoodCategory> foodCategories = new ArrayList<FoodCategory>();
@@ -66,6 +71,10 @@ public abstract class MenuItem extends DomainObjectNaturalId {
 		for(FoodCategory foodCategory : foodCategories) {
 			foodCategory.getMenuItems().add(this);
 		}
+	}
+	
+	public void addPossibleAdditions(Collection<Ingredient> possibleAdditions) {
+		setPossibleAdditions(possibleAdditions);
 	}
 
 	/* business logic */
