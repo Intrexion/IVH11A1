@@ -127,7 +127,6 @@ public class ReservationController {
         	DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
     		if(diningTable ==null){
     			//geen andere tafel beschikbaar
-    			//TODO hier alles afbreken
     			System.out.println("geen dt gevonden");
     			return "redirect:../reservations";
     		}else{

@@ -18,9 +18,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "ORDERITEMS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"menuItem", "quantity"})
+@ToString(callSuper=true, includeFieldNames=true, of= {"ingredient"})
 @NoArgsConstructor
 public class OrderItemDecoration extends OrderItem{
+	private static final long serialVersionUID = 1L;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private OrderItem orderItem;

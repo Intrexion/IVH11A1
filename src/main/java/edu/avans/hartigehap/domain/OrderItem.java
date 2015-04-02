@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Table(name = "ORDERITEMS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter @Setter
-@ToString(callSuper=true, includeFieldNames=true, of= {"menuItem", "quantity"})
+@ToString(callSuper=true, includeFieldNames=true, of= {"quantity"})
 @NoArgsConstructor
 public abstract class OrderItem extends DomainObject {
 	private static final long serialVersionUID = 1L;
