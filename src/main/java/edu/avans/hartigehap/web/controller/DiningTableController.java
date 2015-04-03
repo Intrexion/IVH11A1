@@ -3,6 +3,7 @@ package edu.avans.hartigehap.web.controller;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class DiningTableController {
 	public String addMenuItem(
 			@PathVariable("diningTableId") String diningTableId,
 			OrderItemModel model, Model uiModel) {
-		HashMap<Ingredient, Integer> additions = new HashMap<>();
+		Map<Ingredient, Integer> additions = new HashMap<>();
 		for(String s : model.getAdditions().keySet()){
 			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
 		}
@@ -75,7 +76,7 @@ public class DiningTableController {
 			@PathVariable("orderItemId") String orderItemId, OrderItemModel model,
 			Model uiModel) {
 		
-		HashMap<Ingredient, Integer> additions = new HashMap<>();
+		Map<Ingredient, Integer> additions = new HashMap<>();
 		for(String s : model.getAdditions().keySet()){
 			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
 		}

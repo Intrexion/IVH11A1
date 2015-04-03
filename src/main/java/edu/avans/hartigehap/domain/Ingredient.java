@@ -23,8 +23,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @NoArgsConstructor
 public class Ingredient extends DomainObjectNaturalId {
 	private static final long serialVersionUID = 1L;
-		
-//	private String name;
+
 	// JPA is case sensitive: the corresponding column name will be in small
 	// caps "price"
 	private int price;

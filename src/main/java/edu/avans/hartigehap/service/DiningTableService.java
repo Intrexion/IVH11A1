@@ -1,7 +1,7 @@
 package edu.avans.hartigehap.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +17,7 @@ public interface DiningTableService {
 	void delete(Long id);
 	Page<DiningTable> findAllByPage(Pageable pageable);
 	DiningTable fetchWarmedUp(Long diningTableId);
-	void addOrderItem(DiningTable diningTable, String menuItemName, HashMap<Ingredient, Integer> additions);
+	void addOrderItem(DiningTable diningTable, String menuItemName, Map<Ingredient, Integer> additions);
 	void deleteOrderItem(DiningTable diningTable, String orderItemId);
 	void submitOrder(DiningTable diningTable) throws StateException;
 	void submitBill(DiningTable diningTable) throws StateException, EmptyBillException;

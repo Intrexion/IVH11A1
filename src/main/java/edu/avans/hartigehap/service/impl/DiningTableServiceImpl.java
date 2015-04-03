@@ -69,7 +69,7 @@ public class DiningTableServiceImpl implements DiningTableService {
 		return diningTable;
 	}
 
-	public void addOrderItem(DiningTable diningTable, String menuItemName, HashMap<Ingredient, Integer> additions) {
+	public void addOrderItem(DiningTable diningTable, String menuItemName, Map<Ingredient, Integer> additions) {
 		MenuItem menuItem = menuItemRepository.findOne(menuItemName);
 		diningTable.getCurrentBill().getCurrentOrder().addOrderItem(menuItem, additions);
 	}

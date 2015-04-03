@@ -3,8 +3,8 @@ package edu.avans.hartigehap.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -86,9 +86,7 @@ public class Order extends DomainObject {
 		return orderItems.isEmpty();
 	}
 
-	public void addOrderItem(MenuItem menuItem, HashMap<Ingredient, Integer>additions) {
-		
-		
+	public void addOrderItem(MenuItem menuItem, Map<Ingredient, Integer>additions) {
 		OrderItem oItem = new BasicOrderItem(menuItem);
 		for(Ingredient i : additions.keySet()){
 			if(additions.get(i) != 0){
