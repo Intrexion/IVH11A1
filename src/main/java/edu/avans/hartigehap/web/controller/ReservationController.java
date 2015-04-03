@@ -112,22 +112,13 @@ public class ReservationController {
     	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
     	reservation.setEndDate(provider.getDateTime());
     	
-    	
-    	System.out.println(reservation.getCustomer().getPartySize());
-    	System.out.println(existingReservation.getCustomer().getPartySize());    	
-    	System.out.println(reservation.getStartDate());
-    	System.out.println(existingReservation.getStartDate());
-    	System.out.println(reservation.getEndDate());
-    	System.out.println(existingReservation.getEndDate());
-    	
     	reservation.setRestaurant(restaurantService.findById(reservation.getRestaurant().getId()));
     	
         if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize() || !reservation.getStartDate().equals(existingReservation.getStartDate()) || !reservation.getEndDate().equals(existingReservation.getEndDate())){
-    		System.out.println(reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()).size());
         	DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
-    		if(diningTable ==null){
+    		if(diningTable == null){
     			//geen andere tafel beschikbaar
-    			System.out.println("geen dt gevonden");
+    			LOGGER.info("No empty table found");
     			return "redirect:../reservations";
     		}else{
     			reservation.setDiningTable(diningTable);

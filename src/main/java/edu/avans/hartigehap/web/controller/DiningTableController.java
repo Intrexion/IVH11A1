@@ -55,13 +55,6 @@ public class DiningTableController {
 			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
 		}
 		
-		for(Ingredient i : additions.keySet()){
-			System.out.println(i.getId());			
-			System.out.println(additions.get(i));			
-			System.out.println("----------");				
-		}
-		
-		
 		DiningTable diningTable = diningTableService.fetchWarmedUp(Long.valueOf(diningTableId));
 		uiModel.addAttribute("diningTable", diningTable);
 
@@ -79,12 +72,6 @@ public class DiningTableController {
 		Map<Ingredient, Integer> additions = new HashMap<>();
 		for(String s : model.getAdditions().keySet()){
 			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
-		}
-		
-		for(Ingredient i : additions.keySet()){
-			System.out.println(i.getId());			
-			System.out.println(additions.get(i));			
-			System.out.println("----------");			
 		}
 
 		DiningTable diningTable = diningTableService.fetchWarmedUp(Long.valueOf(diningTableId));

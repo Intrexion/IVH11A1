@@ -67,7 +67,6 @@ public class RestaurantController {
 		DateTime now = new DateTime();
 		for(DiningTable dt : restaurant.getDiningTables()){
 			for(Reservation reservation : dt.getReservationsByDate(now)){
-				System.out.println(dt.getReservationsByDate(now).size());
 				if(reservation.getStartDate().isAfter(now.minusMinutes(30)) && reservation.getStartDate().isBefore(now.plusMinutes(30))){
 					reservations.add(reservation);
 				}
