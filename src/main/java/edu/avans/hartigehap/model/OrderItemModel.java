@@ -1,6 +1,8 @@
 package edu.avans.hartigehap.model;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +13,6 @@ public class OrderItemModel {
 
 	private String menuItemName;
 	
-	private HashMap<String, Integer> additions = new HashMap<>();	
+	private Map<String, Integer> additions = new HashMap<>();
 	
 }

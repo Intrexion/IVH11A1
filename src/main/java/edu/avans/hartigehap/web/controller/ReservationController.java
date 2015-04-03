@@ -48,7 +48,6 @@ import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.model.ReservationModel;
 import edu.avans.hartigehap.service.CustomerService;
-import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
 
@@ -64,8 +63,6 @@ public class ReservationController {
 	private CustomerService customerService;
 	@Autowired
 	private RestaurantService restaurantService;
-	@Autowired
-	private DiningTableService diningTableService;
 
 	
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
@@ -214,14 +211,11 @@ public class ReservationController {
 				
 				if((reservation.getStartDate().isBefore(r.getStartDate()) && reservation.getStartDate().isBefore(r.getEndDate())) && (reservation.getEndDate().isBefore(r.getStartDate()) && reservation.getEndDate().isBefore(r.getEndDate()))){
 	                //afspraak voor de huidige
-	            }
-	            else if((reservation.getStartDate().isAfter(r.getStartDate()) && reservation.getStartDate().isAfter(r.getEndDate())) && (reservation.getEndDate().isAfter(r.getStartDate()) && reservation.getEndDate().isAfter(r.getEndDate()))){
+	            } else if((reservation.getStartDate().isAfter(r.getStartDate()) && reservation.getStartDate().isAfter(r.getEndDate())) && (reservation.getEndDate().isAfter(r.getStartDate()) && reservation.getEndDate().isAfter(r.getEndDate()))){
 	                //afspraak na de hudige
-	            }
-	            else if((reservation.getStartDate().equals(r.getEndDate()) && reservation.getEndDate().isAfter(r.getEndDate())) || (reservation.getEndDate().equals(r.getStartDate()) && reservation.getStartDate().isBefore(r.getStartDate()))){
+	            } else if((reservation.getStartDate().equals(r.getEndDate()) && reservation.getEndDate().isAfter(r.getEndDate())) || (reservation.getEndDate().equals(r.getStartDate()) && reservation.getStartDate().isBefore(r.getStartDate()))){
 	                //afspraak aansluitend aan huidige
-	            }
-	            else{
+	            } else {
 	                freespot = false;
 	                break;
 	            }
@@ -254,7 +248,7 @@ public class ReservationController {
 		message.setTo(reservation.getCustomer().getEmail());
 		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
 		BodyPart htmlPart = new MimeBodyPart();
-		if (locale.equals("nl_NL")) {
+		if ("nl_NL".equals(locale)) {
 			htmlPart.setContent("<html><body><p>Geachte heer/mevrouw " + reservation.getCustomer().getLastName() + ",</p>" +
 							"<p>Hierbij bevestigen wij uw reservering bij " + reservation.getRestaurant().getId() + " op " + reservationDate + " om " + reservationTime + ".</p>" +
 							"<p>Uw reserveringscode is: <b>" + reservation.getCode() + "</b>.</p>" +
@@ -263,7 +257,7 @@ public class ReservationController {
 							"<p>Met vriendelijke groet,<br>" +
 							"Het Hartige Hap management</p></body></html>", "text/html");
 			multipart.addBodyPart(htmlPart);
-		} else if (locale.equals("en_US")) {
+		} else {
 			htmlPart.setContent("<html><body><p>Dear Sir/Madam " + reservation.getCustomer().getLastName() + ",</p>" +
 						"<p>We hereby confirm your reservation at " + reservation.getRestaurant().getId() + " on " + reservationDate + " at " + reservationTime + ".</p>" +
 						"<p>Your reservationcode is: <b>" + reservation.getCode() + "</b>.<p>" +

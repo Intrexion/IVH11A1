@@ -127,7 +127,6 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 	
 	private void createCustomer(String firstName, String lastName, DateTime birthDate,
 		int partySize, String description, byte[] photo, String email, String phone) {
-		//Customer customer2 = new Customer(firstName, lastName, birthDate, partySize, description, photo); 
 		Customer customer = new Customer.Builder(firstName, lastName)
 										.setBirthDate(birthDate)
 										.setDescription(description)

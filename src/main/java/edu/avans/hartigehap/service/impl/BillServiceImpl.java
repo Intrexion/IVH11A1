@@ -21,8 +21,6 @@ public class BillServiceImpl implements BillService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BillServiceImpl.class);
 
 	@Autowired
-	private OrderRepository orderRepository;
-	@Autowired
 	private BillRepository billRepository;
 
 	@Transactional(readOnly=true)

@@ -31,7 +31,6 @@ import edu.avans.hartigehap.web.controller.ReservationController;
 public class ReservationsRS {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationsRS.class);
 
-
 	@Autowired
 	private ReservationService reservationService;
 	

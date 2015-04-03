@@ -62,8 +62,8 @@ public class RestaurantController {
 		return "hartigehap/restaurant";
 	}
 	
-	private ArrayList<Reservation> getReservationsForHour(Restaurant restaurant){
-		ArrayList<Reservation> reservations = new ArrayList<>();
+	private List<Reservation> getReservationsForHour(Restaurant restaurant){
+		List<Reservation> reservations = new ArrayList<>();
 		DateTime now = new DateTime();
 		for(DiningTable dt : restaurant.getDiningTables()){
 			for(Reservation reservation : dt.getReservationsByDate(now)){
@@ -77,28 +77,24 @@ public class RestaurantController {
 		return reservations;
 	}
 	
-	private ArrayList<DiningTable> getOccupiedTables(Restaurant restaurant){
-		ArrayList<DiningTable> diningTables = new ArrayList<>();
+	private List<DiningTable> getOccupiedTables(Restaurant restaurant){
+		List<DiningTable> diningTables = new ArrayList<>();
 		DateTime now = new DateTime();
-		for(DiningTable dt : restaurant.getDiningTables()){
+		for(DiningTable dt : restaurant.getDiningTables()) {
 			for(Reservation r : dt.getReservationsByDate(now)){
-				
-				if(now.plusHours(1).isBefore(r.getStartDate())){
-	                //afspraak voor de huidige
-	            }
-	            else if(now.isAfter(r.getEndDate())){
-	                //afspraak na de hudige
-	            }
-	            else if(now.equals(r.getEndDate())){
-	                //afspraak aansluitend aan huidige
-	            }
-	            else{
-	            	diningTables.add(dt);
-	            }
-	        }
-	        }
-		return diningTables;
+				if(now.plusHours(1).isBefore(r.getStartDate())) {
+					//afspraak voor de huidige
+				} else if(now.isAfter(r.getEndDate())) {
+					//afspraak na de hudige
+				} else if(now.equals(r.getEndDate())) {
+					//afspraak aansluitend aan huidige
+				} else {
+					diningTables.add(dt);
+				}
+			}
 		}
+		return diningTables;
+	}
 	
 	// called once immediately after bean creation
 	@PostConstruct

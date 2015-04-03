@@ -86,8 +86,6 @@ public class Customer extends DomainObject {
 	@JsonBackReference
 	private Collection<Bill> bills = new ArrayList<Bill>();
 	
-
-	// TODO not complete (bills)
 	private Customer(Builder build) {
 		this.firstName = build.firstName;
 		this.lastName = build.lastName;
@@ -109,18 +107,6 @@ public class Customer extends DomainObject {
         photo = customer.photo;
         partySize = customer.partySize;
 	}
-
-	// example of a "derived property". This property can be be easily derived
-	// from the property "birthDate", so no need to persist it.
-	//	@Transient
-	//	public String getBirthDateString() {
-	//		String birthDateString = "";
-	//		if (birthDate != null) {
-	//			birthDateString = org.joda.time.format.DateTimeFormat.forPattern(
-	//					"yyyy-MM-dd").print(birthDate);
-	//		}
-	//		return birthDateString;
-	//	}
 
 	// business logic
 	public static class Builder{
