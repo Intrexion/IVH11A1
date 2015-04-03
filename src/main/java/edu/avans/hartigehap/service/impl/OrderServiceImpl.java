@@ -25,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(readOnly=true)
 	public Order findById(Long orderId) {
+		logger.info("find Order by id" + orderId);
 		return orderRepository.findOne(orderId);
 	}
 	
@@ -36,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 	// * a repository with a custom method implementation
 	@Transactional(readOnly=true)
 	public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
-		
+		logger.info("fidn submittedOrdersForRestaurtant" + restaurant.getId());
 		// a repository with a custom method implementation
 		// the custom method implementation uses a named query which is
 		// invoked using an entityManager
@@ -72,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(readOnly=true)
 	public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
+		logger.info("find planned orders for restaurant " + restaurant.getId());
 		// a query created using a repository method name
 		List<Order> plannedOrdersList = orderRepository.
 				findByOrderStatusAndBillDiningTableRestaurant(
@@ -85,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(readOnly=true)
 	public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
+		logger.info("fidn preparedorders for restaurant " + restaurant.getId());
 		// a query created using a repository method name
 		List<Order> preparedOrdersList = orderRepository.
 				findByOrderStatusAndBillDiningTableRestaurant(
@@ -96,14 +99,17 @@ public class OrderServiceImpl implements OrderService {
 	}	
 
 	public void planOrder(Order order) throws StateException {
+		logger.info("Plan orders");
 		order.plan();
 	}
 	
 	public void orderPrepared(Order order) throws StateException {
+		logger.info("Prepare orders");
 		order.prepared();
 	}
 
 	public void orderServed(Order order) throws StateException {
+		logger.info("Serve orders");
 		order.served();
 	}
 }

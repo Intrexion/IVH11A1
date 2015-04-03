@@ -31,24 +31,29 @@ public class DiningTableServiceImpl implements DiningTableService {
 	
 	@Transactional(readOnly=true)
 	public List<DiningTable> findAll() {
+		logger.info("Find all diningtables");
 		return Lists.newArrayList(diningTableRepository.findAll());
 	}
 
 	@Transactional(readOnly=true)
 	public DiningTable findById(Long id) {
+		logger.info("Find diningtable by id: " + id);
 		return diningTableRepository.findOne(id);
 	}
 	
 	public DiningTable save(DiningTable diningTable) {
+		logger.info("Find by save diningTable" + diningTable.getId());
 		return diningTableRepository.save(diningTable);
 	}
 
 	public void delete(Long id) {
+		logger.info("delete diningtable: " + id);
 		diningTableRepository.delete(id);
 	}
 
 	@Transactional(readOnly=true)
 	public Page<DiningTable> findAllByPage(Pageable pageable) {
+		logger.info("find all diningtables by page");
 		return diningTableRepository.findAll(pageable);
 	}
 
@@ -70,16 +75,19 @@ public class DiningTableServiceImpl implements DiningTableService {
 	}
 
 	public void addOrderItem(DiningTable diningTable, String menuItemName, Map<Ingredient, Integer> additions) {
+		logger.info("Add orderitem");
 		MenuItem menuItem = menuItemRepository.findOne(menuItemName);
 		diningTable.getCurrentBill().getCurrentOrder().addOrderItem(menuItem, additions);
 	}
 	
 	public void deleteOrderItem(DiningTable diningTable, String orderItemId) {
+		logger.info("delete orderitem. orderItemId" + orderItemId);
 		diningTable.getCurrentBill().getCurrentOrder().deleteOrderItem(orderItemId);
 	}
 	
 	public void submitOrder(DiningTable diningTable)
 		throws StateException {
+		logger.info("submitOrder");
 		diningTable.getCurrentBill().submitOrder();
 		
 		// for test purposes: to cause a rollback, throw new StateException("boe")
@@ -87,6 +95,7 @@ public class DiningTableServiceImpl implements DiningTableService {
 	
 	public void submitBill(DiningTable diningTable)
 		throws StateException, EmptyBillException {
+		logger.info("submit bill");
 		diningTable.submitBill();
 	}
 }

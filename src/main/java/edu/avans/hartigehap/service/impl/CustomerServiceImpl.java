@@ -33,17 +33,19 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Transactional(readOnly=true)
 	public List<Customer> findAll() {
+		logger.info("Find all customers");
 		return Lists.newArrayList(customerRepository.findAll());
 	}
 
 	@Transactional(readOnly=true)
 	public Customer findById(Long id) {
+		logger.info("Find customer by id" + id);
 		return customerRepository.findOne(id);
 	}
 
 	@Transactional(readOnly=true)
 	public Customer findByFirstNameAndLastName(String firstName, String lastName) {
-		
+		logger.info("Find by firstName: " + firstName + " and lastName: " + lastName );
 		Customer customer = null;
 		
 		List<Customer> customers = customerRepository.findByFirstNameAndLastName(firstName, lastName);
@@ -56,7 +58,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Transactional(readOnly=true)
 	public List<Customer> findCustomersForRestaurant(Restaurant restaurant) {
-		
+		logger.info("Find by customers by restaurant: " + restaurant.getId());
 		// a query created using a repository method name
 		List<Customer> customersForRestaurants = customerRepository.
 				findByRestaurants(
@@ -75,11 +77,13 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Transactional(readOnly=true)
 	public Page<Customer> findAllByPage(Pageable pageable) {
+		logger.info("Find all customers (pageable)");
 		return customerRepository.findAll(pageable);
 	}	
 
 	@Transactional(readOnly=true)
 	public Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable) {
+		logger.info("Find customers by restaurant" + restaurant.getId());
 		// a query created using a repository method name
 		Page<Customer> customersForRestaurants = customerRepository.
 				findByRestaurants((Collection<Restaurant>)Arrays.asList(new Restaurant[]{restaurant}), pageable);
@@ -96,10 +100,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	
 	public Customer save(Customer customer) {
+		logger.info("save customer" + customer.getFirstName() + customer.getLastName());
 		return customerRepository.save(customer);
 	}
 
 	public void delete(Long id) {
+		logger.info("delete customer: " + id);
 		customerRepository.delete(id);
 	}
 

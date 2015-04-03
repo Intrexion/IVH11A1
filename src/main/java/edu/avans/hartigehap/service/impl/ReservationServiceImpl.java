@@ -29,11 +29,13 @@ public class ReservationServiceImpl implements ReservationService {
 	private ReservationRepository reservationRepository;
 	@Override
 	public List<Reservation> findAll() {
+		logger.info("Find all reservations");
 		return Lists.newArrayList(reservationRepository.findAll(new Sort(Sort.Direction.ASC, "id")));
 	}
 
 	@Override
 	public Reservation findById(Long id) {
+		logger.info("find reservation by id: " + id);
 		return reservationRepository.findOne(id);
 	}
 
@@ -65,16 +67,19 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public Reservation save(Reservation reservation) {
+		logger.info("Save reservation");
 		return reservationRepository.save(reservation);
 	}
 
 	@Override
 	public void delete(Reservation reservation) {
+		logger.info("delete reservation " + reservation.getId());
 		reservationRepository.delete(reservation);		
 	}
 
 	@Override
 	public List<Reservation> findByRestaurant(Restaurant restaurant) {
+		logger.info("find reservation by restaurant " + restaurant.getId());
 		return reservationRepository.findByRestaurant(restaurant, new Sort(Sort.Direction.ASC, "id"));
 	}
 
