@@ -110,14 +110,14 @@ public class Customer extends DomainObject {
 
 	// business logic
 	public static class Builder{
-		public final String firstName;
-		public final String lastName;
-		public int partySize;
-		public DateTime birthDate;
-		public String description;
-		public byte[] photo;
-		public String email;
-		public String phone;
+		protected final String firstName;
+		protected final String lastName;
+		protected int partySize;
+		protected DateTime birthDate;
+		protected String description;
+		protected byte[] photo;
+		protected String email;
+		protected String phone;
 		
 		public Builder(String firstName, String lastName){
 			this.firstName = firstName;

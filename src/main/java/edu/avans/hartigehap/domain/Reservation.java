@@ -68,23 +68,6 @@ public class Reservation extends DomainObject {
 	@ManyToOne
 	private DiningTable diningTable;
 	
-	public void updateEditableFields(Reservation reservation) {
-		
-		
-		customer.setPartySize(reservation.getCustomer().getPartySize());
-        diningTable = reservation.getDiningTable();
-        description = reservation.getDescription();
-    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
-		startDate = provider.getDateTime();
-    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
-		endDate = provider.getDateTime();
-        startTime = reservation.getStartTime();
-        endTime = reservation.getEndTime();
-        day= reservation.getDay();
-
-        
-	}
-	
 	public Reservation(DateTime startDate, DateTime endDate, String description){
 		this.startDate = startDate;
 		this.endDate = endDate;
@@ -93,6 +76,19 @@ public class Reservation extends DomainObject {
 		startTime = startDate.toString("HH:mm");
 		endTime = endDate.toString("HH:mm");
 	}
+	
+	public void updateEditableFields(Reservation reservation) {customer.setPartySize(reservation.getCustomer().getPartySize());
+        diningTable = reservation.getDiningTable();
+        description = reservation.getDescription();
+    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
+		startDate = provider.getDateTime();
+    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
+		endDate = provider.getDateTime();
+        startTime = reservation.getStartTime();
+        endTime = reservation.getEndTime();
+        day= reservation.getDay();   
+	}
+	
 	@Transient
 	public String getEndDateString(){
 		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(endDate);
