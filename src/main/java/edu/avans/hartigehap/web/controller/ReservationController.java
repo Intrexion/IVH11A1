@@ -54,7 +54,7 @@ import edu.avans.hartigehap.service.RestaurantService;
 
 @Controller
 public class ReservationController {
-	final Logger logger = LoggerFactory.getLogger(ReservationController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 	
 	@Autowired
 	private static JavaMailSender mailSender;
@@ -144,7 +144,7 @@ public class ReservationController {
 	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
-		logger.info("Create reservation form");
+		LOGGER.info("Create reservation form");
 		ReservationModel model = new ReservationModel();
 		uiModel.addAttribute("reservationmodel", model);
 		
@@ -161,7 +161,7 @@ public class ReservationController {
 	public String createReservation(@Valid ReservationModel model, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			RedirectAttributes redirectAttributes, Locale locale) throws MessagingException, IOException {
-		logger.info("Create reservation form");
+		LOGGER.info("Create reservation form");
 		
 		Reservation reservation = new Reservation();
 		DateTimeAdapter dateTimeAdapter = new DateTimeAdapter();

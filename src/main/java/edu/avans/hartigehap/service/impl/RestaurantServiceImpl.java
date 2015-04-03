@@ -18,14 +18,14 @@ import com.google.common.collect.Lists;
 @Repository
 @Transactional
 public class RestaurantServiceImpl implements RestaurantService {
-	final Logger logger = LoggerFactory.getLogger(RestaurantServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantServiceImpl.class);
 	
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 		
 	@Transactional(readOnly=true)
 	public List<Restaurant> findAll() {
-		logger.info("find all restaurants");
+		LOGGER.info("find all restaurants");
 		// MySQL and H2 return the restaurants of findAll() in different order
 		// sorting the result makes the behavior less database vendor dependent
 		Sort sort = new Sort(Sort.Direction.ASC, "id");
@@ -34,23 +34,23 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Transactional(readOnly=true)
 	public Restaurant findById(String restaurant) {
-		logger.info("find by id: " + restaurant);
+		LOGGER.info("find by id: " + restaurant);
 		return restaurantRepository.findOne(restaurant);
 	}
 	
 	public Restaurant save(Restaurant restaurant) {
-		logger.info("save restaurant");
+		LOGGER.info("save restaurant");
 		return restaurantRepository.save(restaurant);
 	}
 
 	public void delete(String restaurant) {
-		logger.info("delete restaurant: " + restaurant);
+		LOGGER.info("delete restaurant: " + restaurant);
 		restaurantRepository.delete(restaurant);
 	}
 
 	@Transactional(readOnly=true)
 	public Page<Restaurant> findAllByPage(Pageable pageable) {
-		logger.info("find all restaurants by page");
+		LOGGER.info("find all restaurants by page");
 		return restaurantRepository.findAll(pageable);
 	}
 
@@ -60,7 +60,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	 */
 	@Transactional(readOnly=true)
 	public Restaurant fetchWarmedUp(String restaurantName) {
-		logger.info("fetchwarmedUp restaurant");
+		LOGGER.info("fetchwarmedUp restaurant");
 		Restaurant restaurant = restaurantRepository.findOne(restaurantName);
 		restaurant.warmup();
 		

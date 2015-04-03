@@ -23,19 +23,19 @@ import edu.avans.hartigehap.service.ReservationService;
 @Repository
 @Transactional
 public class ReservationServiceImpl implements ReservationService {
-	final Logger logger = LoggerFactory.getLogger(ReservationServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
 	@Autowired
 	private ReservationRepository reservationRepository;
 	@Override
 	public List<Reservation> findAll() {
-		logger.info("Find all reservations");
+		LOGGER.info("Find all reservations");
 		return Lists.newArrayList(reservationRepository.findAll(new Sort(Sort.Direction.ASC, "id")));
 	}
 
 	@Override
 	public Reservation findById(Long id) {
-		logger.info("find reservation by id: " + id);
+		LOGGER.info("find reservation by id: " + id);
 		return reservationRepository.findOne(id);
 	}
 
@@ -67,19 +67,19 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public Reservation save(Reservation reservation) {
-		logger.info("Save reservation");
+		LOGGER.info("Save reservation");
 		return reservationRepository.save(reservation);
 	}
 
 	@Override
 	public void delete(Reservation reservation) {
-		logger.info("delete reservation " + reservation.getId());
+		LOGGER.info("delete reservation " + reservation.getId());
 		reservationRepository.delete(reservation);		
 	}
 
 	@Override
 	public List<Reservation> findByRestaurant(Restaurant restaurant) {
-		logger.info("find reservation by restaurant " + restaurant.getId());
+		LOGGER.info("find reservation by restaurant " + restaurant.getId());
 		return reservationRepository.findByRestaurant(restaurant, new Sort(Sort.Direction.ASC, "id"));
 	}
 

@@ -32,7 +32,7 @@ import javax.servlet.http.*;
 @Controller
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 public class CustomerController {
-	final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -46,10 +46,10 @@ public class CustomerController {
 		
 		Restaurant restaurant = warmupRestaurant(restaurantName, uiModel);
 		
-		logger.info("Listing customers");
+		LOGGER.info("Listing customers");
 		List<Customer> customers = customerService.findCustomersForRestaurant(restaurant);
 		uiModel.addAttribute("customers", customers);
-		logger.info("No. of customers: " + customers.size());
+		LOGGER.info("No. of customers: " + customers.size());
 		
 		return "hartigehap/listcustomers";
 	}
@@ -59,7 +59,7 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		logger.info("Show customer: " + id);
+		LOGGER.info("Show customer: " + id);
 		
 		Customer customer = customerService.findById(id);
 		uiModel.addAttribute("customer", customer);
@@ -71,11 +71,11 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		logger.info("Customer update form for customer: " + id);
+		LOGGER.info("Customer update form for customer: " + id);
 		
 		Customer customer = customerService.findById(id);
 		uiModel.addAttribute("customer", customer);
-		logger.info("updatingCustomerForm(" + customer.getFirstName() + ", " + customer.getLastName() + ")");
+		LOGGER.info("updatingCustomerForm(" + customer.getFirstName() + ", " + customer.getLastName() + ")");
 		return "hartigehap/editcustomer";
 	}
 
@@ -109,19 +109,19 @@ public class CustomerController {
 
 		// Process upload file
         if(file != null) {
-			logger.info("File name: " + file.getName());
-			logger.info("File size: " + file.getSize());
-			logger.info("File content type: " + file.getContentType());
+			LOGGER.info("File name: " + file.getName());
+			LOGGER.info("File size: " + file.getSize());
+			LOGGER.info("File content type: " + file.getContentType());
 			byte[] fileContent = null;
 			try {
 				InputStream inputStream = file.getInputStream();
 				if(inputStream == null) {
-					logger.info("File inputstream is null");
+					LOGGER.info("File inputstream is null");
 				}
 				fileContent = IOUtils.toByteArray(inputStream);
 				customer.setPhoto(fileContent);
 			} catch (IOException ex) {
-				logger.error("Error saving uploaded file", ex);
+				LOGGER.error("Error saving uploaded file", ex);
 			}
 			customer.setPhoto(fileContent);
 		}
@@ -143,7 +143,7 @@ public class CustomerController {
 
 		warmupRestaurant(restaurantName, uiModel);
 		
-		logger.info("Create customer form");
+		LOGGER.info("Create customer form");
 		
 		Customer customer = new Customer();
 		uiModel.addAttribute("customer", customer);
@@ -157,9 +157,9 @@ public class CustomerController {
 		RedirectAttributes redirectAttributes, Locale locale,
 		@RequestParam(value = "file", required = false) Part file) {
 
-		logger.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());	
-		logger.info("Binding Result target: " + (Customer) bindingResult.getTarget()); 
-		logger.info("Binding Result: " + bindingResult);
+		LOGGER.info("Creating customer: " + customer.getFirstName() + " " + customer.getLastName());	
+		LOGGER.info("Binding Result target: " + (Customer) bindingResult.getTarget()); 
+		LOGGER.info("Binding Result: " + bindingResult);
 		
 		if(bindingResult.hasErrors()) {
 			uiModel.addAttribute(
@@ -177,19 +177,19 @@ public class CustomerController {
 		
 		// Process upload file
 		if(file != null) {
-			logger.info("File name: " + file.getName());
-			logger.info("File size: " + file.getSize());
-			logger.info("File content type: " + file.getContentType());
+			LOGGER.info("File name: " + file.getName());
+			LOGGER.info("File size: " + file.getSize());
+			LOGGER.info("File content type: " + file.getContentType());
 			byte[] fileContent = null;
 			try {
 				InputStream inputStream = file.getInputStream();
 				if(inputStream == null) {
-					logger.info("File inputstream is null");
+					LOGGER.info("File inputstream is null");
 				}
 				fileContent = IOUtils.toByteArray(inputStream);
 				customer.setPhoto(fileContent);
 			} catch (IOException ex) {
-				logger.error("Error saving uploaded file", ex);
+				LOGGER.error("Error saving uploaded file", ex);
 			}
 			customer.setPhoto(fileContent);
 		}
@@ -211,7 +211,7 @@ public class CustomerController {
 	public byte[] downloadPhoto(@PathVariable("id") Long id) {
 		Customer customer = customerService.findById(id);
 		if(customer.getPhoto() != null) {
-			logger.info("Downloading photo for id: {} with size: {}",
+			LOGGER.info("Downloading photo for id: {} with size: {}",
 					customer.getId(), customer.getPhoto().length);
 		}
 		return customer.getPhoto();
@@ -221,7 +221,7 @@ public class CustomerController {
 	@RequestMapping(value = "/restaurants/{restaurantName}/customers/{id}", params = "delete", method = RequestMethod.GET)
 	public String delete(@PathVariable("restaurantName") String restaurantName, @PathVariable("id") Long id) {
 
-		logger.info("Deleting customer: " + id);
+		LOGGER.info("Deleting customer: " + id);
 		customerService.delete(id);
 		return "redirect:/restaurants/" + restaurantName + "/customers/";
 	}
@@ -235,9 +235,9 @@ public class CustomerController {
 			@RequestParam(value = "rows", required = false) Integer rows,
 			@RequestParam(value = "sidx", required = false) String sortBy,
 			@RequestParam(value = "sord", required = false) String order) {
-		logger.info("Listing customers for grid with page: {}, rows: {}", page,
+		LOGGER.info("Listing customers for grid with page: {}, rows: {}", page,
 				rows);
-		logger.info("Listing customers for grid with sort: {}, order: {}",
+		LOGGER.info("Listing customers for grid with sort: {}, order: {}",
 				sortBy, order);
 		// Process order by
 		Sort sort = null;

@@ -18,14 +18,14 @@ import edu.avans.hartigehap.repository.OrderRepository;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class OrderServiceImpl implements OrderService {
-	final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
 	@Autowired
 	private OrderRepository orderRepository;
 	
 	@Transactional(readOnly=true)
 	public Order findById(Long orderId) {
-		logger.info("find Order by id" + orderId);
+		LOGGER.info("find Order by id" + orderId);
 		return orderRepository.findOne(orderId);
 	}
 	
@@ -37,17 +37,17 @@ public class OrderServiceImpl implements OrderService {
 	// * a repository with a custom method implementation
 	@Transactional(readOnly=true)
 	public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
-		logger.info("fidn submittedOrdersForRestaurtant" + restaurant.getId());
+		LOGGER.info("fidn submittedOrdersForRestaurtant" + restaurant.getId());
 		// a repository with a custom method implementation
 		// the custom method implementation uses a named query which is
 		// invoked using an entityManager
 		List<Order> submittedOrdersList = orderRepository.findSubmittedOrdersForRestaurant(restaurant);
 		
-		logger.info("findSubmittedOrdersForRestaurant using named query");
+		LOGGER.info("findSubmittedOrdersForRestaurant using named query");
 		ListIterator<Order>	it = submittedOrdersList.listIterator();
 		while(it.hasNext()) {
 			Order order = it.next();
-			logger.info("submittedOrder = " + order.getId() 
+			LOGGER.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}
@@ -59,11 +59,11 @@ public class OrderServiceImpl implements OrderService {
 						restaurant,
 						new Sort(Sort.Direction.ASC, "submittedTime"));
 		
-		logger.info("findSubmittedOrdersForRestaurant using query created using repository method name");
+		LOGGER.info("findSubmittedOrdersForRestaurant using query created using repository method name");
 		ListIterator<Order>	italt = submittedOrdersListAlternative.listIterator();
 		while(italt.hasNext()) {
 			Order order = italt.next();
-			logger.info("submittedOrder = " + order.getId() 
+			LOGGER.info("submittedOrder = " + order.getId() 
 					+ ", for table = " + order.getBill().getDiningTable().getId()
 					+ ", submitted time = " + order.getSubmittedTime());
 		}
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(readOnly=true)
 	public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
-		logger.info("find planned orders for restaurant " + restaurant.getId());
+		LOGGER.info("find planned orders for restaurant " + restaurant.getId());
 		// a query created using a repository method name
 		List<Order> plannedOrdersList = orderRepository.
 				findByOrderStatusAndBillDiningTableRestaurant(
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Transactional(readOnly=true)
 	public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
-		logger.info("fidn preparedorders for restaurant " + restaurant.getId());
+		LOGGER.info("fidn preparedorders for restaurant " + restaurant.getId());
 		// a query created using a repository method name
 		List<Order> preparedOrdersList = orderRepository.
 				findByOrderStatusAndBillDiningTableRestaurant(
@@ -99,17 +99,17 @@ public class OrderServiceImpl implements OrderService {
 	}	
 
 	public void planOrder(Order order) throws StateException {
-		logger.info("Plan orders");
+		LOGGER.info("Plan orders");
 		order.plan();
 	}
 	
 	public void orderPrepared(Order order) throws StateException {
-		logger.info("Prepare orders");
+		LOGGER.info("Prepare orders");
 		order.prepared();
 	}
 
 	public void orderServed(Order order) throws StateException {
-		logger.info("Serve orders");
+		LOGGER.info("Serve orders");
 		order.served();
 	}
 }

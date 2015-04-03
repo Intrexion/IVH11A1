@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.support.*;
 @Controller
 public class DiningTableController {
 
-	final Logger logger = LoggerFactory.getLogger(DiningTableController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DiningTableController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -37,7 +37,7 @@ public class DiningTableController {
 
 	@RequestMapping(value = "/diningTables/{diningTableId}", method = RequestMethod.GET)
 	public String showTable(@PathVariable("diningTableId") String diningTableId, Model uiModel) {
-		logger.info("diningTable = " + diningTableId);
+		LOGGER.info("diningTable = " + diningTableId);
 
 		warmupRestaurant(diningTableId, uiModel);
 		OrderItemModel model = new OrderItemModel();
@@ -102,7 +102,7 @@ public class DiningTableController {
 			RedirectAttributes redirectAttributes,
 			Model uiModel, Locale locale) { 
 		
-		logger.info("(receiveEvent) diningTable = " + diningTableId);
+		LOGGER.info("(receiveEvent) diningTable = " + diningTableId);
 
 		
 		// because of REST, the "event" parameter is part of the body. It therefore cannot be used for
@@ -120,7 +120,7 @@ public class DiningTableController {
 			
 		default:	
 			warmupRestaurant(diningTableId, uiModel);
-			logger.error("internal error: event " + event + "not recognized");
+			LOGGER.error("internal error: event " + event + "not recognized");
 			return "hartigehap/diningtable";			
 		}
 	}
@@ -130,7 +130,7 @@ public class DiningTableController {
 		try {
 			diningTableService.submitOrder(diningTable);
 		} catch (StateException e) {
-			logger.error("StateException", e);
+			LOGGER.error("StateException", e);
 			uiModel.addAttribute("message", new Message("error",
 					messageSource.getMessage("message_submit_order_fail", new Object[]{}, locale)));
 
@@ -152,11 +152,11 @@ public class DiningTableController {
 		try {
 			diningTableService.submitBill(diningTable);
 		} catch(EmptyBillException e) {
-			logger.error("EmptyBillException", e);
+			LOGGER.error("EmptyBillException", e);
 			uiModel.addAttribute("message", new Message("error", messageSource.getMessage("message_submit_empty_bill_fail", new Object[]{}, locale))); 
 			return "hartigehap/diningtable";
 		} catch(StateException e) {
-			logger.error("StateException", e);
+			LOGGER.error("StateException", e);
 			uiModel.addAttribute("message", new Message("error", messageSource.getMessage("message_submit_bill_fail", new Object[]{}, locale))); 
 
 			// StateException triggers a rollback; consequently all Entities are invalidated by Hibernate

@@ -10,6 +10,7 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 public class UrlUtil {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UrlUtil.class);
 
 	private UrlUtil() {
 		
@@ -23,9 +24,8 @@ public class UrlUtil {
         try {
             pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
         } catch (UnsupportedEncodingException uee) {
-        	Logger logger = LoggerFactory.getLogger(UrlUtil.class);
-        	logger.error("UnsupportedEncodingException", uee);
-        	}
+        	LOGGER.error("UnsupportedEncodingException", uee);
+        }
         return pathSegment;
     }	
 	

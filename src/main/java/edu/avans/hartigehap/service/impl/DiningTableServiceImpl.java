@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class DiningTableServiceImpl implements DiningTableService {
-	final Logger logger = LoggerFactory.getLogger(DiningTableServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DiningTableServiceImpl.class);
 	
 	@Autowired
 	private DiningTableRepository diningTableRepository;
@@ -31,29 +31,29 @@ public class DiningTableServiceImpl implements DiningTableService {
 	
 	@Transactional(readOnly=true)
 	public List<DiningTable> findAll() {
-		logger.info("Find all diningtables");
+		LOGGER.info("Find all diningtables");
 		return Lists.newArrayList(diningTableRepository.findAll());
 	}
 
 	@Transactional(readOnly=true)
 	public DiningTable findById(Long id) {
-		logger.info("Find diningtable by id: " + id);
+		LOGGER.info("Find diningtable by id: " + id);
 		return diningTableRepository.findOne(id);
 	}
 	
 	public DiningTable save(DiningTable diningTable) {
-		logger.info("Find by save diningTable" + diningTable.getId());
+		LOGGER.info("Find by save diningTable" + diningTable.getId());
 		return diningTableRepository.save(diningTable);
 	}
 
 	public void delete(Long id) {
-		logger.info("delete diningtable: " + id);
+		LOGGER.info("delete diningtable: " + id);
 		diningTableRepository.delete(id);
 	}
 
 	@Transactional(readOnly=true)
 	public Page<DiningTable> findAllByPage(Pageable pageable) {
-		logger.info("find all diningtables by page");
+		LOGGER.info("find all diningtables by page");
 		return diningTableRepository.findAll(pageable);
 	}
 
@@ -61,13 +61,13 @@ public class DiningTableServiceImpl implements DiningTableService {
 	// prefetch the associated entities by traversing the associations
 	@Transactional(readOnly=true)
 	public DiningTable fetchWarmedUp(Long id) {
-		logger.info("(fetchWarmedUp) diningTable id: " + id);
+		LOGGER.info("(fetchWarmedUp) diningTable id: " + id);
 
 		// finding an item using find
 		DiningTable diningTable = diningTableRepository.findOne(id);
 		
 		// the following code will deliberately cause a null pointer exception, if something is wrong
-		logger.info("diningTable = " + diningTable.getId());
+		LOGGER.info("diningTable = " + diningTable.getId());
 		
 		diningTable.warmup();
 				
@@ -75,19 +75,19 @@ public class DiningTableServiceImpl implements DiningTableService {
 	}
 
 	public void addOrderItem(DiningTable diningTable, String menuItemName, Map<Ingredient, Integer> additions) {
-		logger.info("Add orderitem");
+		LOGGER.info("Add orderitem");
 		MenuItem menuItem = menuItemRepository.findOne(menuItemName);
 		diningTable.getCurrentBill().getCurrentOrder().addOrderItem(menuItem, additions);
 	}
 	
 	public void deleteOrderItem(DiningTable diningTable, String orderItemId) {
-		logger.info("delete orderitem. orderItemId" + orderItemId);
+		LOGGER.info("delete orderitem. orderItemId" + orderItemId);
 		diningTable.getCurrentBill().getCurrentOrder().deleteOrderItem(orderItemId);
 	}
 	
 	public void submitOrder(DiningTable diningTable)
 		throws StateException {
-		logger.info("submitOrder");
+		LOGGER.info("submitOrder");
 		diningTable.getCurrentBill().submitOrder();
 		
 		// for test purposes: to cause a rollback, throw new StateException("boe")
@@ -95,7 +95,7 @@ public class DiningTableServiceImpl implements DiningTableService {
 	
 	public void submitBill(DiningTable diningTable)
 		throws StateException, EmptyBillException {
-		logger.info("submit bill");
+		LOGGER.info("submit bill");
 		diningTable.submitBill();
 	}
 }

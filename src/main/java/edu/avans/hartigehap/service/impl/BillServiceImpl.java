@@ -18,7 +18,7 @@ import edu.avans.hartigehap.domain.*;
 @Repository
 @Transactional(rollbackFor = StateException.class)
 public class BillServiceImpl implements BillService {
-	final Logger logger = LoggerFactory.getLogger(BillServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BillServiceImpl.class);
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -27,20 +27,20 @@ public class BillServiceImpl implements BillService {
 
 	@Transactional(readOnly=true)
 	public Bill findById(Long billId) {
-		logger.info("find bill by id: " + billId);
+		LOGGER.info("find bill by id: " + billId);
 		return billRepository.findOne(billId);
 	}
 
 	
 	public void billHasBeenPaid(Bill bill) throws StateException {
-		logger.info("Bill has been paid");
+		LOGGER.info("Bill has been paid");
 		bill.paid();
 	}
 
 
 	@Transactional(readOnly=true)
 	public List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant) {
-		logger.info("Find submitted bills by restaurant");
+		LOGGER.info("Find submitted bills by restaurant");
 		// a query created using a repository method name
 		List<Bill> submittedBillsList = billRepository.findByBillState_StatusTypeAndDiningTable_Restaurant(
 				BillStateSubmitted.DISCRIMINATOR,

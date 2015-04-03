@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @Controller
 public class RestaurantController {
 		
-	final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantController.class);
 	
 	@Autowired
 	private RestaurantService restaurantService;

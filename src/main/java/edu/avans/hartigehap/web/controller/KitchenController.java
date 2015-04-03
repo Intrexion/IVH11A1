@@ -21,7 +21,7 @@ import edu.avans.hartigehap.web.form.Message;
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 public class KitchenController {
 
-	final Logger logger = LoggerFactory.getLogger(KitchenController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(KitchenController.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -96,7 +96,7 @@ public class KitchenController {
 			// break unreachable
 
 		default:
-			logger.error("Internal error: event " + event + " not recognized");
+			LOGGER.error("Internal error: event " + event + " not recognized");
 			Order order = orderService.findById(Long.valueOf(orderId));
 			Restaurant restaurant = warmupRestaurant(order, uiModel);
 			return "redirect:/restaurants/" + restaurant.getId();
@@ -109,7 +109,7 @@ public class KitchenController {
 		try {
 			orderService.planOrder(order);
 		} catch (StateException e) {
-			logger.error(
+			LOGGER.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to planned state!", e);
@@ -130,7 +130,7 @@ public class KitchenController {
 		try {
 			orderService.orderPrepared(order);
 		} catch (StateException e) {
-			logger.error(
+			LOGGER.error(
 					"Internal error has occurred! Order "
 							+ Long.valueOf(orderId)
 							+ "has not been changed to prepared state!", e);

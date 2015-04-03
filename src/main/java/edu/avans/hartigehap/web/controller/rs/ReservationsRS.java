@@ -29,7 +29,7 @@ import edu.avans.hartigehap.web.controller.ReservationController;
 
 @Controller
 public class ReservationsRS {
-	private final Logger logger = LoggerFactory.getLogger(ReservationsRS.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationsRS.class);
 
 
 	@Autowired
@@ -46,7 +46,7 @@ public class ReservationsRS {
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Reservation> reservations() {
-		logger.debug("");
+		LOGGER.debug("");
 		return reservationService.findAll();
 	}
 	
@@ -81,21 +81,21 @@ public class ReservationsRS {
 	@ResponseBody
 	public void delete(@PathVariable Long reservationId, HttpServletResponse httpResponse, WebRequest httpRequest) {
 		Reservation toBeDeleted = reservationService.findById(reservationId);
-		logger.debug("reservationId: {}", toBeDeleted);
+		LOGGER.debug("reservationId: {}", toBeDeleted);
 		reservationService.delete(toBeDeleted);
 	}
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void update(@PathVariable Reservation reservation, HttpServletResponse httpResponse, WebRequest httpRequest) {
-		logger.debug("reservationId: {}", reservation);
+		LOGGER.debug("reservationId: {}", reservation);
 		reservationService.save(reservation);
 	}	
 	
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Reservation findById(@PathVariable Long reservationId, HttpServletResponse httpResponse, WebRequest httpRequest) {
-		logger.debug("reservationId: {}", reservationId);
+		LOGGER.debug("reservationId: {}", reservationId);
 		return reservationService.findById(reservationId);
 	}
 
