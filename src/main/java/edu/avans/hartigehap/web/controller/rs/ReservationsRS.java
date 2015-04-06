@@ -27,6 +27,7 @@ import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
+import edu.avans.hartigehap.web.controller.MailController;
 import edu.avans.hartigehap.web.controller.ReservationController;
 
 @Controller
@@ -73,7 +74,7 @@ public class ReservationsRS {
 			reservation.setCode(ReservationController.randomGenerator());
 			
 			reservation = reservationService.save(reservation);
-			ReservationController.sendMail(reservation);
+			MailController.sendMail(reservation);
 			response.put("result", "OK");
 		}
 

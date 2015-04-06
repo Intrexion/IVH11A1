@@ -26,7 +26,7 @@
         </property>
 	</bean>
  
-	<bean id="sendMail" class="edu.avans.hartigehap.web.controller.ReservationController">
+	<bean id="sendMail" class="edu.avans.hartigehap.web.controller.MailController">
         <property name="mailSender" ref="mailSender" />
 	</bean>
 

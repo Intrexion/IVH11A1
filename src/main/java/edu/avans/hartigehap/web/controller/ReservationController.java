@@ -1,6 +1,5 @@
 package edu.avans.hartigehap.web.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,30 +9,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import net.glxn.qrgen.core.image.ImageType;
-import net.glxn.qrgen.javase.QRCode;
-
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -55,8 +38,7 @@ import edu.avans.hartigehap.service.RestaurantService;
 public class ReservationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 	
-	@Autowired
-	private static JavaMailSender mailSender;
+
 	@Autowired
 	private ReservationService reservationService;
 	@Autowired
@@ -197,7 +179,7 @@ public class ReservationController {
 			customer = customerService.save(customer);
 			restaurant = restaurantService.save(restaurant);
 			
-			sendMail(reservation);
+			MailController.sendMail(reservation);
 			
 			uiModel.addAttribute("reservation", reservation);
 			return "hartigehap/reservationsuccessful";
@@ -225,57 +207,6 @@ public class ReservationController {
 	        }
 		}
 		return null;
-	}
-	
-	
-	public void setMailSender(JavaMailSender mailSender){
-		this.mailSender = mailSender;
-	}
-	
-	public static void sendMail(Reservation reservation) throws MessagingException, IOException{		
-		DateTime date = reservation.getStartDate();
-		DateTimeFormatter dtfd = DateTimeFormat.forPattern("dd/MM/yyyy");
-		DateTimeFormatter dtft = DateTimeFormat.forPattern("HH:mm");
-		String reservationDate = dtfd.print(date);
-		String reservationTime = dtft.print(date);
-		String locale = LocaleContextHolder.getLocale().toString();
-		File qrcode = QRCode.from(reservation.getCode()).to(ImageType.JPG).withSize(250, 250).file();
-		
-		MimeMessage mimeMessage = mailSender.createMimeMessage();
-		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, "utf-8");
-		Multipart multipart = new MimeMultipart("related");
-		message.setFrom("hhreserveringen@gmail.com");
-		message.setTo(reservation.getCustomer().getEmail());
-		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
-		BodyPart htmlPart = new MimeBodyPart();
-		if ("nl_NL".equals(locale)) {
-			htmlPart.setContent("<html><body><p>Geachte heer/mevrouw " + reservation.getCustomer().getLastName() + ",</p>" +
-							"<p>Hierbij bevestigen wij uw reservering bij " + reservation.getRestaurant().getId() + " op " + reservationDate + " om " + reservationTime + ".</p>" +
-							"<p>Uw reserveringscode is: <b>" + reservation.getCode() + "</b>.</p>" +
-							"<p>Bewaar deze code goed, deze is nodig om uw reservering te bevestigen in het restaurant. <br> Hieronder vindt u de code ook in QR vorm, deze kunt u inscannen in het restaurant om uw reservering te bevestigen</p>" +
-							"<img src=\"cid:qr-code\"/><br>" +
-							"<p>Met vriendelijke groet,<br>" +
-							"Het Hartige Hap management</p></body></html>", "text/html");
-			multipart.addBodyPart(htmlPart);
-		} else {
-			htmlPart.setContent("<html><body><p>Dear Sir/Madam " + reservation.getCustomer().getLastName() + ",</p>" +
-						"<p>We hereby confirm your reservation at " + reservation.getRestaurant().getId() + " on " + reservationDate + " at " + reservationTime + ".</p>" +
-						"<p>Your reservationcode is: <b>" + reservation.getCode() + "</b>.<p>" +
-						"<p>Make sure to keep this code safe, it is needed upon your arrival in the restaurant to confirm your reservation. <br> Below you will also find the code as QR code,  which you can also use to confirm your reservation by scanning it at the restaurant.</p>" +
-						"<img src=\"cid:qr-code\"/><br>" +
-						"<p>Best regards,<br>" +
-						"The Hartige Hap team</p></body></html>", "text/html");
-			multipart.addBodyPart(htmlPart);
-		}
-		BodyPart imgPart = new MimeBodyPart();
-		DataSource ds = new FileDataSource(qrcode);
-		imgPart.setDataHandler(new DataHandler(ds));
-		imgPart.setHeader("Content-ID", "<qr-code>");
-		
-		multipart.addBodyPart(imgPart);
-		mimeMessage.setContent(multipart);
-		
-		mailSender.send(mimeMessage);
 	}
 	
 	public static String randomGenerator(){
