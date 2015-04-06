@@ -190,6 +190,7 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		cust.setReservation(reservation);
 		reservation.setCustomer(cust);
 		reservation.setRestaurant(rest);
+		reservation.setCode("AAA111");
 		rest.getReservations().add(reservation);
 		reservation.setDiningTable(table);
 		table.getReservations().add(reservation);

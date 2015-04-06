@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -39,6 +40,7 @@ public class RestaurantController {
 		Restaurant restaurant = restaurantService.fetchWarmedUp(RestaurantPopulatorService.HARTIGEHAP_RESTAURANT_NAME);
 		uiModel.addAttribute("restaurant", restaurant);
 		
+		
 		return "hartigehap/listrestaurants";
 	}
 
@@ -60,6 +62,27 @@ public class RestaurantController {
 		
 		
 		return "hartigehap/restaurant";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public String checkCode(HttpServletRequest request) {
+		String inputCode = request.getParameter("code");
+		System.out.println(inputCode);
+		Collection<Restaurant> restaurants = restaurantService.findAll();
+		DateTime now = new DateTime();
+		
+		for (Restaurant rt : restaurants) {
+			for(DiningTable dt : rt.getDiningTables()){
+				for(Reservation reservation : dt.getReservationsByDate(now)){
+					if(reservation.getStartDate().isAfter(now.minusMinutes(30)) && reservation.getStartDate().isBefore(now.plusMinutes(30))){
+						if (reservation.getCode().equals(inputCode)) {
+							return "redirect:/diningTables/" + reservation.getDiningTable().getId();
+						}
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	private List<Reservation> getReservationsForHour(Restaurant restaurant){

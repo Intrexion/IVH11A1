@@ -3,6 +3,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:joda="http://www.joda.org/joda/time/tags" version="2.0"
 	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
@@ -20,7 +21,6 @@
 	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
 	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
-
 
 	<h1>${labelRestaurant} ${restaurant.id}</h1>
 
@@ -59,7 +59,7 @@
 					<th>${labelCustomerLastName}</th>
 					<th>${labelCustomerPartySize}</th>
 					<th>${labelReservationStartTime}</th>
-					<th>${labelTableNumber}</th>	
+					<th>${labelTableNumber}</th>
 				</tr>
 			</c:if>
 		</thead>
@@ -76,6 +76,12 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	<form method="POST">
+		<label path="code">Reserveringscode</label>
+		<input path="code" required="required" placeholder="AAA111" />
+		<button type="submit">Submit</button>
+	</form>
 
     <sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 		<h3>${labelKitchenSubsystem}</h3>
