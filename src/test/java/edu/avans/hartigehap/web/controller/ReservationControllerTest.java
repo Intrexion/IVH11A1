@@ -155,6 +155,13 @@ public class ReservationControllerTest {
 
 	@Test
 	public void deleteReservation() throws Exception{
+		Reservation reservation = new Reservation();
+		reservation.setId(1L);
+		reservation.setStartDate(new DateTime());
+		reservation.setEndDate(new DateTime());
+		reservation.setCustomer(new Customer.Builder("Henk", "Jaspers").setPartySize(2).build());
+		
+		Mockito.when(reservationServiceMock.findById(1L)).thenReturn(reservation);
 		mockMvc.perform(delete("/reservations/{reservationID}", 1L))
 						.andExpect(status().isFound())
 						.andExpect(view().name("redirect:../reservations"));
@@ -207,7 +214,6 @@ public class ReservationControllerTest {
 		Mockito.when(reservationServiceMock.findAll()).thenReturn(getReservations());
 		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
 		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
-		
 		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(domainObjectAnswer);
 		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
 		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(domainObjectAnswer);
