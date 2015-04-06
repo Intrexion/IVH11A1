@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name = "ORDERITEMS")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 @Getter @Setter
 @ToString(callSuper=true, includeFieldNames=true, of= {"menuItem"})
@@ -23,7 +22,7 @@ public class BasicOrderItem extends OrderItem{
 	private static final long serialVersionUID = 1L;
 	// unidirectional one-to-one
 	// deliberate: no cascade!!
-	@OneToOne()
+	@OneToOne
 	protected MenuItem menuItem;
 	
 
