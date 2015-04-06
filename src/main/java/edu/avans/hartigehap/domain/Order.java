@@ -1,10 +1,10 @@
 package edu.avans.hartigehap.domain;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -64,7 +64,7 @@ public class Order extends DomainObject {
 
 	// unidirectional one-to-many relationship.
 	@OneToMany(cascade = javax.persistence.CascadeType.ALL)
-	private Collection<OrderItem> orderItems = new ArrayList<OrderItem>();
+	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	@ManyToOne()
 	private Bill bill;
@@ -94,7 +94,7 @@ public class Order extends DomainObject {
 			}
 		}	
 		
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+		Iterator<OrderItem> orderItemIterator = createIterator();
 		boolean found = false;
 		while (orderItemIterator.hasNext()) {
 			OrderItem orderItem = orderItemIterator.next();
@@ -113,7 +113,7 @@ public class Order extends DomainObject {
 	public void deleteOrderItem(String orderItemId) {
 
 		
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+		Iterator<OrderItem> orderItemIterator = createIterator();
 		boolean found = false;
 		while (orderItemIterator.hasNext()) {
 			OrderItem orderItem = orderItemIterator.next();
@@ -190,11 +190,48 @@ public class Order extends DomainObject {
 	@Transient
 	public int getPrice() {
 		int price = 0;
-		Iterator<OrderItem> orderItemIterator = orderItems.iterator();
+		Iterator<OrderItem> orderItemIterator = createIterator();
 		while (orderItemIterator.hasNext()) {
 			price += orderItemIterator.next().getPrice();
 		}
 		return price;
 	}
-
+	
+	public Iterator<OrderItem> createIterator(){
+		   return new Iterator<OrderItem>(orderItems); 
+	}
+	
+	private class Iterator<E> {
+	      private int current;
+	      private List<E> items;
+	      
+	    public Iterator(List<E> items){
+	    	current = -1;
+	    	this.items = items;
+	    }
+	      
+	    public boolean hasNext(){ 
+	    	try{
+	    	 return items.get(current + 1) != null; 
+	    	}catch(IndexOutOfBoundsException e){
+	    		return false;
+	    	}
+	    }
+	    
+	    public E remove(){
+	    	return items.remove(current);
+	    	
+	    }
+	      
+      	public E next(){
+	         try { 
+	        	 current++;
+	        	 return items.get(current); 
+	        	 }
+	         catch (NoSuchElementException e){ 
+	        	 current = -1;
+	        	 return null;
+        	 }
+	    }  
+   }
 }
