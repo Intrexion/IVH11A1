@@ -24,7 +24,6 @@ import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
-import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
 import edu.avans.hartigehap.web.controller.MailController;
@@ -39,9 +38,6 @@ public class ReservationsRS {
 	
 	@Autowired
 	private RestaurantService restaurantService;
-	
-	@Autowired
-	private CustomerService customerService;
 
 	/**
 	 * list all restaurants.
@@ -90,12 +86,10 @@ public class ReservationsRS {
 		reservationService.delete(toBeDeleted);
 	}
 
-	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", 
-			method = RequestMethod.POST,
-			produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> updateReservationJson(@PathVariable Long reservationId, Reservation updateReservation, BindingResult bindingResult) {
-		HashMap<String, Object> response = new HashMap<String, Object>();
+		Map<String, Object> response = new HashMap<String, Object>();
 		Reservation reservation = reservationService.findById(updateReservation.getId());
 
 		reservation.setDescription(updateReservation.getDescription());
