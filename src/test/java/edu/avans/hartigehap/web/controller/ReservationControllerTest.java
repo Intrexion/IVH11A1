@@ -4,6 +4,8 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -16,13 +18,17 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -30,7 +36,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
@@ -40,17 +48,21 @@ import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
 
+import org.mockito.Matchers;
+
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { ReservationControllerTest.class })
 @WebAppConfiguration
 @ImportResource({ "classpath:/test-root-context.xml",
 		"classpath:*servlet-context.xml" })
 @Slf4j
+@EnableWebMvc
 public class ReservationControllerTest {
 	private static final String RESTAURANT_ID = "De Plak";
 	@Autowired
 	private ReservationController reservationController;
-
+	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
@@ -81,7 +93,8 @@ public class ReservationControllerTest {
 		Mockito.reset(restaurantServiceMock);
 		Mockito.reset(customerServiceMock);
 		Mockito.reset(diningTableServiceMock);
-
+		
+		
 		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 				  .build();
 	}
@@ -135,34 +148,118 @@ public class ReservationControllerTest {
 		Mockito.when(restaurantServiceMock.findAll()).thenReturn(restaurants);
 		mockMvc.perform(get("/reservation").param("form", ""))
 				.andExpect(view().name("hartigehap/createreservationform"))
-				.andExpect(model().attribute("restaurants",	hasItems(restaurants.toArray(new Restaurant[] {}))))
-				.andExpect(model().attribute("currentDate",	format.format(new Date())))
+				.andExpect(model().attributeExists("restaurants"))
+				.andExpect(model().attributeExists("currentDate"))
 				.andExpect(model().attributeExists("reservationmodel"));
 	}
 
 	@Test
-	public void createReservation() throws Exception {
+	public void deleteReservation() throws Exception{
+		mockMvc.perform(delete("/reservations/{reservationID}", 1L))
+						.andExpect(status().isFound())
+						.andExpect(view().name("redirect:../reservations"));
+	}
+	
+	@Test
+	public void updateReservation() throws Exception{
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		List<Restaurant> restaurants = getRestaurants();
-		ReservationModel model = new ReservationModel();
-		model.setRestaurantId(RESTAURANT_ID);
-		model.setDate(format.format(new Date()));
-		model.setFirstName("Henk");
-		model.setLastName("Jaspers");
-		model.setStartTime("12:11");
-		model.setEndTime("15:11");
-		model.setEmail("tom@tom.nl");
-		model.setPartySize(2);
-		model.setPhone("1234567890");
-		model.setDescription("Test");
-
-		Mockito.when(restaurantServiceMock.findAll()).thenReturn(restaurants);
-		mockMvc.perform(post("/reservation")
-						.param("form", "")
-						.sessionAttr("model",	model))
-						.andExpect(view().name("hartigehap/reservationsuccessful"));
+		Reservation reservation = new Reservation();
+		reservation.setId(1L);
+		reservation.setStartDate(new DateTime());
+		reservation.setEndDate(new DateTime());
+		reservation.setCustomer(new Customer.Builder("Henk", "Jaspers").setPartySize(2).build());
+		
+		
+		Mockito.when(reservationServiceMock.findAll()).thenReturn(getReservations());
+		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
+		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
+		Mockito.when(reservationServiceMock.findById(1L)).thenReturn(reservation);
+		
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		//execute
+		mockMvc.perform(put("/reservations/{reservationID}", 1L)
+											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+											.param("id", "1")
+											.param("restaurant.id", RESTAURANT_ID)
+											.param("customer.firstName", "Henk")
+											.param("customer.lastName", "Jaspers")
+											.param("day", format.format(new Date()))
+											.param("startTime", "14:11")
+											.param("endTime", "18:11")
+											.param("customer.id", "1")
+											.param("customer.email", "tom@tom.nl")
+											.param("customer.partySize", "1")
+											.param("customer.phone", "1234567890")
+											.param("description", "Test")
+											.sessionAttr("reservation", new Reservation()))
+		.andExpect(view().name("redirect:../reservations"));
+	}
+	
+	@Test
+	public void createReservationSuccess() throws Exception {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Reservation reservation = new Reservation();
+		reservation.setId(2L);
+		
+		Mockito.when(reservationServiceMock.findAll()).thenReturn(getReservations());
+		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
+		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
+		
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		//execute
+		mockMvc.perform(post("/reservation").param("form", "")
+											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+											.param("restaurantId", RESTAURANT_ID)
+											.param("firstName", "Henk")
+											.param("lastName", "Jaspers")
+											.param("date", format.format(new Date()))
+											.param("startTime", "13:11")
+											.param("endTime", "15:11")
+											.param("email", "tom@tom.nl")
+											.param("partySize", "1")
+											.param("phone", "1234567890")
+											.param("description", "Test")
+											.sessionAttr("model", new ReservationModel()))
+		.andExpect(view().name("hartigehap/reservationsuccessful"));
 	}
 
+	@Test
+	public void createReservationFailed() throws Exception {
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Reservation reservation = new Reservation();
+		reservation.setId(2L);
+		
+		Mockito.when(reservationServiceMock.findAll()).thenReturn(getReservations());
+		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
+		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
+		
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		//execute
+		mockMvc.perform(post("/reservation").param("form", "")
+											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
+											.param("restaurantId", RESTAURANT_ID)
+											.param("firstName", "Henk")
+											.param("lastName", "Jaspers")
+											.param("date", format.format(new Date()))
+											.param("startTime", "13:11")
+											.param("endTime", "15:11")
+											.param("email", "tom@tom.nl")
+											.param("partySize", "111")
+											.param("phone", "1234567890")
+											.param("description", "Test")
+											.sessionAttr("model", new ReservationModel()))
+		.andExpect(view().name("hartigehap/reservationfailed"));
+	}
+	
 	private List<Reservation> getReservations() {
 		LinkedList<Reservation> retval = new LinkedList<Reservation>();
 		Reservation r1 = new Reservation();
@@ -182,11 +279,67 @@ public class ReservationControllerTest {
 		return retval;
 	}
 
+	private Restaurant getRestaurant(){
+		return getRestaurants().get(0);
+	}
+	
+	private Answer<Reservation> reservationAnswer = new Answer<Reservation>(){
+
+		@Override
+		public Reservation answer(InvocationOnMock invocation)
+				throws Throwable {
+			Reservation reservation = (Reservation) invocation.getArguments()[0];
+			reservation.setId(1L);
+			return reservation;
+		}
+		
+	};
+	
+	
+	private Answer<DiningTable> diningTableAnswer = new Answer<DiningTable>(){
+
+		@Override
+		public DiningTable answer(InvocationOnMock invocation)
+				throws Throwable {
+			DiningTable ding = (DiningTable) invocation.getArguments()[0];
+			ding.setId(1L);
+			return ding;
+		}
+		
+	};
+	
+	private Answer<Customer> customerAnswer = new Answer<Customer>(){
+
+		@Override
+		public Customer answer(InvocationOnMock invocation)
+				throws Throwable {
+			Customer cust = (Customer) invocation.getArguments()[0];
+			cust.setId(1L);
+			return cust;
+		}
+		
+	};
+	
+	private Answer<Restaurant> restaurantAnswer = new Answer<Restaurant>(){
+
+		@Override
+		public Restaurant answer(InvocationOnMock invocation)
+				throws Throwable {
+			Restaurant restaurant = (Restaurant) invocation.getArguments()[0];
+			restaurant.setId(RESTAURANT_ID);
+			return restaurant;
+		}
+		
+	};
+	
 	private List<Restaurant> getRestaurants() {
 		LinkedList<Restaurant> retval = new LinkedList<Restaurant>();
 		Restaurant r1 = new Restaurant();
 		r1.setId(RESTAURANT_ID);
-		r1.setDiningTables(getDiningTables());
+		List<DiningTable> diningTables = getDiningTables();
+		for(DiningTable d : diningTables)
+			d.setRestaurant(r1);
+		r1.setDiningTables(diningTables);
 		retval.add(r1);
 		return retval;
 	}
