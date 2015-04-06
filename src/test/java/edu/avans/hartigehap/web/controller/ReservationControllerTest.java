@@ -40,6 +40,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
+import edu.avans.hartigehap.domain.DomainObject;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.model.ReservationModel;
@@ -143,7 +144,6 @@ public class ReservationControllerTest {
 	@Test
 	public void createReservationForm() throws Exception {
 		List<Restaurant> restaurants = getRestaurants();
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 		Mockito.when(restaurantServiceMock.findAll()).thenReturn(restaurants);
 		mockMvc.perform(get("/reservation").param("form", ""))
@@ -175,10 +175,10 @@ public class ReservationControllerTest {
 		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
 		Mockito.when(reservationServiceMock.findById(1L)).thenReturn(reservation);
 		
-		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(domainObjectAnswer);
 		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
-		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
-		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(domainObjectAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(domainObjectAnswer);
 		//execute
 		mockMvc.perform(put("/reservations/{reservationID}", 1L)
 											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -208,10 +208,10 @@ public class ReservationControllerTest {
 		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
 		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
 		
-		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(domainObjectAnswer);
 		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
-		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
-		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(domainObjectAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(domainObjectAnswer);
 		//execute
 		mockMvc.perform(post("/reservation").param("form", "")
 											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -238,11 +238,11 @@ public class ReservationControllerTest {
 		Mockito.when(reservationServiceMock.findAll()).thenReturn(getReservations());
 		Mockito.when(diningTableServiceMock.findAll()).thenReturn(getDiningTables());
 		Mockito.when(restaurantServiceMock.findById(RESTAURANT_ID)).thenReturn(getRestaurant());
-		
-		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(reservationAnswer);
+
+		Mockito.when(reservationServiceMock.save(Matchers.any(Reservation.class))).thenAnswer(domainObjectAnswer);
 		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
-		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(diningTableAnswer);
-		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(customerAnswer);
+		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(domainObjectAnswer);
+		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(domainObjectAnswer);
 		//execute
 		mockMvc.perform(post("/reservation").param("form", "")
 											.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -283,53 +283,22 @@ public class ReservationControllerTest {
 		return getRestaurants().get(0);
 	}
 	
-	private Answer<Reservation> reservationAnswer = new Answer<Reservation>(){
-
+	private Answer<DomainObject> domainObjectAnswer = new Answer<DomainObject>(){
 		@Override
-		public Reservation answer(InvocationOnMock invocation)
-				throws Throwable {
-			Reservation reservation = (Reservation) invocation.getArguments()[0];
-			reservation.setId(1L);
-			return reservation;
+		public DomainObject answer(InvocationOnMock invocation) throws Throwable {
+			DomainObject obj = (DomainObject) invocation.getArguments()[0];
+			obj.setId(1L);
+			return obj;
 		}
-		
-	};
-	
-	
-	private Answer<DiningTable> diningTableAnswer = new Answer<DiningTable>(){
-
-		@Override
-		public DiningTable answer(InvocationOnMock invocation)
-				throws Throwable {
-			DiningTable ding = (DiningTable) invocation.getArguments()[0];
-			ding.setId(1L);
-			return ding;
-		}
-		
-	};
-	
-	private Answer<Customer> customerAnswer = new Answer<Customer>(){
-
-		@Override
-		public Customer answer(InvocationOnMock invocation)
-				throws Throwable {
-			Customer cust = (Customer) invocation.getArguments()[0];
-			cust.setId(1L);
-			return cust;
-		}
-		
 	};
 	
 	private Answer<Restaurant> restaurantAnswer = new Answer<Restaurant>(){
-
 		@Override
-		public Restaurant answer(InvocationOnMock invocation)
-				throws Throwable {
+		public Restaurant answer(InvocationOnMock invocation) throws Throwable {
 			Restaurant restaurant = (Restaurant) invocation.getArguments()[0];
 			restaurant.setId(RESTAURANT_ID);
 			return restaurant;
 		}
-		
 	};
 	
 	private List<Restaurant> getRestaurants() {
