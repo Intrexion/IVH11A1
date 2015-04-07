@@ -4,23 +4,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 @NoArgsConstructor
 public class DateTimeToJsonAdapter implements DateTimeToJsonProvider {
 	@Setter
-	private DateTime dateAndTime;
-
-    public DateTimeToJsonAdapter(DateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
+	private LocalDate date;
+	@Setter
+	private LocalTime time;
+	
+    public DateTimeToJsonAdapter(LocalTime time, LocalDate date) {
+        this.date = date;
+        this.time = time;
     }
 
-    private static String convertDateTimeToString(DateTime dateTime) {
-        return dateTime.toString("yyyy-MM-dd HH:mm");
+    private String convertDateTimeToString() {
+        return date.toString("yyyy-MM-dd") + " " + time.toString("HH:mm");
     }
     
 	@Override
 	public String getJson() {		
-		return convertDateTimeToString(dateAndTime);
+		return convertDateTimeToString();
 	}
 
 }

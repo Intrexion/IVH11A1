@@ -52,8 +52,10 @@ public class Reservation extends DomainObject {
 //	 */
 //	private DateTime endDate;
 
+	@JsonIgnore
 	private LocalTime startTime, endTime;
 	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd")
+	@JsonIgnore
 	private LocalDate day;
 	
 	private String description;
@@ -86,13 +88,13 @@ public class Reservation extends DomainObject {
 	
 	@Transient
 	public String getEndDateString(){
-		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(getEndDate());
+		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(endTime, day);
 		return adapter.getJson();
 	}
 	
 	@Transient
 	public String getStartDateString(){
-		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(getStartDate());
+		DateTimeToJsonAdapter adapter = new DateTimeToJsonAdapter(startTime, day);
 		return adapter.getJson();
 	}
 	
