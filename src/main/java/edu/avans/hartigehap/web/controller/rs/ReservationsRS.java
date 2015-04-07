@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,6 +79,7 @@ public class ReservationsRS {
 		return response;
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void delete(@PathVariable Long reservationId, HttpServletResponse httpResponse, WebRequest httpRequest) {
@@ -86,6 +88,7 @@ public class ReservationsRS {
 		reservationService.delete(toBeDeleted);
 	}
 
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = RSConstants.URL_PREFIX + "/reservations/{reservationId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, Object> updateReservationJson(@PathVariable Long reservationId, Reservation updateReservation, BindingResult bindingResult) {

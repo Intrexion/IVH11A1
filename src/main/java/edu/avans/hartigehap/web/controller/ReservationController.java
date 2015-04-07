@@ -17,6 +17,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,7 +47,7 @@ public class ReservationController {
 	@Autowired
 	private RestaurantService restaurantService;
 
-	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
 	public String listReservations(Model uiModel) {
 		
@@ -59,6 +60,7 @@ public class ReservationController {
 		return "hartigehap/listreservations";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.GET)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Model uiModel) {
 		Collection<Restaurant> restaurants = restaurantService.findAll();
@@ -70,6 +72,7 @@ public class ReservationController {
 		return "hartigehap/reservation";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.DELETE)
 	public String deleteReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel){	
 		Reservation existingReservation = reservationService.findById(reservationID);
@@ -79,6 +82,7 @@ public class ReservationController {
         return "redirect:../reservations";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 	@RequestMapping(value = "/reservations/{reservationID}", method = RequestMethod.PUT)
 	public String showReservation(@PathVariable("reservationID") Long reservationID, Reservation reservation, Model uiModel) {
 

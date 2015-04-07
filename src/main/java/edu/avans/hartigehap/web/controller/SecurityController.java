@@ -14,6 +14,7 @@ import edu.avans.hartigehap.web.form.Message;
 
 
 @Controller
+@RequestMapping(value="/security")
 public class SecurityController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityController.class);	
