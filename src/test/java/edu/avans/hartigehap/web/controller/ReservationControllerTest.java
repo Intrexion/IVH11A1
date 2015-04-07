@@ -150,7 +150,7 @@ public class ReservationControllerTest {
 				.andExpect(view().name("hartigehap/createreservationform"))
 				.andExpect(model().attributeExists("restaurants"))
 				.andExpect(model().attributeExists("currentDate"))
-				.andExpect(model().attributeExists("reservationmodel"));
+				.andExpect(model().attributeExists("reservation"));
 	}
 
 	@Test
@@ -170,7 +170,6 @@ public class ReservationControllerTest {
 	
 	@Test
 	public void updateReservation() throws Exception{
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Reservation reservation = new Reservation();
 		reservation.setId(1L);
 		reservation.setStartTime(new LocalTime());
@@ -195,7 +194,7 @@ public class ReservationControllerTest {
 											.param("restaurant.id", RESTAURANT_ID)
 											.param("customer.firstName", "Henk")
 											.param("customer.lastName", "Jaspers")
-											.param("day", format.format(new Date()))
+											.param("day", new LocalDate().toString("yyyy-MM-dd"))
 											.param("startTime", "14:11")
 											.param("endTime", "18:11")
 											.param("customer.id", "1")
@@ -209,7 +208,6 @@ public class ReservationControllerTest {
 	
 	@Test
 	public void createReservationSuccess() throws Exception {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Reservation reservation = new Reservation();
 		reservation.setId(2L);
 		
@@ -227,7 +225,7 @@ public class ReservationControllerTest {
 											.param("restaurantId", RESTAURANT_ID)
 											.param("firstName", "Henk")
 											.param("lastName", "Jaspers")
-											.param("day", format.format(new LocalDate()))
+											.param("day", new LocalDate().toString("yyyy-MM-dd"))
 											.param("startTime", "13:11")
 											.param("endTime", "15:11")
 											.param("email", "tom@tom.nl")
@@ -240,7 +238,6 @@ public class ReservationControllerTest {
 
 	@Test
 	public void createReservationFailed() throws Exception {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Reservation reservation = new Reservation();
 		reservation.setId(2L);
 		
@@ -258,7 +255,7 @@ public class ReservationControllerTest {
 											.param("restaurantId", RESTAURANT_ID)
 											.param("firstName", "Henk")
 											.param("lastName", "Jaspers")
-											.param("day", format.format(new LocalDate()))
+											.param("day", new LocalDate().toString("yyyy-MM-dd"))
 											.param("startTime", "13:11")
 											.param("endTime", "15:11")
 											.param("email", "tom@tom.nl")

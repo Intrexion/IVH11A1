@@ -101,8 +101,9 @@ public class ReservationServiceTest extends AbstractTransactionRollbackTest {
 		assertEquals("Customer", customer.getId(), retval.getCustomer().getId());
 		assertEquals("Restaurant", restaurant.getId(), retval.getRestaurant().getId());
 		assertEquals("DiningTable", diningTbl.getId(), retval.getDiningTable().getId());
-		assertEquals("Start", start, retval.getStartDate());
-		assertEquals("End", end, retval.getEndDate());
+		assertEquals("Start", start, retval.getStartTime());
+		assertEquals("End", end, retval.getEndTime());
+		assertEquals("Day", day, retval.getDay());
 		return retval;
 	}
 
