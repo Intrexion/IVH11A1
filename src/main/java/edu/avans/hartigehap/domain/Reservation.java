@@ -7,6 +7,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -33,9 +34,12 @@ public class Reservation extends DomainObject {
 
 	@JsonIgnore
 	@DateTimeFormat(iso = ISO.TIME, pattern = "HH:mm")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalTime")
 	private LocalTime startTime, endTime;
-	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd")
+
 	@JsonIgnore
+	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd")
+	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
 	private LocalDate day;
 	
 	private String description;
