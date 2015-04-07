@@ -68,7 +68,7 @@ public class ReservationControllerTest {
 	private WebApplicationContext webApplicationContext;
 
 	private MockMvc mockMvc;
-
+	
 	@Autowired
 	private ReservationService reservationServiceMock;
 
@@ -220,6 +220,7 @@ public class ReservationControllerTest {
 		Mockito.when(restaurantServiceMock.save(Matchers.any(Restaurant.class))).thenAnswer(restaurantAnswer);
 		Mockito.when(diningTableServiceMock.save(Matchers.any(DiningTable.class))).thenAnswer(domainObjectAnswer);
 		Mockito.when(customerServiceMock.save(Matchers.any(Customer.class))).thenAnswer(domainObjectAnswer);
+		
 		//execute
 		mockMvc.perform(post("/reservation").param("form", "")
 											.contentType(MediaType.APPLICATION_FORM_URLENCODED)

@@ -23,6 +23,7 @@
 	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
 	<spring:message code="label_error_length" var="labelLengthError" />
+	<spring:message code="label_reservation_code" var="labelReservationCode" />
 	
 	
 	<script type="text/javascript">
@@ -85,12 +86,12 @@
 			<c:forEach items="${reservations}" var="reservation">
 				<spring:url var="showTable" value="/diningTables/${reservation.diningTable.id}" />								
 				<tr>
-					<td><a href="${showTable}">${reservation.customer.lastName}</a></td>	
-					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
-					<td><a href="${showTable}">${fn:substring(reservation.startTime, 0, 5)}</a></td>
-					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
-					<td><input id="code${reservation.id}" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
-			</tr>
+					<td>${reservation.customer.lastName}</td>	
+					<td>${reservation.customer.partySize}</td>
+					<td>${fn:substring(reservation.startTime, 0, 5)}</td>
+					<td>${reservation.diningTable.tableNr}</td>
+					<td><input id="code${reservation.id}" style="width:80%" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
+				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
