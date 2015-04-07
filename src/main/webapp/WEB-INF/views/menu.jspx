@@ -21,6 +21,7 @@
 	<spring:message code="label_kitchen_subsystem" var="labelKitchenSubsystem" />
 	<spring:message code="label_waiter_subsystem" var="labelWaiterSubsystem" />
 	<spring:message code="label_customer_subsystem" var="labelCustomerSubsystem" />
+	<spring:message code="label_reservation_subsystem" var="labelReservationSubsystem" />
 	<spring:message code="label_dining_tables" var="labelDiningTables" />
 	<spring:message code="label_dining_table" var="labelDiningTable" />
 
@@ -53,7 +54,12 @@
 		
 			<spring:url var="customerSubsystem" value="/restaurants/${restaurant.id}/customers" />					
 			<a href="${customerSubsystem}">${restaurant.id} ${labelCustomerSubsystem}</a>							
+											
+		</c:if><c:if test="${empty restaurant}">
+			<h3>${labelSubsystems}</h3>
 		</c:if>
+		<spring:url var="reservationSubsystem" value="/reservations/" />					
+			<a href="${reservationSubsystem}">${labelReservationSubsystem}</a>	
     </sec:authorize>
 
     <sec:authorize access="isAnonymous()">
