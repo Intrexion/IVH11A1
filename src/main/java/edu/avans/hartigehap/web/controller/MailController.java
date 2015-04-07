@@ -51,7 +51,7 @@ public class MailController {
 		MimeMessage mimeMessage = mailSender.createMimeMessage();
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, "utf-8");
 		Multipart multipart = new MimeMultipart("related");
-		message.setFrom("hhreserveringen@gmail.com");
+		message.setFrom("reservationshh@gmail.com");
 		message.setTo(reservation.getCustomer().getEmail());
 		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
 		BodyPart htmlPart = new MimeBodyPart();		
