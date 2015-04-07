@@ -3,11 +3,11 @@ package edu.avans.hartigehap.web.controller;
 import lombok.Setter;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 /**
- * Adapter to convert date and time strings to an DateTime object, using the Object Adapter pattern.
+ * Adapter to convert date and time objects to an DateTime object, using the Object Adapter pattern.
  */
 public class DateTimeAdapter implements DateTimeProvider {
 	@Setter
@@ -27,13 +27,8 @@ public class DateTimeAdapter implements DateTimeProvider {
             return new DateTime();
         }
 
-        String text = dateAndTime.getDateAndTime();
-        return convertStringToDateTime(text);
-    }
-
-    private static DateTime convertStringToDateTime(String text) {
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm");
-        DateTime dateTime = formatter.parseDateTime(text);
-        return dateTime;
+        LocalDate date = dateAndTime.getDate();
+        LocalTime time = dateAndTime.getTime();
+        return date.toDateTime(time);
     }
 }

@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import edu.avans.hartigehap.web.controller.DateAndTime;
+import edu.avans.hartigehap.web.controller.DateTimeAdapter;
 import edu.avans.hartigehap.web.controller.rs.DateTimeToJsonAdapter;
 
 @Entity
@@ -85,13 +87,14 @@ public class Reservation extends DomainObject {
 	@Transient
 	@JsonIgnore
 	public DateTime getStartDate(){
-		return new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), startTime.getHourOfDay(), startTime.getMinuteOfHour());
+		DateTimeAdapter adapter = new DateTimeAdapter(new DateAndTime(day, startTime));
+		return adapter.getDateTime();
 	}
 	
 	@Transient
 	@JsonIgnore
 	public DateTime getEndDate(){
-		
-		return new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), endTime.getHourOfDay(), endTime.getMinuteOfHour());
+		DateTimeAdapter adapter = new DateTimeAdapter(new DateAndTime(day, endTime));
+		return adapter.getDateTime();
 	}
 }
