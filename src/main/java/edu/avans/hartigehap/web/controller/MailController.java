@@ -55,17 +55,21 @@ public class MailController {
 		message.setTo(reservation.getCustomer().getEmail());
 		message.setSubject("Uw " + reservation.getRestaurant().getId() + " reservering");
 		BodyPart htmlPart = new MimeBodyPart();		
-		if ("nl_NL".equals(locale)) {
-			DutchStrategy context = new DutchStrategy();
-			htmlPart.setContent(context.setMailContent(reservation, reservationDate, reservationTime), "text/html");
-			multipart.addBodyPart(htmlPart);
-		} else if ("en_US".equals(locale)) {
-			EnglishStrategy context = new EnglishStrategy();
-			htmlPart.setContent(context.setMailContent(reservation, reservationDate, reservationTime), "text/html");
-			multipart.addBodyPart(htmlPart);
-		} else {
-			LOGGER.info("Not supported locale used.");
+		
+		MailStrategy context = null;
+		
+		switch(locale){
+			case "nl_NL": context = new DutchStrategy();
+				break;
+			case "en_US": context = new EnglishStrategy();
+				break;
+			default: 
+				LOGGER.info("Not supported locale used.");
+				break;
 		}
+		htmlPart.setContent(context.setMailContent(reservation, reservationDate, reservationTime), "text/html");
+		multipart.addBodyPart(htmlPart);
+		
 		BodyPart imgPart = new MimeBodyPart();
 		DataSource ds = new FileDataSource(qrcode);
 		imgPart.setDataHandler(new DataHandler(ds));

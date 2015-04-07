@@ -3,6 +3,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:joda="http://www.joda.org/joda/time/tags" version="2.0"
 	xmlns:spring="http://www.springframework.org/tags"
+	xmlns:form="http://www.springframework.org/tags/form"
 	xmlns:sec="http://www.springframework.org/security/tags">
 	<jsp:directive.page contentType="text/html;charset=UTF-8" />
 	<jsp:output omit-xml-declaration="yes" />
@@ -20,7 +21,21 @@
 	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
 	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
-
+	<spring:message code="label_error_length" var="labelLengthError" />
+	
+	
+	<script type="text/javascript">
+	function validateCode(reservationId, codeElement, formElement) {
+	    var code = document.getElementById(codeElement).value;
+	    var codeLength = code.length;
+		if (codeLength != 6) {
+	        document.getElementById(codeElement).style.borderColor = "red";
+	        document.getElementById(codeElement).setCustomValidity('${labelLengthError}');
+		} else { 
+		    window.location = "/hh/checkCode/" + reservationId + "/" + code;
+		}		
+	}
+	</script>
 
 	<h1>${labelRestaurant} ${restaurant.id}</h1>
 
@@ -59,7 +74,8 @@
 					<th>${labelCustomerLastName}</th>
 					<th>${labelCustomerPartySize}</th>
 					<th>${labelReservationStartTime}</th>
-					<th>${labelTableNumber}</th>	
+					<th>${labelTableNumber}</th>
+					<th>${labelReservationCode}</th>
 				</tr>
 			</c:if>
 		</thead>
@@ -72,7 +88,8 @@
 					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
 					<td><a href="${showTable}">${reservation.startTime}</a></td>
 					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
-				</tr>
+					<td><input id="code${reservation.id}" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
+			</tr>
 			</c:forEach>
 		</tbody>
 	</table>
