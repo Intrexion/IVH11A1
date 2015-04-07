@@ -65,7 +65,11 @@ public class MailController {
 				break;
 			default: 
 				LOGGER.info("Not supported locale used.");
+<<<<<<< HEAD
 				context = new NullMailStrategy(); 
+=======
+				context = new EnglishStrategy();
+>>>>>>> 7d8823c0a6950a12cb3ff0edd67063603f57701d
 				break;
 		}
 		htmlPart.setContent(context.setMailContent(reservation, reservationDate, reservationTime), "text/html");
