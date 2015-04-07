@@ -53,6 +53,7 @@ public class Reservation extends DomainObject {
 //	private DateTime endDate;
 
 	@JsonIgnore
+	@DateTimeFormat(iso = ISO.TIME, pattern = "HH:mm")
 	private LocalTime startTime, endTime;
 	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd")
 	@JsonIgnore
@@ -101,7 +102,6 @@ public class Reservation extends DomainObject {
 	@Transient
 	@JsonIgnore
 	public DateTime getStartDate(){
-		
 		return new DateTime(day.getYear(), day.getMonthOfYear(), day.getDayOfMonth(), startTime.getHourOfDay(), startTime.getMinuteOfHour());
 	}
 	
