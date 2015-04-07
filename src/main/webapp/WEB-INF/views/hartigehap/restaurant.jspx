@@ -42,7 +42,7 @@
 	<h3>${labelOrderingSubsystem}</h3>
 
 	<c:if test="${not empty message}">
-		<div id="message" class="${message.type}">BLABLABLA ${message.message}</div>
+		<div id="message" class="${message.type}">${message.message}</div>
 	</c:if>
 
 	<table>
