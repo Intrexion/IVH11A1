@@ -30,27 +30,6 @@ import edu.avans.hartigehap.web.controller.rs.DateTimeToJsonAdapter;
 @NoArgsConstructor
 public class Reservation extends DomainObject {
 	private static final long serialVersionUID = 1L;
-//	------------------------------------------------------------------------------------
-//	DENNIS BLIJF HIER VANAF, TOM HEEFT HET NOG NODIG!
-//	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-//	// needed to allow changing a date in the GUI
-//	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
-//	//Alleen zodat json dit veld negeert en de getter naar String pakt
-//	@JsonIgnore
-//	/* Dit is de mooie manier om het op te lossen, klasse heb ik hiervoor expres er in gelaten. Deze manier staat in de customer als voorbeeld
-//	 * @JsonSerialize(using = DateTimeToRSConverter.class)
-//	 */
-//	private DateTime startDate;
-//
-//	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-//	// needed to allow changing a date in the GUI
-//	@DateTimeFormat(iso = ISO.DATE_TIME, pattern = "yyyy-MM-dd HH:mm")
-//	//Alleen zodat json dit veld negeert en de getter naar String pakt
-//	@JsonIgnore
-//	/* Dit is de mooie manier om het op te lossen, klasse heb ik hiervoor expres er in gelaten. Deze manier staat in de customer als voorbeeld
-//	 * @JsonSerialize(using = DateTimeToRSConverter.class)
-//	 */
-//	private DateTime endDate;
 
 	@JsonIgnore
 	@DateTimeFormat(iso = ISO.TIME, pattern = "HH:mm")

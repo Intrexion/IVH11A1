@@ -3,7 +3,6 @@ package edu.avans.hartigehap.web.controller.rs;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
