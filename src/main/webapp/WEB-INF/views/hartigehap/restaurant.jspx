@@ -21,12 +21,20 @@
 	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
 	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
+	<spring:message code="label_error_length" var="labelLengthError" />
+	
 	
 	<script type="text/javascript">
-	function validateCode(reservationId) {
-	    var code = document.getElementById('code').value;
-	    window.location = "/hh/checkCode/" + reservationId + "/" + code;
-	    }
+	function validateCode(reservationId, codeElement, formElement) {
+	    var code = document.getElementById(codeElement).value;
+	    var codeLength = code.length;
+		if (codeLength != 6) {
+	        document.getElementById(codeElement).style.borderColor = "red";
+	        document.getElementById(codeElement).setCustomValidity('${labelLengthError}');
+		} else { 
+		    window.location = "/hh/checkCode/" + reservationId + "/" + code;
+		}		
+	}
 	</script>
 
 	<h1>${labelRestaurant} ${restaurant.id}</h1>
@@ -34,7 +42,7 @@
 	<h3>${labelOrderingSubsystem}</h3>
 
 	<c:if test="${not empty message}">
-		<div id="message" class="${message.type}">${message.message}</div>
+		<div id="message" class="${message.type}">BLABLABLA ${message.message}</div>
 	</c:if>
 
 	<table>
@@ -67,6 +75,7 @@
 					<th>${labelCustomerPartySize}</th>
 					<th>${labelReservationStartTime}</th>
 					<th>${labelTableNumber}</th>
+					<th>${labelReservationCode}</th>
 				</tr>
 			</c:if>
 		</thead>
@@ -79,18 +88,11 @@
 					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
 					<td><a href="${showTable}">${reservation.startTime}</a></td>
 					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
-					<td><button onclick="validateCode(${reservation.id})">Submit</button></td>
-					
-				</tr>
+					<td><input id="code${reservation.id}" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
+			</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	
-	<form method="POST">
-		<label>Reserveringscode</label>
-		<input id="code" required="required" placeholder="AAA111" />
-		<button onclick="validateCode()">Submit</button>
-	</form>
 
     <sec:authorize access="hasRole('ROLE_EMPLOYEE')">
 		<h3>${labelKitchenSubsystem}</h3>

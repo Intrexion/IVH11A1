@@ -4,12 +4,14 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.service.*;
+import edu.avans.hartigehap.web.form.Message;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -30,6 +32,8 @@ public class RestaurantController {
 	private RestaurantPopulatorService restaurantPopulatorService;
 	@Autowired
 	private ReservationService reservationService;
+	@Autowired
+	private MessageSource messageSource;
 
 	// mapping to "/" is not RESTful, but is for bootstrapping!
 	@RequestMapping(value = {"/", "/restaurants"}, method = RequestMethod.GET)
@@ -67,15 +71,13 @@ public class RestaurantController {
 	}
 	
 	@RequestMapping(value="/checkCode/{reservationid}/{code}", method = RequestMethod.GET)
-	public String checkCode(@PathVariable("reservationid") String reservationId,@PathVariable("code") String code, HttpServletRequest request) {
-
-		Reservation reservation = reservationService.findById(Long.valueOf(reservationId));
-		
+	public String checkCode(@PathVariable("reservationid") String reservationId,@PathVariable("code") String code, HttpServletRequest request, Model uiModel, Locale locale) {
+		Reservation reservation = reservationService.findById(Long.valueOf(reservationId));		
 		if(reservation.getCode().equalsIgnoreCase(code)){
 			return "redirect:/diningTables/" + reservation.getDiningTable().getId();
 		}
-		
-		return "redirect:/restaurants/";
+		uiModel.addAttribute("message", new Message("error", messageSource.getMessage("message_code_incorrect", new Object[]{}, locale))); 
+		return "redirect:/restaurants/" + reservation.getRestaurant().getId();
 	}
 	
 	private List<Reservation> getReservationsForHour(Restaurant restaurant){
