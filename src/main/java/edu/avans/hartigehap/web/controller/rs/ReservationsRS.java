@@ -94,10 +94,8 @@ public class ReservationsRS {
 	public Map<String, Object> updateReservationJson(@PathVariable Long reservationId, Reservation updateReservation, BindingResult bindingResult) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		Reservation reservation = reservationService.findById(updateReservation.getId());
-
-		reservation.setDescription(updateReservation.getDescription());
-		reservation.setStartDate(updateReservation.getStartDate());
-		reservation.setEndDate(updateReservation.getEndDate());
+		
+		reservation.updateEditableFields(updateReservation);
 
 		Customer cust = reservation.getCustomer();
 		Customer upCust = updateReservation.getCustomer();

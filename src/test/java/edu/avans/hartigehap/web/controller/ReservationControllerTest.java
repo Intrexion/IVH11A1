@@ -18,7 +18,8 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +44,6 @@ import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.DomainObject;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
-import edu.avans.hartigehap.model.ReservationModel;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.DiningTableService;
 import edu.avans.hartigehap.service.ReservationService;
@@ -157,8 +157,9 @@ public class ReservationControllerTest {
 	public void deleteReservation() throws Exception{
 		Reservation reservation = new Reservation();
 		reservation.setId(1L);
-		reservation.setStartDate(new DateTime());
-		reservation.setEndDate(new DateTime());
+		reservation.setStartTime(new LocalTime());
+		reservation.setEndTime(new LocalTime());
+		reservation.setDay(new LocalDate());
 		reservation.setCustomer(new Customer.Builder("Henk", "Jaspers").setPartySize(2).build());
 		
 		Mockito.when(reservationServiceMock.findById(1L)).thenReturn(reservation);
@@ -172,8 +173,9 @@ public class ReservationControllerTest {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Reservation reservation = new Reservation();
 		reservation.setId(1L);
-		reservation.setStartDate(new DateTime());
-		reservation.setEndDate(new DateTime());
+		reservation.setStartTime(new LocalTime());
+		reservation.setEndTime(new LocalTime());
+		reservation.setDay(new LocalDate());
 		reservation.setCustomer(new Customer.Builder("Henk", "Jaspers").setPartySize(2).build());
 		
 		
@@ -224,14 +226,14 @@ public class ReservationControllerTest {
 											.param("restaurantId", RESTAURANT_ID)
 											.param("firstName", "Henk")
 											.param("lastName", "Jaspers")
-											.param("date", format.format(new Date()))
+											.param("day", format.format(new LocalDate()))
 											.param("startTime", "13:11")
 											.param("endTime", "15:11")
 											.param("email", "tom@tom.nl")
 											.param("partySize", "1")
 											.param("phone", "1234567890")
 											.param("description", "Test")
-											.sessionAttr("model", new ReservationModel()))
+											.sessionAttr("model", new Reservation()))
 		.andExpect(view().name("hartigehap/reservationsuccessful"));
 	}
 
@@ -255,14 +257,14 @@ public class ReservationControllerTest {
 											.param("restaurantId", RESTAURANT_ID)
 											.param("firstName", "Henk")
 											.param("lastName", "Jaspers")
-											.param("date", format.format(new Date()))
+											.param("day", format.format(new LocalDate()))
 											.param("startTime", "13:11")
 											.param("endTime", "15:11")
 											.param("email", "tom@tom.nl")
 											.param("partySize", "111")
 											.param("phone", "1234567890")
 											.param("description", "Test")
-											.sessionAttr("model", new ReservationModel()))
+											.sessionAttr("model", new Reservation()))
 		.andExpect(view().name("hartigehap/reservationfailed"));
 	}
 	

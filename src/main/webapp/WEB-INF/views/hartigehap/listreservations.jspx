@@ -54,7 +54,7 @@
 					<td><a href="${showReservation}">${reservation.customer.lastName}</a></td>	
 					<td><a href="${showReservation}">${reservation.customer.partySize}</a></td>
 					<td><a href="${showReservation}" >${fn:substring(reservation.day, 8, 10)}${fn:substring(reservation.day, 4, 8)}${fn:substring(reservation.day, 0, 4)}</a></td>
-					<td><a href="${showReservation}">${reservation.startTime}</a></td>
+					<td><a href="${showReservation}">${fn:substring(reservation.startTime, 0, 5)}</a></td>
 					<td><a href="${showReservation}">${reservation.restaurant.id}</a></td>	
 					<td><a href="${showReservation}">${reservation.diningTable.tableNr}</a></td>
 					<td>

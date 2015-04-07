@@ -13,7 +13,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
-import edu.avans.hartigehap.model.ReservationModel;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
 import edu.avans.hartigehap.service.RestaurantService;
@@ -89,11 +87,7 @@ public class ReservationController {
 		
 		Reservation existingReservation = reservationService.findById(reservationID);
         assert existingReservation != null : "reservation should exist";
-        
-    	DateTimeProvider provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getStartTime()));
-		reservation.setStartDate(provider.getDateTime());
-    	provider = new DateTimeAdapter(new DateAndTime(reservation.getDay(), reservation.getEndTime()));
-    	reservation.setEndDate(provider.getDateTime());
+
     	
     	reservation.setRestaurant(restaurantService.findById(reservation.getRestaurant().getId()));
     	
@@ -119,8 +113,8 @@ public class ReservationController {
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.GET)
 	public String createReservationForm(Model uiModel) {
 		LOGGER.info("Create reservation form");
-		ReservationModel model = new ReservationModel();
-		uiModel.addAttribute("reservationmodel", model);
+		Reservation reservation = new Reservation();
+		uiModel.addAttribute("reservation", reservation);
 		
 		Collection<Restaurant> restaurants = restaurantService.findAll();
 		uiModel.addAttribute("restaurants", restaurants);
@@ -132,43 +126,20 @@ public class ReservationController {
 	}
 	
 	@RequestMapping(value = "/reservation", params = "form", method = RequestMethod.POST)
-	public String createReservation(@Valid ReservationModel model, BindingResult bindingResult,
+	public String createReservation(@Valid Reservation reservation, BindingResult bindingResult,
 			Model uiModel, HttpServletRequest httpServletRequest,
 			RedirectAttributes redirectAttributes, Locale locale) throws MessagingException, IOException {
 		LOGGER.info("Create reservation form");
-		
-		Reservation reservation = new Reservation();
-		DateTimeAdapter dateTimeAdapter = new DateTimeAdapter();
 
-		DateAndTime dateAndTimeStart = new DateAndTime(model.getDate(), model.getStartTime());
-		dateTimeAdapter.setDateAndTime(dateAndTimeStart);
-		DateTime startDate = dateTimeAdapter.getDateTime();
-		reservation.setStartDate(startDate);
 
-		DateAndTime dateAndTimeEnd = new DateAndTime(model.getDate(), model.getEndTime());
-		dateTimeAdapter.setDateAndTime(dateAndTimeEnd);
-		DateTime endDate = dateTimeAdapter.getDateTime();
-		reservation.setEndDate(endDate);
-		reservation.setStartTime(model.getStartTime());
-		reservation.setEndTime(model.getEndTime());
-		reservation.setDay(model.getDate());
-		
-		reservation.setDescription(model.getDescription());
-
-		Customer customer = new Customer.Builder(model.getFirstName(), model.getLastName())
-				.setPartySize(model.getPartySize())
-				.setEmail(model.getEmail())
-				.setPhone(model.getPhone())
-				.build();
-
-		Restaurant restaurant = restaurantService.findById(model.getRestaurantId());
-		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(customer.getPartySize()));
+		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
+		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering
 			return "hartigehap/reservationfailed";
 		} else {
-			customer = customerService.save(customer);
+			Customer customer = customerService.save(reservation.getCustomer());
 			reservation.setCustomer(customer);
 
 			reservation.setRestaurant(restaurant);

@@ -71,17 +71,17 @@
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>
 		</c:if>
-		<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservationmodel" id="form" method="post">
+		<form:form class="pure-form pure-form-aligned form-style" onsubmit="return validateForm()" modelAttribute="reservation" id="form" method="post">
 		<fieldset>
 			<div class="pure-control-group">
-				<form:label path="restaurantId" class="bold">${labelRestaurant}</form:label>
-				<form:select path="restaurantId" name="restaurant" id="restaurant" class="pure-input-2-3">
+				<form:label path="restaurant.id" class="bold">${labelRestaurant}</form:label>
+				<form:select path="restaurant.id" name="restaurant" id="restaurant" class="pure-input-2-3">
 					<form:options items="${restaurants}" itemValue="id" itemLabel="id" />
 				</form:select>
 			</div>
 			<div class="pure-control-group">
-				<form:label class="bold" path="date">${labelDate}</form:label>
-				<form:input class="pure-input-2-3" type="date" path="date" id="date" min="${currentDate}" value="${currentDate}" />
+				<form:label class="bold" path="day">${labelDate}</form:label>
+				<form:input class="pure-input-2-3" type="date" path="day" id="date" min="${currentDate}" value="${currentDate}" />
 			</div>	
 			
 			<div class="pure-control-group">
@@ -138,27 +138,27 @@
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="partySize" class="bold">${labelPersons}</form:label>
-				<form:input required="required" path="partySize" type="number" min="1" max="12" id="party-size" value="2" />
+				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
+				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size" value="2" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="firstName" class="bold">${labelFirstName}</form:label>
-				<form:input required="required" path="firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
+				<form:label path="customer.firstName" class="bold">${labelFirstName}</form:label>
+				<form:input required="required" path="customer.firstName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 			<div class="pure-control-group">
-				<form:label path="lastName" class="bold">${labelLastName}</form:label>
-				<form:input required="required" path="lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
+				<form:label path="customer.lastName" class="bold">${labelLastName}</form:label>
+				<form:input required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
 			</div>
 			
 			<div class="pure-control-group">
-				<form:label path="email" class="bold">${labelEmail}</form:label>
-				<form:input type="email" required="required" path="email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
+				<form:label path="customer.email" class="bold">${labelEmail}</form:label>
+				<form:input type="email" required="required" path="customer.email" class="pure-input-2-3" id="email-address" placeholder="${labelEmail}" />
 			</div>
 	
 			<div class="pure-control-group">
-				<form:label path="phone" class="bold">${labelPhone}</form:label>
-				<form:input type="tel" required="required" path="phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
+				<form:label path="customer.phone" class="bold">${labelPhone}</form:label>
+				<form:input type="tel" required="required" path="customer.phone" minlength="10" maxlength="10" class="pure-input-2-3" id="phone-number" placeholder="${labelPhone}"  />
 			</div>
 			
 			<div class="pure-control-group">

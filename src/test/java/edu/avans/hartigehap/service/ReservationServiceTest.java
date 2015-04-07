@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,10 +35,11 @@ public class ReservationServiceTest extends AbstractTransactionRollbackTest {
 		Restaurant restaurant = restaurantService.findById(HARTIGEHAP_RESTAURANT_NAME);
 		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
 		DiningTable diningTbl = tables.get(0);
-		DateTime start = DateTime.now();
-		DateTime end = DateTime.now();
+		LocalTime start = LocalTime.now();
+		LocalTime end = LocalTime.now();
+		LocalDate day = LocalDate.now();
 		
-		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end);
+		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end, day);
 		//Assert
 		List<Reservation> reservations = reservationService.findAll();
 		assertNotNull(reservations);
@@ -51,10 +53,11 @@ public class ReservationServiceTest extends AbstractTransactionRollbackTest {
 		Restaurant restaurant = restaurantService.findById(HARTIGEHAP_RESTAURANT_NAME);
 		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
 		DiningTable diningTbl = tables.get(0);
-		DateTime start = DateTime.now();
-		DateTime end = DateTime.now();
+		LocalTime start = LocalTime.now();
+		LocalTime end = LocalTime.now();
+		LocalDate day = LocalDate.now();
 		
-		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end);
+		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end, day);
 
 		// execute
 		List<Reservation> reservation2 = reservationService.findByRestaurant(restaurant);
@@ -70,10 +73,11 @@ public class ReservationServiceTest extends AbstractTransactionRollbackTest {
 		Restaurant restaurant = restaurantService.findById(HARTIGEHAP_RESTAURANT_NAME);
 		List<DiningTable> tables = (List<DiningTable>) restaurant.getDiningTables();
 		DiningTable diningTbl = tables.get(0);
-		DateTime start = DateTime.now();
-		DateTime end = DateTime.now();
+		LocalTime start = LocalTime.now();
+		LocalTime end = LocalTime.now();
+		LocalDate day = LocalDate.now();
 		
-		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end);
+		Reservation reservation = createReservation(customer, restaurant, diningTbl, start, end, day);
 		// execute
 		reservationService.delete(reservation);
 
@@ -85,9 +89,9 @@ public class ReservationServiceTest extends AbstractTransactionRollbackTest {
 
 
 	private Reservation createReservation(Customer customer,
-			Restaurant restaurant, DiningTable diningTbl, DateTime start,
-			DateTime end) {
-		Reservation reservation = new Reservation(start, end, "Test");
+			Restaurant restaurant, DiningTable diningTbl, LocalTime start,
+			LocalTime end, LocalDate day) {
+		Reservation reservation = new Reservation(start, end, day, "Test");
 		reservation.setCustomer(customer);
 		reservation.setRestaurant(restaurant);
 		reservation.setDiningTable(diningTbl);

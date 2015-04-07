@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <div id="body" xmlns:jsp="http://java.sun.com/JSP/Page"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
 	xmlns:joda="http://www.joda.org/joda/time/tags" version="2.0"
 	xmlns:spring="http://www.springframework.org/tags"
 	xmlns:form="http://www.springframework.org/tags/form"
@@ -86,7 +87,7 @@
 				<tr>
 					<td><a href="${showTable}">${reservation.customer.lastName}</a></td>	
 					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
-					<td><a href="${showTable}">${reservation.startTime}</a></td>
+					<td><a href="${showTable}">${fn:substring(reservation.startTime, 0, 5)}</a></td>
 					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
 					<td><input id="code${reservation.id}" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
 			</tr>

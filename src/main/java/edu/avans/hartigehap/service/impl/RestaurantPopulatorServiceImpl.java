@@ -14,6 +14,8 @@ import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 @Service("restaurantPopulatorService")
 @Repository
@@ -183,8 +185,8 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 		return restaurant;
 	}
 
-	private void createReservation(DateTime start, DateTime end, String description, Restaurant rest, DiningTable table, Customer cust){
-		Reservation reservation = new Reservation(start, end, description);
+	private void createReservation(LocalTime start, LocalTime end, LocalDate day, String description, Restaurant rest, DiningTable table, Customer cust){
+		Reservation reservation = new Reservation(start, end, day, description);
 		reservation = reservationRepository.save(reservation);
 		reservations.add(reservation);
 		cust.setReservation(reservation);
@@ -215,6 +217,6 @@ public class RestaurantPopulatorServiceImpl implements RestaurantPopulatorServic
 				break;
 			}
 		}
-		createReservation(new DateTime(), new DateTime().plusHours(2), "", restaurant, diningTable, customers.get(0));
+		createReservation(new LocalTime(), new LocalTime().plusHours(2), new LocalDate(), "", restaurant, diningTable, customers.get(0));
 	}	
 }
