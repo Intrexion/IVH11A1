@@ -59,12 +59,13 @@ public class MailController {
 		MailStrategy context = null;
 		
 		switch(locale){
-			case "nl_NL": context = new DutchStrategy();
+			case "nl_NL": context = new DutchMailStrategy();
 				break;
-			case "en_US": context = new EnglishStrategy();
+			case "en_US": context = new EnglishMailStrategy();
 				break;
 			default: 
 				LOGGER.info("Not supported locale used.");
+				context = new NullMailStrategy(); 
 				break;
 		}
 		htmlPart.setContent(context.setMailContent(reservation, reservationDate, reservationTime), "text/html");
