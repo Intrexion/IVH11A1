@@ -21,6 +21,13 @@
 	<spring:message code="label_reservation_starttime" var="labelReservationStartTime" />
 	<spring:message code="label_dining_table_number" var="labelTableNumber" />
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
+	
+	<script type="text/javascript">
+	function validateCode(reservationId) {
+	    var code = document.getElementById('code').value;
+	    window.location = "/hh/checkCode/" + reservationId + "/" + code;
+	    }
+	</script>
 
 	<h1>${labelRestaurant} ${restaurant.id}</h1>
 
@@ -72,15 +79,17 @@
 					<td><a href="${showTable}">${reservation.customer.partySize}</a></td>
 					<td><a href="${showTable}">${reservation.startTime}</a></td>
 					<td><a href="${showTable}">${reservation.diningTable.tableNr}</a></td>
+					<td><button onclick="validateCode(${reservation.id})">Submit</button></td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
 	
 	<form method="POST">
-		<label path="code">Reserveringscode</label>
-		<input path="code" required="required" placeholder="AAA111" />
-		<button type="submit">Submit</button>
+		<label>Reserveringscode</label>
+		<input id="code" required="required" placeholder="AAA111" />
+		<button onclick="validateCode()">Submit</button>
 	</form>
 
     <sec:authorize access="hasRole('ROLE_EMPLOYEE')">

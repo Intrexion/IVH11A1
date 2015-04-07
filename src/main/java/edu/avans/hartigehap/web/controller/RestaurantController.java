@@ -28,6 +28,8 @@ public class RestaurantController {
 	private RestaurantService restaurantService;
 	@Autowired
 	private RestaurantPopulatorService restaurantPopulatorService;
+	@Autowired
+	private ReservationService reservationService;
 
 	// mapping to "/" is not RESTful, but is for bootstrapping!
 	@RequestMapping(value = {"/", "/restaurants"}, method = RequestMethod.GET)
@@ -64,25 +66,16 @@ public class RestaurantController {
 		return "hartigehap/restaurant";
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
-	public String checkCode(HttpServletRequest request) {
-		String inputCode = request.getParameter("code");
-		System.out.println(inputCode);
-		Collection<Restaurant> restaurants = restaurantService.findAll();
-		DateTime now = new DateTime();
+	@RequestMapping(value="/checkCode/{reservationid}/{code}", method = RequestMethod.GET)
+	public String checkCode(@PathVariable("reservationid") String reservationId,@PathVariable("code") String code, HttpServletRequest request) {
+
+		Reservation reservation = reservationService.findById(Long.valueOf(reservationId));
 		
-		for (Restaurant rt : restaurants) {
-			for(DiningTable dt : rt.getDiningTables()){
-				for(Reservation reservation : dt.getReservationsByDate(now)){
-					if(reservation.getStartDate().isAfter(now.minusMinutes(30)) && reservation.getStartDate().isBefore(now.plusMinutes(30))){
-						if (reservation.getCode().equals(inputCode)) {
-							return "redirect:/diningTables/" + reservation.getDiningTable().getId();
-						}
-					}
-				}
-			}
+		if(reservation.getCode().equalsIgnoreCase(code)){
+			return "redirect:/diningTables/" + reservation.getDiningTable().getId();
 		}
-		return null;
+		
+		return "redirect:/restaurants/";
 	}
 	
 	private List<Reservation> getReservationsForHour(Restaurant restaurant){
