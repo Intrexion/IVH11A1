@@ -11,7 +11,8 @@ public class ReservationCriteriaUpcoming implements ReservationCriteria {
 		List<Reservation> upcomingReservations = new ArrayList<>();
 		DateTime now = new DateTime();
 		for(Reservation reservation : reservations){
-			if(reservation.getStartDate().isAfter(now)){
+			//End of the reservation is after now
+			if(reservation.getEndDate().isAfter(now)){
 				upcomingReservations.add(reservation);
 			}
 		}	

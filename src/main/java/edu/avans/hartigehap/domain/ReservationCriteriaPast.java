@@ -11,7 +11,8 @@ public class ReservationCriteriaPast implements ReservationCriteria {
 		List<Reservation> pastReservations = new ArrayList<>();
 		DateTime now = new DateTime();
 		for(Reservation reservation : reservations){
-			if(reservation.getStartDate().isBefore(now)){
+			//Reservation is in the past
+			if(reservation.getEndDate().isBefore(now)){
 				pastReservations.add(reservation);
 			}
 		}	
