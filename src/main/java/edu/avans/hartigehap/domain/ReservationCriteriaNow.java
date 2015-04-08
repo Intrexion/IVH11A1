@@ -11,6 +11,7 @@ public class ReservationCriteriaNow implements ReservationCriteria {
 		List<Reservation> nowReservations = new ArrayList<>();
 		DateTime now = new DateTime();
 		for(Reservation reservation : reservations){
+			//Reservations between half hour before now and half hour after now.
 			if(reservation.getStartDate().isAfter(now.minusMinutes(30)) && reservation.getStartDate().isBefore(now.plusMinutes(30))){
 				nowReservations.add(reservation);
 			}
