@@ -19,7 +19,7 @@ public class CreateReservationSucceedFrontEnd {
 	}
 
 	@Test
-	public void startTest() throws InterruptedException {
+	public void startTest() {
 		browser.get("localhost:8080/hh/reservation?form");
 	
 		// Will throw exception if elements not found

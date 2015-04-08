@@ -4,15 +4,10 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import edu.avans.hartigehap.domain.Customer;
-import edu.avans.hartigehap.domain.Reservation;
 
 public class DeleteReservationFrontEnd {
 	
@@ -24,7 +19,7 @@ public class DeleteReservationFrontEnd {
 	}
 
 	@Test
-	public void startTest() throws InterruptedException {
+	public void startTest() {
 		browser.get("localhost:8080/hh/");
 	
 		// Will throw exception if elements not found
