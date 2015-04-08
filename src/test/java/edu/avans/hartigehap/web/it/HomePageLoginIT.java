@@ -35,6 +35,7 @@ public class HomePageLoginIT {
     catch (NoSuchElementException ex) {
       log.debug("Login succeeded ;-)");
     }
+    driver.findElement(By.linkText("Logout")).click();
   }
   
   @Test
@@ -62,6 +63,7 @@ public class HomePageLoginIT {
 	  catch (NoSuchElementException ex) {
 		  log.debug("Reseration deleted");
 	  }
+	  driver.findElement(By.linkText("Logout")).click();
   }
   
   @Test
