@@ -28,8 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
-import edu.avans.hartigehap.domain.ReservationCriteria;
-import edu.avans.hartigehap.domain.ReservationCriteriaUpcoming;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
