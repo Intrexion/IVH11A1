@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import org.joda.time.DateTime;
 
-public class ReservationCriteriaUpcoming implements ReservationCriteria {
+public class ReservationCriteriaPast implements ReservationCriteria {
 
 	@Override
 	public List<Reservation> meetCriteria(List<Reservation> reservations) {
-		List<Reservation> upcomingReservations = new ArrayList<>();
+		List<Reservation> pastReservations = new ArrayList<>();
 		DateTime now = new DateTime();
 		for(Reservation reservation : reservations){
-			if(reservation.getStartDate().isAfter(now)){
-				upcomingReservations.add(reservation);
+			if(reservation.getStartDate().isBefore(now)){
+				pastReservations.add(reservation);
 			}
 		}	
-		return upcomingReservations;
+		return pastReservations;
 	}
 }

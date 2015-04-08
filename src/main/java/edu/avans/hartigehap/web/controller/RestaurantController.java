@@ -61,10 +61,10 @@ public class RestaurantController {
 		
 		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
 		
-		ReservationCriteria upcomingReservations = new ReservationCriteriaUpcoming();		
+		ReservationCriteria nowReservations = new ReservationCriteriaNow();		
 		List<Reservation> reservations = getReservationsByRestaurant(restaurant);
 		
-		uiModel.addAttribute("reservations", upcomingReservations.meetCriteria(reservations));
+		uiModel.addAttribute("reservations", nowReservations.meetCriteria(reservations));
 		
 		restaurant.getDiningTables().removeAll(getOccupiedTables(restaurant));
 		uiModel.addAttribute("restaurant", restaurant);
