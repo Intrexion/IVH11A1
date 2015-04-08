@@ -202,36 +202,28 @@ public class Order extends DomainObject {
 	}
 	
 	private class Iterator<E> {
-	      private int current;
-	      private List<E> items;
-	      
-	    public Iterator(List<E> items){
-	    	current = -1;
-	    	this.items = items;
-	    }
-	      
-	    public boolean hasNext(){ 
-	    	try{
-	    	 return items.get(current + 1) != null; 
-	    	}catch(IndexOutOfBoundsException e){
-	    		return false;
-	    	}
-	    }
-	    
-	    public E remove(){
-	    	return items.remove(current);
-	    	
-	    }
-	      
-      	public E next(){
-	         try { 
-	        	 current++;
-	        	 return items.get(current); 
-	        	 }
-	         catch (NoSuchElementException e){ 
-	        	 current = -1;
-	        	 return null;
-        	 }
-	    }  
-   }
+		private int current;
+		private List<E> items;
+
+		public Iterator(List<E> items) {
+			current = -1;
+			this.items = items;
+		}
+
+		public boolean hasNext() {
+			return (current + 1 < items.size());
+		}
+
+		public E remove() {
+			return items.remove(current);
+		}
+
+		public E next() {
+			if (hasNext()) {
+				return items.get(++current);
+			} else {
+				return null;
+			}
+		}
+	}
 }
