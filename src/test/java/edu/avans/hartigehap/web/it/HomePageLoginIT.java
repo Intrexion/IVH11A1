@@ -18,10 +18,9 @@ import org.openqa.selenium.WebElement;
 @Slf4j
 public class HomePageLoginIT {
 
-  public static String URL = "http://localhost:8080/hh";
-
   @Test
   public void login() {
+	String URL = "http://localhost:8080/hh";
     WebDriver driver = BrowserUtils.getWebDriver();
     driver.get(URL);
     log.debug("Congratulations, the home page is available ;-) {}", URL);
@@ -33,8 +32,9 @@ public class HomePageLoginIT {
     WebElement passwordInput = loginDiv.findElement(By.name("j_password"));
     passwordInput.sendKeys("employee");
     assertNotNull(passwordInput);
-
+    
     driver.findElement(By.name("submit")).click();
+	driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
     try {
       WebElement errorDiv = driver.findElement(By.className("error"));
       fail("For a succesful login, an error div is not expected: " + errorDiv);
@@ -47,9 +47,9 @@ public class HomePageLoginIT {
   @Test
   public void deleteReservation() {
 	  WebDriver driver = BrowserUtils.getWebDriver();
+	  String URL = "http://localhost:8080/hh";
 	  driver.get(URL);
 	
-		// Will throw exception if elements not found
 	  driver.findElement(By.name("j_username")).sendKeys("employee");
 	  driver.findElement(By.name("j_password")).sendKeys("employee");
 		
@@ -74,6 +74,7 @@ public class HomePageLoginIT {
   @Test
   public void createReservationSuccess() {
 	  WebDriver driver = BrowserUtils.getWebDriver();
+	  String URL = "http://localhost:8080/hh/reservation?form";
 	  driver.get(URL);
 	  
 	  driver.findElement(By.id("first-name")).sendKeys("Henk");
@@ -91,6 +92,7 @@ public class HomePageLoginIT {
   @Test
   public void createReservationFailed() {
 	  WebDriver driver = BrowserUtils.getWebDriver();
+	  String URL = "http://localhost:8080/hh/reservation?form";
 	  driver.get(URL);
 
 	  driver.findElement(By.id("party-size")).sendKeys("\b");
