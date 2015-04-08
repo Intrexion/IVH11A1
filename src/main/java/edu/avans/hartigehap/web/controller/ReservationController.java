@@ -28,8 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
-import edu.avans.hartigehap.domain.ReservationCriteria;
-import edu.avans.hartigehap.domain.ReservationCriteriaUpcoming;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.service.CustomerService;
 import edu.avans.hartigehap.service.ReservationService;
@@ -96,7 +94,7 @@ public class ReservationController {
     	reservation.setRestaurant(restaurantService.findById(reservation.getRestaurant().getId()));
     	
         if(existingReservation.getCustomer().getPartySize() != reservation.getCustomer().getPartySize() || !reservation.getStartDate().equals(existingReservation.getStartDate()) || !reservation.getEndDate().equals(existingReservation.getEndDate())){
-        	DiningTable diningTable = reservationService.checkReservation(reservation, reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+        	DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
     		if(diningTable == null){
     			//geen andere tafel beschikbaar
     			LOGGER.info("No empty table found");
@@ -137,7 +135,7 @@ public class ReservationController {
 
 
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
-		DiningTable diningTable = reservationService.checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+		DiningTable diningTable = checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 	
 		if(diningTable == null){
 			// geen plaats voor de reservering
@@ -165,6 +163,29 @@ public class ReservationController {
 			uiModel.addAttribute("reservation", reservation);
 			return "hartigehap/reservationsuccessful";
 		}
+	}
+	
+	public static DiningTable checkReservation(Reservation reservation, Collection<DiningTable> diningTables){
+		for(DiningTable dt : diningTables){
+			boolean freespot = true;
+			for(Reservation r : dt.getReservationsByDate(reservation.getStartDate())){
+				
+				if((reservation.getStartDate().isBefore(r.getStartDate()) && reservation.getStartDate().isBefore(r.getEndDate())) && (reservation.getEndDate().isBefore(r.getStartDate()) && reservation.getEndDate().isBefore(r.getEndDate()))){
+	                //afspraak voor de huidige
+	            } else if((reservation.getStartDate().isAfter(r.getStartDate()) && reservation.getStartDate().isAfter(r.getEndDate())) && (reservation.getEndDate().isAfter(r.getStartDate()) && reservation.getEndDate().isAfter(r.getEndDate()))){
+	                //afspraak na de hudige
+	            } else if((reservation.getStartDate().equals(r.getEndDate()) && reservation.getEndDate().isAfter(r.getEndDate())) || (reservation.getEndDate().equals(r.getStartDate()) && reservation.getStartDate().isBefore(r.getStartDate()))){
+	                //afspraak aansluitend aan huidige
+	            } else {
+	                freespot = false;
+	                break;
+	            }
+	        }
+	        if(freespot){    
+			return dt;
+	        }
+		}
+		return null;
 	}
 	
 	public static String randomGenerator(){

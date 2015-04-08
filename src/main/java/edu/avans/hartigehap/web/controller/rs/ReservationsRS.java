@@ -59,7 +59,7 @@ public class ReservationsRS {
 		
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
 		
-		DiningTable diningTable = reservationService.checkReservation(reservation, restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+		DiningTable diningTable = ReservationController.checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 
 		if (diningTable == null) {
 			response.put("result", "FAIL");
@@ -109,7 +109,7 @@ public class ReservationsRS {
 		cust.setEmail(upCust.getEmail());
 		cust.setPartySize(upCust.getPartySize());
 
-		DiningTable diningTable = reservationService.checkReservation(updateReservation, 
+		DiningTable diningTable = ReservationController.checkReservation(updateReservation, 
 				(List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 		if(diningTable == null){
 			response.put("result", "FAIL");

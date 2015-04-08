@@ -200,7 +200,7 @@ public class ReservationControllerTest {
 											.param("customer.phone", "1234567890")
 											.param("description", "Test")
 											.sessionAttr("reservation", new Reservation()))
-		.andExpect(view().name("redirect:../reservations"));
+											.andExpect(view().name("redirect:../reservations"));
 	}
 	
 	@Test
@@ -223,14 +223,14 @@ public class ReservationControllerTest {
 											.param("customer.firstName", "Henk")
 											.param("customer.lastName", "Jaspers")
 											.param("day", new LocalDate().toString("yyyy-MM-dd"))
-											.param("startTime", new LocalTime().toString("HH:mm"))
-											.param("endTime",  new LocalTime().plusHours(1).toString("HH:mm"))
+											.param("startTime", new LocalTime().plusHours(2).toString("HH:mm"))
+											.param("endTime",  new LocalTime().plusHours(3).toString("HH:mm"))
 											.param("customer.email", "hhreserveringen@gmail.com")
 											.param("customer.partySize", "1")
 											.param("customer.phone", "1234567890")
 											.param("description", "Test")
 											.sessionAttr("model", new Reservation()))
-		.andExpect(view().name("hartigehap/reservationsuccessful"));
+											.andExpect(view().name("hartigehap/reservationsuccessful"));
 	}
 
 	@Test
@@ -267,6 +267,9 @@ public class ReservationControllerTest {
 		LinkedList<Reservation> retval = new LinkedList<Reservation>();
 		Reservation r1 = new Reservation();
 		r1.setId(1l);
+		r1.setDay(new LocalDate());
+		r1.setStartTime(new LocalTime());
+		r1.setEndTime(new LocalTime().plusHours(2));
 		retval.add(r1);
 		return retval;
 	}

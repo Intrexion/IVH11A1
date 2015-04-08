@@ -1,8 +1,11 @@
-package edu.avans.hartigehap.domain;
+package edu.avans.hartigehap.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.joda.time.DateTime;
+
+import edu.avans.hartigehap.domain.Reservation;
 
 public class ReservationCriteriaNow implements ReservationCriteria {
 
