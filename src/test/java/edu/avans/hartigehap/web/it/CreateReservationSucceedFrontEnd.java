@@ -9,16 +9,17 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class CreateReservationSucceedFrontEnd {
-	
-	private WebDriver browser;
-
-	@Before
-	public void setup() {
-		browser = BrowserUtils.getWebDriver();
-	}
+//	
+//	private WebDriver browser;
+//
+//	@Before
+//	public void setup() {
+//		
+//	}
 
 	@Test
 	public void startTest() {
+		WebDriver browser = BrowserUtils.getWebDriver();
 		browser.get("localhost:8080/hh/reservation?form");
 	
 		// Will throw exception if elements not found
@@ -32,10 +33,11 @@ public class CreateReservationSucceedFrontEnd {
 		
 		browser.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
 		assertEquals("Reserving succeeded", browser.findElement(By.id("reservation-header")).getText());
-	}
-
-	@After
-	public void tearDown() {
 		browser.close();
 	}
+//
+//	@After
+//	public void tearDown() {
+//		
+//	}
 }
