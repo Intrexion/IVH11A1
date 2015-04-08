@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
-import edu.avans.hartigehap.domain.Criteria;
-import edu.avans.hartigehap.domain.CriteriaOpenDiningTable;
 import edu.avans.hartigehap.domain.Customer;
 import edu.avans.hartigehap.domain.DiningTable;
 import edu.avans.hartigehap.domain.Reservation;
@@ -61,8 +59,7 @@ public class ReservationsRS {
 		
 		Restaurant restaurant = restaurantService.findById(reservation.getRestaurant().getId());
 		
-		Criteria openDiningTable = new CriteriaOpenDiningTable();
-		DiningTable diningTable = openDiningTable.meetCriteria(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
+		DiningTable diningTable = ReservationController.checkReservation(reservation, (List<DiningTable>) restaurant.getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 
 		if (diningTable == null) {
 			response.put("result", "FAIL");
@@ -109,9 +106,7 @@ public class ReservationsRS {
 		cust.setEmail(upCust.getEmail());
 		cust.setPartySize(upCust.getPartySize());
 
-		Criteria openDiningTable = new CriteriaOpenDiningTable();
-
-		DiningTable diningTable = openDiningTable.meetCriteria(updateReservation, 
+		DiningTable diningTable = ReservationController.checkReservation(updateReservation, 
 				(List<DiningTable>) reservation.getRestaurant().getDiningTablesBySeats(reservation.getCustomer().getPartySize()));
 		if(diningTable == null){
 			response.put("result", "FAIL");

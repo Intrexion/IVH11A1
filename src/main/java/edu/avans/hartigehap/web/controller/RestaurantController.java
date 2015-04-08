@@ -61,7 +61,10 @@ public class RestaurantController {
 		
 		Restaurant restaurant = restaurantService.fetchWarmedUp(restaurantName);
 		
-		uiModel.addAttribute("reservations", getReservationsForHour(restaurant));
+		ReservationCriteria upcomingReservations = new ReservationCriteriaUpcoming();		
+		List<Reservation> reservations = getReservationsByRestaurant(restaurant);
+		
+		uiModel.addAttribute("reservations", upcomingReservations.meetCriteria(reservations));
 		
 		restaurant.getDiningTables().removeAll(getOccupiedTables(restaurant));
 		uiModel.addAttribute("restaurant", restaurant);
@@ -82,18 +85,13 @@ public class RestaurantController {
 		return "redirect:/restaurants/" + reservation.getRestaurant().getId();
 	}
 	
-	private List<Reservation> getReservationsForHour(Restaurant restaurant){
+	private List<Reservation> getReservationsByRestaurant(Restaurant restaurant){
 		List<Reservation> reservations = new ArrayList<>();
-		DateTime now = new DateTime();
 		for(DiningTable dt : restaurant.getDiningTables()){
-			for(Reservation reservation : dt.getReservationsByDate(now)){
-				if(reservation.getStartDate().isAfter(now.minusMinutes(30)) && reservation.getStartDate().isBefore(now.plusMinutes(30))){
-					reservations.add(reservation);
-				}
+			for(Reservation reservation : dt.getReservations()){
+				reservations.add(reservation);
 			}
 		}
-		
-		
 		return reservations;
 	}
 	
