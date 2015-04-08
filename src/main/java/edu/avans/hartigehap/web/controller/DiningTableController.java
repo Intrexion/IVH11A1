@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.model.OrderItemModel;
-import edu.avans.hartigehap.repository.IngredientRepository;
 import edu.avans.hartigehap.service.*;
 import edu.avans.hartigehap.web.form.Message;
 
@@ -33,7 +32,7 @@ public class DiningTableController {
 	@Autowired
 	private DiningTableService diningTableService;
 	@Autowired
-	private IngredientRepository ingredientRepository;
+	private IngredientService ingredientService;
 
 	@RequestMapping(value = "/diningTables/{diningTableId}", method = RequestMethod.GET)
 	public String showTable(@PathVariable("diningTableId") String diningTableId, Model uiModel) {
@@ -52,7 +51,7 @@ public class DiningTableController {
 			OrderItemModel model, Model uiModel) {
 		Map<Ingredient, Integer> additions = new HashMap<>();
 		for(String s : model.getAdditions().keySet()){
-			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
+			additions.put(ingredientService.findById(s), model.getAdditions().get(s));			
 		}
 		
 		DiningTable diningTable = diningTableService.fetchWarmedUp(Long.valueOf(diningTableId));
@@ -71,7 +70,7 @@ public class DiningTableController {
 		
 		Map<Ingredient, Integer> additions = new HashMap<>();
 		for(String s : model.getAdditions().keySet()){
-			additions.put(ingredientRepository.findOne(s), model.getAdditions().get(s));			
+			additions.put(ingredientService.findById(s), model.getAdditions().get(s));			
 		}
 
 		DiningTable diningTable = diningTableService.fetchWarmedUp(Long.valueOf(diningTableId));
