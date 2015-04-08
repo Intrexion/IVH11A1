@@ -29,6 +29,7 @@
 	<spring:message code="label_customer_subsystem" var="labelCustomerSubsystem" />
 	<spring:message code="label_dining_tables" var="labelDiningTables" />
 	<spring:message code="label_dining_table" var="labelDiningTable" />
+	<spring:message code="label_reservation_code" var="labelReservationCode" />
 
 	<script type="text/javascript">
 	function validateForm() {
@@ -109,6 +110,11 @@
 			<div class="pure-control-group">
 				<form:label path="customer.partySize" class="bold">${labelPersons}</form:label>
 				<form:input required="required" path="customer.partySize" type="number" min="1" max="12" id="party-size"/>
+			</div>
+					
+			<div class="pure-control-group">
+				<form:label path="code" class="bold">${labelReservationCode}</form:label>
+				<form:input readonly="true" required="required" path="code" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelFirstName}"  />
 			</div>
 	
 			<div class="pure-control-group">

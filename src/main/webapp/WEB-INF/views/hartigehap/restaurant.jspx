@@ -24,6 +24,8 @@
 	<spring:message code="label_no_reservations" var="labelNoReservations" />
 	<spring:message code="label_error_length" var="labelLengthError" />
 	<spring:message code="label_reservation_code" var="labelReservationCode" />
+	<spring:message code="label_no_free_diningtables" var="labelNoFreeTables" />
+	
 	
 	
 	<script type="text/javascript">
@@ -54,8 +56,8 @@
 			</tr>
 		</thead>
 		<tbody>
+		<c:if test="${restaurant.diningTables.size() == '0'}"><td colspan="4" >${labelNoFreeTables}</td></c:if>	
 			<c:forEach items="${restaurant.diningTables}" var="diningTable">
-			<c:forEach items="${occupiedTables}" var="table"></c:forEach>
 				<spring:url var="showTable" value="/diningTables/${diningTable.id}" />					
 				<tr>
 					<td><a href="${showTable}">${labelDiningTable} ${diningTable.tableNr}</a></td>							
@@ -86,11 +88,11 @@
 			<c:forEach items="${reservations}" var="reservation">
 				<spring:url var="showTable" value="/diningTables/${reservation.diningTable.id}" />								
 				<tr>
-					<td>${reservation.customer.lastName}</td>	
-					<td>${reservation.customer.partySize}</td>
-					<td>${fn:substring(reservation.startTime, 0, 5)}</td>
-					<td>${reservation.diningTable.tableNr}</td>
-					<td><input id="code${reservation.id}" style="width:80%" required="required" placeholder="J5MN2K"/><button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
+					<td width="30%">${reservation.customer.lastName}</td>	
+					<td width="10%">${reservation.customer.partySize}</td>
+					<td width="25%">${fn:substring(reservation.startTime, 0, 5)}</td>
+					<td width="10%">${reservation.diningTable.tableNr}</td>
+					<td width="25%"><input id="code${reservation.id}" maxlength="6" style=" width:70%; text-transform:uppercase;" required="required" />&#160;<button onclick="validateCode('${reservation.id}', 'code${reservation.id}')">>>></button></td>
 				</tr>
 			</c:forEach>
 		</tbody>
