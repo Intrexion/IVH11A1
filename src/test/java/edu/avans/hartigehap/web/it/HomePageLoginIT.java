@@ -1,9 +1,15 @@
 package edu.avans.hartigehap.web.it;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import java.util.concurrent.TimeUnit;
+
 import lombok.extern.slf4j.Slf4j;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -39,5 +45,34 @@ public class HomePageLoginIT {
       log.debug("Login succeeded ;-)");
     }
   }
+  
+	private WebDriver browser;
+
+	@Before
+	public void setup() {
+		browser = BrowserUtils.getWebDriver();
+	}
+
+	@Test
+	public void startTest() {
+		browser.get("localhost:8080/hh/reservation?form");
+	
+		// Will throw exception if elements not found
+		browser.findElement(By.id("first-name")).sendKeys("Henk");
+		browser.findElement(By.id("last-name")).sendKeys("Jaspers");
+		browser.findElement(By.id("email-address")).sendKeys("hhreserveringen@gmail.com");
+		browser.findElement(By.id("phone-number")).sendKeys("0123456789");
+		browser.findElement(By.id("description")).sendKeys("This is a description");
+		
+		browser.findElement(By.id("submit")).click();
+		
+		browser.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+		assertEquals("Reserving succeeded", browser.findElement(By.id("reservation-header")).getText());
+	}
+
+	@After
+	public void tearDown() {
+		browser.close();
+	}
 
 }
