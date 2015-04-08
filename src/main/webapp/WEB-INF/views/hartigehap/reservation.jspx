@@ -143,7 +143,7 @@
 			
 			<div class="pure-controls">
 			
-				<button type="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
+				<button type="submit" id="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>

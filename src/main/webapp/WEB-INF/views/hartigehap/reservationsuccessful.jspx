@@ -16,7 +16,7 @@
 
 	<div class="reservation-box success-box">
 	
-		<h2 class="reservation-header">${labelSuccessfulHeader}</h2>
+		<h2 id="reservation-header" class="reservation-header">${labelSuccessfulHeader}</h2>
 	
 		<c:if test="${not empty message}">
 			<div id="message" class="${message.type}">${message.message}</div>

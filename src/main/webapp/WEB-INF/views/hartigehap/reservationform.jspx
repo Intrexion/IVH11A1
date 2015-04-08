@@ -148,7 +148,7 @@
 			</div>
 			<div class="pure-control-group">
 				<form:label path="customer.lastName" class="bold">${labelLastName}</form:label>
-				<form:input required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="first-name" placeholder="${labelLastName}"  />
+				<form:input required="required" path="customer.lastName" type="text" class="pure-input-2-3" id="last-name" placeholder="${labelLastName}"  />
 			</div>
 			
 			<div class="pure-control-group">
@@ -174,7 +174,7 @@
 				<form:input id="terms" type="checkbox" path=/>
 				<br />-->
 			
-				<button type="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
+				<button type="submit" id="submit" class="pure-button pure-button-primary button-float">${labelSubmit}</button>
 			</div>
 		</fieldset>
 	</form:form>
