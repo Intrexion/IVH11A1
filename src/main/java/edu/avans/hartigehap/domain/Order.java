@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -211,7 +210,7 @@ public class Order extends DomainObject {
 		}
 
 		public boolean hasNext() {
-			return (current + 1 < items.size());
+			return current + 1 < items.size();
 		}
 
 		public E remove() {

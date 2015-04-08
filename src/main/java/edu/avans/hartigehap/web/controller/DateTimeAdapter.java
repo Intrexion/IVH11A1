@@ -24,7 +24,7 @@ public class DateTimeAdapter implements DateTimeProvider {
     @Override
     public DateTime getDateTime() {
         if (dateAndTime == null) {
-            return new DateTime();
+            throw new NullPointerException("Trying to get a DateTime, while there's no DateAndTime object set");
         }
 
         LocalDate date = dateAndTime.getDate();
