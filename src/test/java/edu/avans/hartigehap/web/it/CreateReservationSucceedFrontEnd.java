@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class CreateReservationSucceedFrontEnd {
 	
@@ -15,7 +14,7 @@ public class CreateReservationSucceedFrontEnd {
 
 	@Before
 	public void setup() {
-		browser = new FirefoxDriver();
+		browser = BrowserUtils.getWebDriver();
 	}
 
 	@Test
@@ -32,7 +31,7 @@ public class CreateReservationSucceedFrontEnd {
 		browser.findElement(By.id("submit")).click();
 		
 		browser.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
-		assertEquals("Reserving failed", browser.findElement(By.id("reservation-header")).getText());
+		assertEquals("Reserving succeeded", browser.findElement(By.id("reservation-header")).getText());
 	}
 
 	@After
