@@ -156,6 +156,8 @@ public class ReservationController {
 			reservation.setCode(randomGenerator());
 
 			customer = customerService.save(customer);
+			customer.getRestaurants().add(restaurant);
+			restaurant.getCustomers().add(customer);
 			restaurant = restaurantService.save(restaurant);
 			
 			MailController.sendMail(reservation);

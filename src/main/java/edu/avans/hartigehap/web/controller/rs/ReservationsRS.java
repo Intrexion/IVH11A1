@@ -70,6 +70,9 @@ public class ReservationsRS {
 			diningTable.getReservations().add(reservation);
 			reservation.getCustomer().setReservation(reservation);
 			reservation.setCode(ReservationController.randomGenerator());
+
+			reservation.getCustomer().getRestaurants().add(restaurant);
+			restaurant.getCustomers().add(reservation.getCustomer());
 			
 			reservation = reservationService.save(reservation);
 			MailController.sendMail(reservation);
