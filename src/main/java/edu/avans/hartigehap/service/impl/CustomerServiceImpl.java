@@ -15,9 +15,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
+
 import com.google.common.collect.Lists;
 
 
@@ -36,13 +39,15 @@ public class CustomerServiceImpl implements CustomerService {
 		LOGGER.info("Find all customers");
 		return Lists.newArrayList(customerRepository.findAll());
 	}
-
+	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Customer findById(Long id) {
 		LOGGER.info("Find customer by id" + id);
 		return customerRepository.findOne(id);
 	}
 
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Customer findByFirstNameAndLastName(String firstName, String lastName) {
 		LOGGER.info("Find by firstName: " + firstName + " and lastName: " + lastName );
@@ -55,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 		return customer;
 	}
 
-
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Customer> findCustomersForRestaurant(Restaurant restaurant) {
 		LOGGER.info("Find by customers by restaurant: " + restaurant.getId());
@@ -75,12 +80,14 @@ public class CustomerServiceImpl implements CustomerService {
 		return customersForRestaurants;
 	}
 	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Page<Customer> findAllByPage(Pageable pageable) {
 		LOGGER.info("Find all customers (pageable)");
 		return customerRepository.findAll(pageable);
 	}	
 
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Page<Customer> findCustomersForRestaurantByPage(Restaurant restaurant, Pageable pageable) {
 		LOGGER.info("Find customers by restaurant" + restaurant.getId());
@@ -98,12 +105,13 @@ public class CustomerServiceImpl implements CustomerService {
 		return customersForRestaurants;
 	}	
 
-	
+	@MyExecutionTime
 	public Customer save(Customer customer) {
 		LOGGER.info("save customer" + customer.getFirstName() + customer.getLastName());
 		return customerRepository.save(customer);
 	}
-
+	
+	@MyExecutionTime
 	public void delete(Long id) {
 		LOGGER.info("delete customer: " + id);
 		customerRepository.delete(id);

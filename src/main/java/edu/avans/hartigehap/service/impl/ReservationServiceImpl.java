@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.Reservation;
 import edu.avans.hartigehap.domain.Restaurant;
 import edu.avans.hartigehap.repository.ReservationRepository;
@@ -25,30 +26,36 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Autowired
 	private ReservationRepository reservationRepository;
+
+	@MyExecutionTime
 	@Override
 	public List<Reservation> findAll() {
 		LOGGER.info("Find all reservations");
 		return Lists.newArrayList(reservationRepository.findAll(new Sort(Sort.Direction.ASC, "id")));
 	}
 
+	@MyExecutionTime
 	@Override
 	public Reservation findById(Long id) {
 		LOGGER.info("find reservation by id: " + id);
 		return reservationRepository.findOne(id);
 	}
 	
+	@MyExecutionTime
 	@Override
 	public Reservation save(Reservation reservation) {
 		LOGGER.info("Save reservation");
 		return reservationRepository.save(reservation);
 	}
 
+	@MyExecutionTime
 	@Override
 	public void delete(Reservation reservation) {
 		LOGGER.info("delete reservation " + reservation.getId());
 		reservationRepository.delete(reservation);		
 	}
 
+	@MyExecutionTime
 	@Override
 	public List<Reservation> findByRestaurant(Restaurant restaurant) {
 		LOGGER.info("find reservation by restaurant " + restaurant.getId());

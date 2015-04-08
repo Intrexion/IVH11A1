@@ -10,7 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import edu.avans.hartigehap.service.*;
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.OrderRepository;
 
@@ -23,6 +25,7 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderRepository orderRepository;
 	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Order findById(Long orderId) {
 		LOGGER.info("find Order by id" + orderId);
@@ -35,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
 	// * a named query (using entityManager)
 	// * a query created using a repository method name
 	// * a repository with a custom method implementation
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Order> findSubmittedOrdersForRestaurant(Restaurant restaurant) {
 		LOGGER.info("fidn submittedOrdersForRestaurtant" + restaurant.getId());
@@ -71,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
 		return submittedOrdersList;
 	}
 	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Order> findPlannedOrdersForRestaurant(Restaurant restaurant) {
 		LOGGER.info("find planned orders for restaurant " + restaurant.getId());
@@ -85,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	}	
 	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Order> findPreparedOrdersForRestaurant(Restaurant restaurant) {
 		LOGGER.info("fidn preparedorders for restaurant " + restaurant.getId());
@@ -98,16 +104,19 @@ public class OrderServiceImpl implements OrderService {
 		return preparedOrdersList;	
 	}	
 
+	@MyExecutionTime
 	public void planOrder(Order order) throws StateException {
 		LOGGER.info("Plan orders");
 		order.plan();
 	}
 	
+	@MyExecutionTime
 	public void orderPrepared(Order order) throws StateException {
 		LOGGER.info("Prepare orders");
 		order.prepared();
 	}
 
+	@MyExecutionTime
 	public void orderServed(Order order) throws StateException {
 		LOGGER.info("Serve orders");
 		order.served();

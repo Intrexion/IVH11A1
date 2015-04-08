@@ -9,9 +9,12 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.*;
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
+
 import com.google.common.collect.Lists;
 
 @Service("restaurantService")
@@ -23,6 +26,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	private RestaurantRepository restaurantRepository;
 		
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Restaurant> findAll() {
 		LOGGER.info("find all restaurants");
@@ -32,22 +36,26 @@ public class RestaurantServiceImpl implements RestaurantService {
 		return Lists.newArrayList(restaurantRepository.findAll(sort));
 	}
 
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Restaurant findById(String restaurant) {
 		LOGGER.info("find by id: " + restaurant);
 		return restaurantRepository.findOne(restaurant);
 	}
 	
+	@MyExecutionTime
 	public Restaurant save(Restaurant restaurant) {
 		LOGGER.info("save restaurant");
 		return restaurantRepository.save(restaurant);
 	}
 
+	@MyExecutionTime
 	public void delete(String restaurant) {
 		LOGGER.info("delete restaurant: " + restaurant);
 		restaurantRepository.delete(restaurant);
 	}
 
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Page<Restaurant> findAllByPage(Pageable pageable) {
 		LOGGER.info("find all restaurants by page");
@@ -58,6 +66,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	 *  to be able to follow associations outside the context of a transaction, prefetch the associated
 	 *  entities by traversing the associations
 	 */
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Restaurant fetchWarmedUp(String restaurantName) {
 		LOGGER.info("fetchwarmedUp restaurant");

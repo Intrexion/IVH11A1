@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.avans.hartigehap.repository.*;
 import edu.avans.hartigehap.service.*;
+import edu.avans.hartigehap.aop.MyExecutionTime;
 import edu.avans.hartigehap.domain.*;
 
 @Service("billService")
@@ -22,7 +23,8 @@ public class BillServiceImpl implements BillService {
 
 	@Autowired
 	private BillRepository billRepository;
-
+	
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public Bill findById(Long billId) {
 		LOGGER.info("find bill by id: " + billId);
@@ -35,7 +37,7 @@ public class BillServiceImpl implements BillService {
 		bill.paid();
 	}
 
-
+	@MyExecutionTime
 	@Transactional(readOnly=true)
 	public List<Bill> findSubmittedBillsForRestaurant(Restaurant restaurant) {
 		LOGGER.info("Find submitted bills by restaurant");
