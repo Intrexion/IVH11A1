@@ -23,15 +23,8 @@ public class HomePageLoginIT {
 	String URL = "http://localhost:8080/hh";
     WebDriver driver = BrowserUtils.getWebDriver();
     driver.get(URL);
-    log.debug("Congratulations, the home page is available ;-) {}", URL);
-    WebElement loginDiv = driver.findElement(By.id("login"));
-    assertNotNull(loginDiv);
-    WebElement nameInput = loginDiv.findElement(By.name("j_username"));
-    assertNotNull(nameInput);
-    nameInput.sendKeys("employee");
-    WebElement passwordInput = loginDiv.findElement(By.name("j_password"));
-    passwordInput.sendKeys("employee");
-    assertNotNull(passwordInput);
+    driver.findElement(By.name("j_username")).sendKeys("employee");
+	driver.findElement(By.name("j_password")).sendKeys("employee");;
     
     driver.findElement(By.name("submit")).click();
 	driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
