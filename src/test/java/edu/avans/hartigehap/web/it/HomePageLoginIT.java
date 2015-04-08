@@ -25,9 +25,9 @@ public class HomePageLoginIT {
     assertNotNull(loginDiv);
     WebElement nameInput = loginDiv.findElement(By.name("j_username"));
     assertNotNull(nameInput);
-    nameInput.sendKeys("erco");
+    nameInput.sendKeys("employee");
     WebElement passwordInput = loginDiv.findElement(By.name("j_password"));
-    passwordInput.sendKeys("erco");
+    passwordInput.sendKeys("employee");
     assertNotNull(passwordInput);
 
     driver.findElement(By.name("submit")).click();
